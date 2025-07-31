@@ -38,4 +38,8 @@ public abstract class User extends BaseTimeEntity {
     @Column(name = "provider", nullable = false, updatable = false)
     @Enumerated(EnumType.STRING)
     private EProvider provider;
+
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private EStatus status;
 }
