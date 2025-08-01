@@ -13,8 +13,6 @@ import java.util.UUID;
 @Table(name = "calendar")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 public class Calendar extends BaseTimeEntity {
 
     @Id
@@ -40,4 +38,39 @@ public class Calendar extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", nullable = false)
     private UserPatient patient;
+
+    // 빌더: 외부에서 받아야 하는 필드만
+    @Builder
+    private Calendar(final LocalDateTime date,
+                     final String description,
+                     final Emotion emotion,
+                     final Question question,
+                     final UserPatient patient) {
+        this.date = date;
+        this.description = description;
+        this.emotion = emotion;
+        this.question = question;
+        this.patient = patient;
+    }
+
+    // 정적 팩토리 메서드
+    public static Calendar create(final LocalDateTime date,
+                                  final String description,
+                                  final Emotion emotion,
+                                  final Question question,
+                                  final UserPatient patient) {
+        return Calendar.builder()
+                .date(date)
+                .description(description)
+                .emotion(emotion)
+                .question(question)
+                .patient(patient)
+                .build();
+    }
+
+    // 도메인 메서드 (예: 감정/설명 업데이트)
+    public void updateEmotion(final Emotion newEmotion, final String newDescription) {
+        this.emotion = newEmotion;
+        this.description = newDescription;
+    }
 }

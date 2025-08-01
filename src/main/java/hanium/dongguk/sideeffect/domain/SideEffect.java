@@ -12,8 +12,6 @@ import java.util.UUID;
 @Table(name = "side_effect")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 public class SideEffect extends BaseTimeEntity {
 
     @Id
@@ -23,9 +21,27 @@ public class SideEffect extends BaseTimeEntity {
     private UUID id;
 
     @Column(name = "description", columnDefinition = "TEXT", nullable = false)
-    private String description;   // 부작용 내용
+    private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "calendar_drug_id", nullable = false)
-    private CalendarDrug calendarDrug;    // 어떤 복용 기록(CalendarDrug)에 속하는지
+    private CalendarDrug calendarDrug;
+
+    @Builder
+    private SideEffect(final String description, final CalendarDrug calendarDrug) {
+        this.description = description;
+        this.calendarDrug = calendarDrug;
+    }
+
+    public static SideEffect create(final String description, final CalendarDrug calendarDrug) {
+        return SideEffect.builder()
+                .description(description)
+                .calendarDrug(calendarDrug)
+                .build();
+    }
+
+    // 수정 API용 도메인 메서드
+    public void updateDescription(final String newDescription) {
+        this.description = newDescription;
+    }
 }
