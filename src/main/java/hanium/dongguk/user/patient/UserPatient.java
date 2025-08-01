@@ -23,13 +23,13 @@ public class UserPatient extends User {
     @Column(name = "weight")
     private Integer weight;
 
-    @Column(name = "due_date") // 출산 예정일
+    @Column(name = "due_date", nullable = false) // 출산 예정일
     private LocalDate dueDate;
 
-    @Column(name = "pregnancy_weeks") //임신 주차
+    @Column(name = "pregnancy_weeks", nullable = false) //임신 주차
     private Integer pregnancyWeeks;
 
-    @Column(name = "feeding") //수유 여부
+    @Column(name = "feeding", nullable = false) //수유 여부
     private boolean feeding;
 
 
