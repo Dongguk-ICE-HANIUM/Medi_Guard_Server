@@ -75,3 +75,14 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+// Monitoring
+springBoot {
+	buildInfo {
+		properties {
+			additional = [
+					'commitTime': new Date().toString()
+			]
+		}
+	}
+}
