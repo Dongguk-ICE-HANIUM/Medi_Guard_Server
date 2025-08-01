@@ -29,7 +29,7 @@ public class CalendarDrug extends BaseTimeEntity {
     private PatientDrug patientDrug;  // 어떤 환자의 복용 약인지
 
     @Column(name = "time_slot", nullable = false)
-    private Long timeSlot;  // ERD상 bigint → 예: 아침=1, 점심=2, 저녁=3 같은 slot 번호
+    private Integer timeSlot;  // 예: 아침=1, 점심=2, 저녁=3 같은 slot 번호
 
     // 빌더: id는 제외
     @Builder
