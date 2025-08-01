@@ -4,6 +4,7 @@ import hanium.dongguk.user.core.domain.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @DiscriminatorValue("PATIENT")
+@Table(name = "user_patient")
 public class UserPatient extends User {
 
     @Column(name = "birth", nullable = false)
