@@ -5,9 +5,8 @@ import hanium.dongguk.question.domain.EQuestionType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-import hanium.dongguk.calendar.domain.EEmotion;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -23,7 +22,7 @@ public class Calendar extends BaseTimeEntity {
     private UUID id;
 
     @Column(name = "date", nullable = false)
-    private LocalDateTime date;
+    private LocalDate date;
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
@@ -38,7 +37,7 @@ public class Calendar extends BaseTimeEntity {
 
     // 빌더: 외부에서 받아야 하는 필드만
     @Builder
-    private Calendar(final LocalDateTime date,
+    private Calendar(final LocalDate date,
                      final String description,
                      final EEmotion emotion,
                      final EQuestionType question) {
@@ -49,7 +48,7 @@ public class Calendar extends BaseTimeEntity {
     }
 
     // 정적 팩토리 메서드
-    public static Calendar create(final LocalDateTime date,
+    public static Calendar create(final LocalDate date,
                                   final String description,
                                   final EEmotion emotion,
                                   final EQuestionType question) {
