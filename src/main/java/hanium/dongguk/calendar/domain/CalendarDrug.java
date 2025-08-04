@@ -43,3 +43,5 @@ public class CalendarDrug extends BaseTimeEntity {
                 .build();
     }
 }
+
+//약물 정보 엔티티 생성 후 추가 예정

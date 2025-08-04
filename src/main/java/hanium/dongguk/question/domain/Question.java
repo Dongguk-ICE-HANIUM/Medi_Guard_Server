@@ -1,10 +1,10 @@
 package hanium.dongguk.question.domain;
 
+import hanium.dongguk.calendar.domain.Calendar;
 import hanium.dongguk.global.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-import hanium.dongguk.question.domain.EQuestionType;
 
 import java.util.UUID;
 
@@ -21,23 +21,30 @@ public class Question extends BaseTimeEntity {
     private UUID id;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private EQuestionType type;   // 질문 타입 (Enum)
 
-    @Column(name = "answer", columnDefinition = "TEXT")
+    @Column(name = "answer", columnDefinition = "TEXT", nullable = false)
     private String answer;  // 사용자가 작성한 답변
 
-    // 빌더는 필요한 필드만 열어줌 (id는 제외)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "calendar_id", nullable = false)
+    private Calendar calendar;
+
+    // 빌더
     @Builder
-    private Question(final EQuestionType type, final String answer) {
+    private Question(final EQuestionType type, final String answer, final Calendar calendar) {
         this.type = type;
         this.answer = answer;
+        this.calendar = calendar;
     }
 
     // 정적 팩토리 메서드
-    public static Question createQuestion(final EQuestionType type, final String answer) {
+    public static Question createQuestion(final EQuestionType type, final String answer, final Calendar calendar) {
         return Question.builder()
                 .type(type)
                 .answer(answer)
+                .calendar(calendar)
                 .build();
     }
 
