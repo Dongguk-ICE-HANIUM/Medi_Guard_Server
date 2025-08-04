@@ -22,7 +22,7 @@ public class CalendarService {
     @Transactional(readOnly = true)
     public CalendarResponseDto getTodayMood(LocalDate date) {
         Calendar calendar = calendarRepository.findByDate(date)
-                .orElseThrow(() -> new CommonException(GlobalErrorCode.CALENDAR_NOT_FOUND));
+                .orElseThrow(() -> new CommonException(GlobalErrorCode.NOT_FOUND));
         return CalendarResponseDto.of(calendar);
     }
 
@@ -40,7 +40,7 @@ public class CalendarService {
     @Transactional
     public CalendarResponseDto updateMood(CalendarUpdateRequestDto requestDto) {
         Calendar calendar = calendarRepository.findById(requestDto.calendarId())
-                .orElseThrow(() -> new CommonException(GlobalErrorCode.CALENDAR_NOT_FOUND));
+                .orElseThrow(() -> new CommonException(GlobalErrorCode.NOT_FOUND));
 
         calendar.updateEmotion(requestDto.emotion(), requestDto.description());
         return CalendarResponseDto.of(calendar);
