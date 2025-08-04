@@ -46,6 +46,12 @@ public enum GlobalErrorCode implements ErrorCode {
     TOKEN_UNKNOWN_ERROR(HttpStatus.UNAUTHORIZED, "REQUEST_18", "알 수 없는 토큰입니다."),
 
     /**
+     * 404 : 캘린더 관련 에러
+     */
+    CALENDAR_NOT_FOUND(HttpStatus.NOT_FOUND, "CALENDAR_001", "해당 날짜에 기분 기록이 없습니다."),
+    CALENDAR_NOT_EXIST(HttpStatus.NOT_FOUND, "CALENDAR_002", "존재하지 않는 캘린더입니다."),
+
+    /**
      * 500 : 응답 실패
      */
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "RESPONSE_001", "서버와의 연결에 실패했습니다."),
