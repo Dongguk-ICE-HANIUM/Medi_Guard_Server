@@ -44,12 +44,12 @@ public class Calendar extends BaseTimeEntity {
     private Calendar(final LocalDate date,
                      final String description,
                      final EEmotion emotion,
-                     final EQuestionType question,
+                     final EQuestionType questionType,
                      final UserPatient userPatient) {
         this.date = date;
         this.description = description;
         this.emotion = emotion;
-        this.questionType = question;
+        this.questionType = questionType;
         this.userPatient = userPatient;
     }
 
@@ -57,13 +57,13 @@ public class Calendar extends BaseTimeEntity {
     public static Calendar create(final LocalDate date,
                                   final String description,
                                   final EEmotion emotion,
-                                  final EQuestionType question,
+                                  final EQuestionType questionType,
                                   final UserPatient userPatient) {
         return Calendar.builder()
                 .date(date)
                 .description(description)
                 .emotion(emotion)
-                .question(question)
+                .questionType(questionType)
                 .userPatient(userPatient)
                 .build();
     }

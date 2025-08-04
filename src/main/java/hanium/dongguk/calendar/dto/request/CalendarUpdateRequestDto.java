@@ -1,11 +1,13 @@
 package hanium.dongguk.calendar.dto.request;
 
 import hanium.dongguk.calendar.domain.EEmotion;
-
+import hanium.dongguk.question.domain.EQuestionType;
+import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 public record CalendarUpdateRequestDto(
-        UUID calendarId,
+        @NotNull UUID calendarId,
         String description,
-        EEmotion emotion
+        @NotNull EEmotion emotion,
+        EQuestionType questionType
 ) {}
