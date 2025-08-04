@@ -1,6 +1,6 @@
 package hanium.dongguk.user.patient;
 
-import hanium.dongguk.user.core.domain.User;
+import hanium.dongguk.user.core.domain.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -34,5 +34,54 @@ public class UserPatient extends User {
     @Column(name = "feeding", nullable = false) //수유 여부
     private boolean feeding;
 
+    @Builder
+    private UserPatient(String serialId,
+                        Email email,
+                        String password,
+                        String name,
+                        ERole role,
+                        EProvider provider,
+                        EStatus status,
+                        LocalDate birth,
+                        Integer height,
+                        Integer weight,
+                        LocalDate dueDate,
+                        Integer pregnancyWeeks,
+                        boolean feeding) {
+        super(serialId, email, password, name, role, provider, status);
+        this.birth = birth;
+        this.height = height;
+        this.weight = weight;
+        this.dueDate = dueDate;
+        this.pregnancyWeeks = pregnancyWeeks;
+        this.feeding = feeding;
+    }
+
+    public static UserPatient normalCreate(final String serialId,
+                                           final Email email,
+                                           final String password,
+                                           final String name,
+                                           final LocalDate birth,
+                                           final Integer height,
+                                           final Integer weight,
+                                           final LocalDate dueDate,
+                                           final Integer pregnancyWeeks,
+                                           final boolean feeding){
+        return UserPatient.builder()
+                .serialId(serialId)
+                .email(email)
+                .password(password)
+                .name(name)
+                .role(ERole.PATIENT)
+                .provider(EProvider.BASIC)
+                .status(EStatus.ACTIVE)
+                .birth(birth)
+                .height(height)
+                .weight(weight)
+                .dueDate(dueDate)
+                .pregnancyWeeks(pregnancyWeeks)
+                .feeding(feeding)
+                .build();
+    }
 
 }

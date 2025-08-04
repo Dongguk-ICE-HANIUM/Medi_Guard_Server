@@ -1,6 +1,6 @@
 package hanium.dongguk.question.domain;
 
-public enum QuestionType {
+public enum EQuestionType {
     PHYSICAL_SYMPTOMS,      // 신체 증상 및 태아 상태
     FETAL_MOVEMENT,         // 태아 움직임
     MEDICATION_COMPLIANCE,  // 약물 복용 준수

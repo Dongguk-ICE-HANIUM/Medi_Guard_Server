@@ -1,6 +1,6 @@
 package hanium.dongguk.calendar.domain;
 
-public enum Emotion {
+public enum EEmotion {
     VERY_HAPPY,
     HAPPY,
     NEUTRAL,

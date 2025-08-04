@@ -18,6 +18,7 @@ public class Constants {
             "/api-docs/**",
             "/v3/api-docs/**",
             "/api/health-check",
-            "/api/auth/normal/login"
+            "/api/auth/normal/login",
+            "/api/user"
     );
 }
