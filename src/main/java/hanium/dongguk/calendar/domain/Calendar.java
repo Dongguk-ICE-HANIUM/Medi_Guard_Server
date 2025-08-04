@@ -2,14 +2,10 @@ package hanium.dongguk.calendar.domain;
 
 import hanium.dongguk.global.base.BaseTimeEntity;
 import hanium.dongguk.question.domain.EQuestionType;
-import hanium.dongguk.question.domain.Question;
-import hanium.dongguk.user.patient.UserPatient;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity

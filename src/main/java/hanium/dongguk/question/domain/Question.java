@@ -4,6 +4,7 @@ import hanium.dongguk.global.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import hanium.dongguk.question.domain.EQuestionType;
 
 import java.util.UUID;
 
@@ -20,6 +21,7 @@ public class Question extends BaseTimeEntity {
     private UUID id;
 
     @Enumerated(EnumType.STRING)
+
     @Column(name = "type", nullable = false)
     private EQuestionType type;   // 질문 타입 (Enum)
 
