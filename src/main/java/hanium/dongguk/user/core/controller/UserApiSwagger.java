@@ -13,7 +13,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "User", description = "사용자 관리 API")
-public interface UserApi {
+public interface UserApiSwagger {
 
     @Operation(
             summary = "일반 회원가입",

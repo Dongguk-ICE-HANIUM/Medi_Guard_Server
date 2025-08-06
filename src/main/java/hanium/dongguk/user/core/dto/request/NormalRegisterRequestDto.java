@@ -26,7 +26,7 @@ public record NormalRegisterRequestDto(
         String birthday,
 
         @NotNull
-        @Min(130) @Max(200)
+        @Min(100) @Max(220)
         @Schema(example = "180")
         Integer height,
 

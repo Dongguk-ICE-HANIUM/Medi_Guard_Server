@@ -12,17 +12,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserSaver {
 
     private final UserRepository userRepository;
     private final UserValidator userValidator;
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Transactional
-    public void normalRegister(NormalRegisterRequestDto request){
+    public void normalRegister(NormalRegisterRequestDto request)
+    {
 
         LocalDate birthday = LocalDate.parse(request.birthday());
         LocalDate dueDate = LocalDate.parse(request.dueDate());
@@ -30,7 +32,8 @@ public class UserService {
         userValidator.validateBirthday(birthday);
         userValidator.validateDueDate(dueDate);
 
-        if(userRepository.existsByEmail(request.email())){
+        if(userRepository.existsByEmail(request.email()))
+        {
             throw CommonException.type(UserErrorCode.EMAIL_ALREADY_EXISTS);
         }
 
@@ -57,6 +60,6 @@ public class UserService {
     }
 
     private String generateSerialId(){
-        return "P" + System.currentTimeMillis();
+        return UUID.randomUUID().toString();
     }
 }
