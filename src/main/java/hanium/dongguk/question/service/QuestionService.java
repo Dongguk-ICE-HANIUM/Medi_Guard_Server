@@ -12,6 +12,8 @@ import hanium.dongguk.question.dto.request.QuestionUpdateRequestDto;
 import hanium.dongguk.question.dto.response.QuestionResponseDto;
 import hanium.dongguk.user.patient.UserPatient;
 import hanium.dongguk.user.patient.UserPatientRepository;
+import hanium.dongguk.calendar.domain.EEmotion;
+import hanium.dongguk.question.domain.EQuestionType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +40,13 @@ public class QuestionService {
 
         Calendar calendar = calendarRepository.findByDateAndUserPatient(date, userPatient)
                 .orElseGet(() -> calendarRepository.save(
-                        Calendar.create(date, null, null, null, userPatient)
+                        Calendar.create(
+                                date,
+                                "자동 생성된 캘린더입니다.",         // description
+                                EEmotion.NEUTRAL,                        // emotion: enum 기본값
+                                EQuestionType.PHYSICAL_SYMPTOMS,         // questionType: enum 기본값
+                                userPatient
+                        )
                 ));
 
         List<Question> questions = requestDto.questionList().stream()

@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import hanium.dongguk.user.core.dto.UserSecurityForm;
@@ -37,6 +38,14 @@ public class QuestionController {
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @RequestBody QuestionSaveRequestDto requestDto) {
 
+        /**
+        UUID patientId = (loginUser != null)
+                ? loginUser.getId()
+                : UUID.fromString("253fb51c-72dd-11f0-b240-f389d48c409d");
+
+        return ResponseEntity.ok(
+                questionService.saveQuestions(patientId, date, requestDto) */
+
         return ResponseEntity.ok(
                 questionService.saveQuestions(loginUser.getId(), date, requestDto)
         );
@@ -55,6 +64,14 @@ public class QuestionController {
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @RequestBody QuestionUpdateRequestDto requestDto) {
 
+        /**
+        UUID patientId = (loginUser != null)
+                ? loginUser.getId()
+                : UUID.fromString("253fb51c-72dd-11f0-b240-f389d48c409d");
+
+        return ResponseEntity.ok(
+                questionService.updateQuestions(patientId, date, requestDto) */
+
         return ResponseEntity.ok(
                 questionService.updateQuestions(loginUser.getId(), date, requestDto)
         );
@@ -71,6 +88,15 @@ public class QuestionController {
     public ResponseEntity<QuestionResponseDto> getQuestionsByDate(
             @AuthenticationPrincipal UserSecurityForm loginUser,
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        /**
+        //  테스트용 하드코딩: Swagger에서는 인증이 안 되기 때문에 fallback UUID 설정
+        UUID patientId = (loginUser != null) ? loginUser.getId() :
+                UUID.fromString("253fb51c-72dd-11f0-b240-f389d48c409d"); // 실제 user_patient ID
+
+        return ResponseEntity.ok(
+                questionService.getQuestionsByDate(patientId, date) */
+
 
         return ResponseEntity.ok(
                 questionService.getQuestionsByDate(loginUser.getId(), date)
