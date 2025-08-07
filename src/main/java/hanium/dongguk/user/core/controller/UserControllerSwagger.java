@@ -1,7 +1,7 @@
 package hanium.dongguk.user.core.controller;
 
 import hanium.dongguk.user.core.dto.request.NormalRegisterRequestDto;
-import hanium.dongguk.user.core.service.UserSaver;
+import hanium.dongguk.user.core.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserControllerSwagger implements UserApiSwagger {
 
 
-    private final UserSaver userSaver;
+    private final UserService userService;
 
     @Override
     @PostMapping("/register")
     public void normalRegister(@RequestBody @Valid NormalRegisterRequestDto request) {
-        userSaver.normalRegister(request);
+        userService.normalRegister(request);
     }
 
 }
