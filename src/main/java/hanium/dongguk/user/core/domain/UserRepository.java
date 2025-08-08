@@ -16,4 +16,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<UserSecurityForm> findUserSecurityFromById(@Param("id") UUID id);
 
     Optional<User> findById(UUID id);
+
+    boolean existsByEmail(Email email);
 }
