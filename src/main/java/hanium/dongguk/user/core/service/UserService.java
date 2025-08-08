@@ -31,13 +31,10 @@ public class UserService {
 
         userValidator.validateBirthday(birthday);
         userValidator.validateDueDate(dueDate);
+        userValidator.validateEmailNotExist(request.email());
 
-        userRetriever.validateEmailNotExist(request.email());
-
-        String serialId = generateSerialId();
 
         UserPatient userPatient = UserPatient.normalCreate(
-                serialId,
                 request.email(),
                 encodePassword(request.password()),
                 request.name(),
@@ -57,8 +54,5 @@ public class UserService {
         return passwordEncoder.encode(password);
     }
 
-    private String generateSerialId(){
-        return UUID.randomUUID().toString();
-    }
 
 }

@@ -13,12 +13,8 @@ public class UserRetriever {
 
     private final UserRepository userRepository;
 
-    public void validateEmailNotExist(Email email) {
-
-        if(userRepository.existsByEmail(email))
-        {
-            throw CommonException.type(UserErrorCode.EMAIL_ALREADY_EXISTS);
-        }
+    public boolean validateEmailNotExist(Email email) {
+        return userRepository.existsByEmail(email);
     }
 
 }

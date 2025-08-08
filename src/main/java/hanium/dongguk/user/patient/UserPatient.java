@@ -8,6 +8,7 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -57,8 +58,7 @@ public class UserPatient extends User {
         this.feeding = feeding;
     }
 
-    public static UserPatient normalCreate(final String serialId,
-                                           final Email email,
+    public static UserPatient normalCreate(final Email email,
                                            final String password,
                                            final String name,
                                            final LocalDate birth,
@@ -67,6 +67,8 @@ public class UserPatient extends User {
                                            final LocalDate dueDate,
                                            final Integer pregnancyWeeks,
                                            final boolean feeding){
+        String serialId = UUID.randomUUID().toString();
+
         return UserPatient.builder()
                 .serialId(serialId)
                 .email(email)
