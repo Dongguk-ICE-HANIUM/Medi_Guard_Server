@@ -1,12 +1,13 @@
 package hanium.dongguk.calendar.service;
 
-import hanium.dongguk.calendar.domain.Calendar;
-import hanium.dongguk.calendar.domain.CalendarRepository;
+import hanium.dongguk.calendar.domain.*;
 import hanium.dongguk.calendar.dto.request.CalendarSaveRequestDto;
 import hanium.dongguk.calendar.dto.request.CalendarUpdateRequestDto;
 import hanium.dongguk.calendar.dto.response.CalendarResponseDto;
 import hanium.dongguk.global.exception.CalendarErrorCode;
 import hanium.dongguk.global.exception.CommonException;
+import hanium.dongguk.question.domain.Question;
+import hanium.dongguk.question.domain.QuestionRepository;
 import hanium.dongguk.user.patient.UserPatient;
 import hanium.dongguk.user.patient.UserPatientRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -21,7 +23,9 @@ import java.util.UUID;
 public class CalendarService {
 
     private final CalendarRepository calendarRepository;
+    private final CalendarDrugRepository calendarDrugRepository;
     private final UserPatientRepository userPatientRepository;
+    private final QuestionRepository questionRepository;
 
     /**
      * 오늘의 기분 저장
@@ -35,13 +39,14 @@ public class CalendarService {
                 requestDto.date(),
                 requestDto.description(),
                 requestDto.emotion(),
-                requestDto.questionType(), // 추가됨
+                requestDto.questionType(),
                 userPatient
         );
 
         calendarRepository.save(calendar);
+        List<CalendarDrug> calendarDrugs = calendarDrugRepository.findByCalendar(calendar);
 
-        return CalendarResponseDto.of(calendar);
+        return CalendarResponseDto.of(calendar, calendarDrugs);
     }
 
     /**
@@ -59,10 +64,11 @@ public class CalendarService {
             throw new CommonException(CalendarErrorCode.UNAUTHORIZED_ACCESS);
         }
 
-        // Calendar 엔티티에 updateEmotion 메서드 사용
         calendar.updateEmotion(requestDto.emotion(), requestDto.description());
 
-        return CalendarResponseDto.of(calendar);
+        List<CalendarDrug> calendarDrugs = calendarDrugRepository.findByCalendar(calendar);
+
+        return CalendarResponseDto.of(calendar, calendarDrugs);
     }
 
     /**
@@ -76,7 +82,8 @@ public class CalendarService {
         Calendar calendar = calendarRepository.findByDateAndUserPatient(date, userPatient)
                 .orElseThrow(() -> new CommonException(CalendarErrorCode.CALENDAR_NOT_FOUND));
 
-        return CalendarResponseDto.of(calendar);
+        List<CalendarDrug> calendarDrugs = calendarDrugRepository.findByCalendar(calendar);
+
+        return CalendarResponseDto.of(calendar, calendarDrugs);
     }
 }
-//patient drug 생성 후 수정 예정
