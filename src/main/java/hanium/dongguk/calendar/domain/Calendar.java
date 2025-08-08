@@ -32,8 +32,8 @@ public class Calendar extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private EEmotion emotion;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "question_type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private EQuestionType questionType;
 
     @ManyToOne(fetch = FetchType.LAZY)
