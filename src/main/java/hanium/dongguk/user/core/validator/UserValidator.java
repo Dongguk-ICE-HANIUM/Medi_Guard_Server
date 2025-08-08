@@ -38,7 +38,7 @@ public class UserValidator {
     }
 
     public void validateEmailNotExist(Email email) {
-        if(userRetriever.validateEmailNotExist(email))
+        if(userRetriever.existsByEmail(email))
         {
             throw CommonException.type(UserErrorCode.EMAIL_ALREADY_EXISTS);
         }
