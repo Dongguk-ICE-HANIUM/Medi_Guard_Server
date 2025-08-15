@@ -60,4 +60,8 @@ public abstract class User extends BaseTimeEntity {
         this.provider = provider;
         this.status = status;
     }
+
+    public void restore(){
+        this.status = EStatus.ACTIVE;
+    }
 }
