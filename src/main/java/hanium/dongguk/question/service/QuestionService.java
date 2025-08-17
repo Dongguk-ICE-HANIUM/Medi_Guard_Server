@@ -6,6 +6,7 @@ import hanium.dongguk.calendar.service.CalendarSaver;
 import hanium.dongguk.global.exception.CommonException;
 import hanium.dongguk.calendar.exception.CalendarErrorCode;
 import hanium.dongguk.question.exception.QuestionErrorCode;
+import hanium.dongguk.user.core.exception.UserErrorCode;
 import hanium.dongguk.question.domain.Question;
 import hanium.dongguk.question.dto.request.QuestionSaveRequestDto;
 import hanium.dongguk.question.dto.request.QuestionUpdateRequestDto;
@@ -40,7 +41,7 @@ public class QuestionService {
     @Transactional
     public QuestionResponseDto saveQuestions(UUID patientId, LocalDate date, QuestionSaveRequestDto requestDto) {
         User user = userRepository.findById(patientId)
-                .orElseThrow(() -> CommonException.type(CalendarErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> CommonException.type(UserErrorCode.NOT_FOUND_USER));
         
         if (!(user instanceof UserPatient)) {
             throw CommonException.type(CalendarErrorCode.UNAUTHORIZED_ACCESS);
@@ -74,7 +75,7 @@ public class QuestionService {
     @Transactional
     public QuestionResponseDto updateQuestions(UUID patientId, LocalDate date, QuestionUpdateRequestDto requestDto) {
         User user = userRepository.findById(patientId)
-                .orElseThrow(() -> CommonException.type(CalendarErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> CommonException.type(UserErrorCode.NOT_FOUND_USER));
         
         if (!(user instanceof UserPatient)) {
             throw CommonException.type(CalendarErrorCode.UNAUTHORIZED_ACCESS);
@@ -106,7 +107,7 @@ public class QuestionService {
     @Transactional(readOnly = true)
     public QuestionResponseDto getQuestionsByDate(UUID patientId, LocalDate date) {
         User user = userRepository.findById(patientId)
-                .orElseThrow(() -> CommonException.type(CalendarErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> CommonException.type(UserErrorCode.NOT_FOUND_USER));
         
         if (!(user instanceof UserPatient)) {
             throw CommonException.type(CalendarErrorCode.UNAUTHORIZED_ACCESS);
