@@ -61,7 +61,12 @@ public abstract class User extends BaseTimeEntity {
         this.status = status;
     }
 
-    public void restore(){
+    public void activate(){
         this.status = EStatus.ACTIVE;
     }
+
+    protected void updateName(String name){
+        this.name = name;
+    }
+
 }

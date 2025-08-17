@@ -1,13 +1,14 @@
 package hanium.dongguk.user.patient.controller;
 
+import hanium.dongguk.global.dto.JwtDto;
 import hanium.dongguk.user.patient.dto.request.GoogleLoginRequestDto;
+import hanium.dongguk.user.patient.dto.request.SocialLoginSignupRequestDto;
 import hanium.dongguk.user.patient.dto.response.GoogleLoginResponseDto;
 import hanium.dongguk.user.patient.service.GoogleAuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,4 +22,8 @@ public class UserPatientController implements UserPatientApiSwagger {
         return googleAuthService.googleLogin(googleLoginRequestDto);
     }
 
+    @PostMapping("/social/signup")
+    public JwtDto socialLoginSignup(@RequestBody SocialLoginSignupRequestDto request){
+        return googleAuthService.socialLoginSignup(request);
+    }
 }

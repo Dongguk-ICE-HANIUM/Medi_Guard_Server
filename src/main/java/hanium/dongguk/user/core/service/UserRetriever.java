@@ -21,4 +21,5 @@ public class UserRetriever {
     public Optional<User> getUserBySerialId (String serialId) {
         return userRepository.findBySerialId(serialId);
     }
+
 }

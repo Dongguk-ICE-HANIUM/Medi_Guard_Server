@@ -48,4 +48,11 @@ public class UserValidator {
     public boolean isInactive(EStatus status){
         return status == EStatus.INACTIVE;
     }
+
+    public void validatePending(EStatus status){
+        if(status != EStatus.PENDING){
+            throw CommonException.type(UserErrorCode.ALREADY_COMPLETED_SIGNUP);
+        }
+    }
+
 }

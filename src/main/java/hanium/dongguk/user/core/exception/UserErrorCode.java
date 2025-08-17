@@ -18,7 +18,7 @@ public enum UserErrorCode implements ErrorCode {
     // == oauth 관련 오류 == //
     NOT_FOUND_GOOGLE_USER(HttpStatus.NOT_FOUND, "USER_007", "구글 사용자 정보를 찾을 수 없습니다."),
     GOOGLE_OAUTH_FAILED(HttpStatus.BAD_REQUEST, "USER_008", "구글 사용자 정보 조회 실패"),
-
+    ALREADY_COMPLETED_SIGNUP(HttpStatus.BAD_REQUEST, "USER_009", "이미 회원가입이 완료된 사용자입니다.")
     ;
 
     private final HttpStatus status;

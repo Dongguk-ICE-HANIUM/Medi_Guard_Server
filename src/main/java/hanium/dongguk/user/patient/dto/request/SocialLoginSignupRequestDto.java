@@ -1,18 +1,15 @@
-package hanium.dongguk.user.core.dto.request;
+package hanium.dongguk.user.patient.dto.request;
 
-import hanium.dongguk.user.core.domain.Email;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 
-public record NormalRegisterRequestDto(
+import java.util.UUID;
+
+public record SocialLoginSignupRequestDto(
 
         @NotNull
-        @Schema(example = "wpsxkehf7@naver.com")
-        Email email,
-
-        @NotBlank
-        @Schema(example = "tkddbs3535")
-        String password,
+        @Schema(example = "123e4567-e89b-12d3-a456-426614174000")
+        UUID userId,
 
         @NotBlank
         @Schema(example = "홍길동")
@@ -49,8 +46,6 @@ public record NormalRegisterRequestDto(
 
         // List<String> allergyList,
 
-       // List<String> diseaseList
-
+        // List<String> diseaseList
 ) {
-
 }
