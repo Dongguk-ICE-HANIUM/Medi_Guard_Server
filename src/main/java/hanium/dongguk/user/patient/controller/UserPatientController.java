@@ -23,7 +23,7 @@ public class UserPatientController implements UserPatientApiSwagger {
     }
 
     @PostMapping("/social/signup")
-    public JwtDto socialLoginSignup(@RequestBody SocialLoginSignupRequestDto request){
+    public JwtDto socialLoginSignup(@RequestBody SocialLoginSignupRequestDto request) {
         return googleAuthService.socialLoginSignup(request);
     }
 }

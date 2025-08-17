@@ -3,7 +3,7 @@ package hanium.dongguk.user.core.service;
 import hanium.dongguk.user.core.domain.UserRepository;
 import hanium.dongguk.user.core.dto.request.NormalRegisterRequestDto;
 import hanium.dongguk.user.core.validator.UserValidator;
-import hanium.dongguk.user.patient.domain.UserPatient;
+import hanium.dongguk.user.patient.UserPatient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -44,7 +44,7 @@ public class UserService {
                 request.pregnancyWeek(),
                 request.feeding());
 
-        userSaver.save(userPatient);
+        userSaver.saveUser(userPatient);
     }
 
 
