@@ -40,10 +40,10 @@ public class QuestionService {
     @Transactional
     public QuestionResponseDto saveQuestions(UUID patientId, LocalDate date, QuestionSaveRequestDto requestDto) {
         User user = userRepository.findById(patientId)
-                .orElseThrow(() -> new CommonException(CalendarErrorCode.UNAUTHORIZED_ACCESS));
+                .orElseThrow(() -> CommonException.type(CalendarErrorCode.USER_NOT_FOUND));
         
         if (!(user instanceof UserPatient)) {
-            throw new CommonException(CalendarErrorCode.UNAUTHORIZED_ACCESS);
+            throw CommonException.type(CalendarErrorCode.UNAUTHORIZED_ACCESS);
         }
         
         UserPatient userPatient = (UserPatient) user;
@@ -74,21 +74,21 @@ public class QuestionService {
     @Transactional
     public QuestionResponseDto updateQuestions(UUID patientId, LocalDate date, QuestionUpdateRequestDto requestDto) {
         User user = userRepository.findById(patientId)
-                .orElseThrow(() -> new CommonException(CalendarErrorCode.UNAUTHORIZED_ACCESS));
+                .orElseThrow(() -> CommonException.type(CalendarErrorCode.USER_NOT_FOUND));
         
         if (!(user instanceof UserPatient)) {
-            throw new CommonException(CalendarErrorCode.UNAUTHORIZED_ACCESS);
+            throw CommonException.type(CalendarErrorCode.UNAUTHORIZED_ACCESS);
         }
         
         UserPatient userPatient = (UserPatient) user;
 
         Calendar calendar = calendarRetriever.findByDateAndUserPatient(date, userPatient)
-                .orElseThrow(() -> new CommonException(CalendarErrorCode.CALENDAR_NOT_FOUND));
+                .orElseThrow(() -> CommonException.type(CalendarErrorCode.CALENDAR_NOT_FOUND));
 
         List<Question> updatedQuestions = requestDto.questionList().stream()
                 .map(item -> {
                     Question question = questionRetriever.findById(item.id())
-                            .orElseThrow(() -> new CommonException(QuestionErrorCode.QUESTION_NOT_FOUND));
+                            .orElseThrow(() -> CommonException.type(QuestionErrorCode.QUESTION_NOT_FOUND));
 
                     questionValidator.validateQuestionBelongsToCalendar(question, calendar);
 
@@ -106,16 +106,16 @@ public class QuestionService {
     @Transactional(readOnly = true)
     public QuestionResponseDto getQuestionsByDate(UUID patientId, LocalDate date) {
         User user = userRepository.findById(patientId)
-                .orElseThrow(() -> new CommonException(CalendarErrorCode.UNAUTHORIZED_ACCESS));
+                .orElseThrow(() -> CommonException.type(CalendarErrorCode.USER_NOT_FOUND));
         
         if (!(user instanceof UserPatient)) {
-            throw new CommonException(CalendarErrorCode.UNAUTHORIZED_ACCESS);
+            throw CommonException.type(CalendarErrorCode.UNAUTHORIZED_ACCESS);
         }
         
         UserPatient userPatient = (UserPatient) user;
 
         Calendar calendar = calendarRetriever.findByDateAndUserPatient(date, userPatient)
-                .orElseThrow(() -> new CommonException(CalendarErrorCode.CALENDAR_NOT_FOUND));
+                .orElseThrow(() -> CommonException.type(CalendarErrorCode.CALENDAR_NOT_FOUND));
 
         List<Question> questions = questionRetriever.findByCalendarId(calendar.getId());
 
