@@ -3,7 +3,10 @@ package hanium.dongguk.patientdrug.domain;
 import hanium.dongguk.global.base.BaseTimeEntity;
 import hanium.dongguk.user.patient.UserPatient;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
@@ -30,10 +33,6 @@ public class PatientDrug extends BaseTimeEntity {
 
     @Column(name = "end_at", nullable = false)
     private LocalDateTime endAt;
-
-    // 향후 연동 예정: 복용 방식, 질병, 약물 그룹 등
-    // @ManyToOne
-    // private DrugGroup drugGroup;
 
     @Builder
     private PatientDrug(UserPatient userPatient,

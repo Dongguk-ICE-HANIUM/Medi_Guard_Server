@@ -1,5 +1,6 @@
-package hanium.dongguk.global.exception;
+package hanium.dongguk.calendar.exception;
 
+import hanium.dongguk.global.exception.ErrorCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,19 +24,4 @@ public enum CalendarErrorCode implements ErrorCode {
     private final HttpStatus status;
     private final String errorCode;
     private final String message;
-
-    @Override
-    public HttpStatus getStatus() {
-        return status;
-    }
-
-    @Override
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    @Override
-    public String getMessage() {
-        return message;
-    }
 }

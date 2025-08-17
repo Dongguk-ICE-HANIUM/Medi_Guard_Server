@@ -1,7 +1,7 @@
 package hanium.dongguk.calendar.domain;
 
 import hanium.dongguk.global.base.BaseTimeEntity;
-import hanium.dongguk.patientdrug.domain.PatientDrug; //패키지 경로는 실제 위치에 맞게 수정 예정
+import hanium.dongguk.patientdrug.domain.PatientDrug;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

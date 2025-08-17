@@ -1,105 +1,58 @@
 package hanium.dongguk.question.controller;
 
+import hanium.dongguk.global.annotation.UserId;
 import hanium.dongguk.question.dto.request.QuestionSaveRequestDto;
 import hanium.dongguk.question.dto.request.QuestionUpdateRequestDto;
 import hanium.dongguk.question.dto.response.QuestionResponseDto;
 import hanium.dongguk.question.service.QuestionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.Operation;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import hanium.dongguk.user.core.dto.UserSecurityForm;
-
 @RestController
 @RequestMapping("/api/question")
 @RequiredArgsConstructor
-@Tag(name = "오늘의 질문", description = "오늘의 질문 저장, 수정, 조회 기능 제공")
-public class QuestionController {
+public class QuestionController implements QuestionApiSwagger {
 
     private final QuestionService questionService;
 
-    /**
-     * 오늘의 질문 저장
-     */
-    @Operation(
-            summary = "오늘의 질문 저장",
-            description = "로그인된 환자의 오늘의 질문을 저장합니다."
-    )
+    @Override
     @PostMapping
     public ResponseEntity<QuestionResponseDto> saveQuestions(
-            @AuthenticationPrincipal UserSecurityForm loginUser,
+            @UserId UUID userId,
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @RequestBody QuestionSaveRequestDto requestDto) {
-
-        /**
-        UUID patientId = (loginUser != null)
-                ? loginUser.getId()
-                : UUID.fromString("253fb51c-72dd-11f0-b240-f389d48c409d");
+            @Valid @RequestBody QuestionSaveRequestDto requestDto) {
 
         return ResponseEntity.ok(
-                questionService.saveQuestions(patientId, date, requestDto) */
-
-        return ResponseEntity.ok(
-                questionService.saveQuestions(loginUser.getId(), date, requestDto)
+                questionService.saveQuestions(userId, date, requestDto)
         );
     }
 
-    /**
-     * 오늘의 질문 수정
-     */
-    @Operation(
-            summary = "오늘의 질문 수정",
-            description = "로그인된 환자의 오늘의 질문을 수정합니다."
-    )
+    @Override
     @PutMapping
     public ResponseEntity<QuestionResponseDto> updateQuestions(
-            @AuthenticationPrincipal UserSecurityForm loginUser,
+            @UserId UUID userId,
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @RequestBody QuestionUpdateRequestDto requestDto) {
-
-        /**
-        UUID patientId = (loginUser != null)
-                ? loginUser.getId()
-                : UUID.fromString("253fb51c-72dd-11f0-b240-f389d48c409d");
+            @Valid @RequestBody QuestionUpdateRequestDto requestDto) {
 
         return ResponseEntity.ok(
-                questionService.updateQuestions(patientId, date, requestDto) */
-
-        return ResponseEntity.ok(
-                questionService.updateQuestions(loginUser.getId(), date, requestDto)
+                questionService.updateQuestions(userId, date, requestDto)
         );
     }
 
-    /**
-     * 특정 날짜 기준 질문 조회
-     */
-    @Operation(
-            summary = "오늘의 질문 조회",
-            description = "로그인된 환자의 특정 날짜 질문을 조회합니다."
-    )
+    @Override
     @GetMapping
     public ResponseEntity<QuestionResponseDto> getQuestionsByDate(
-            @AuthenticationPrincipal UserSecurityForm loginUser,
+            @UserId UUID userId,
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
-        /**
-        //  테스트용 하드코딩: Swagger에서는 인증이 안 되기 때문에 fallback UUID 설정
-        UUID patientId = (loginUser != null) ? loginUser.getId() :
-                UUID.fromString("253fb51c-72dd-11f0-b240-f389d48c409d"); // 실제 user_patient ID
-
         return ResponseEntity.ok(
-                questionService.getQuestionsByDate(patientId, date) */
-
-
-        return ResponseEntity.ok(
-                questionService.getQuestionsByDate(loginUser.getId(), date)
+                questionService.getQuestionsByDate(userId, date)
         );
     }
 }
