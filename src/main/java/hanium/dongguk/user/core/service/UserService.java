@@ -3,7 +3,7 @@ package hanium.dongguk.user.core.service;
 import hanium.dongguk.user.core.domain.UserRepository;
 import hanium.dongguk.user.core.dto.request.NormalRegisterRequestDto;
 import hanium.dongguk.user.core.validator.UserValidator;
-import hanium.dongguk.user.patient.UserPatient;
+import hanium.dongguk.user.patient.domain.UserPatient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,10 +15,8 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
     private final UserValidator userValidator;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final UserRetriever userRetriever;
     private final UserSaver userSaver;
 
     @Transactional
@@ -44,7 +42,7 @@ public class UserService {
                 request.pregnancyWeek(),
                 request.feeding());
 
-        userSaver.saveUser(userPatient);
+        userSaver.save(userPatient);
     }
 
 
