@@ -64,9 +64,9 @@ jobs:
         run: |
           cd infra
           TAG=${{ steps.vars.outputs.VERSION }}
-          echo "Updating image tag to: $TAG"
+          echo "Updating image tag to: ${{ steps.vars.outputs.VERSION }}"
           
-          sed -i "s|^\([[:space:]]*tag:\).*|\1 \"$TAG\"|" charts/medi-guard/value/dev.yaml
+          sed -i "s|^\([[:space:]]*tag:\).*|\1 \"${{ steps.vars.outputs.VERSION }}\"|" charts/medi-guard/value/dev.yaml
           
           git config user.name "github-actions"
           git config user.email "actions@github.com"
