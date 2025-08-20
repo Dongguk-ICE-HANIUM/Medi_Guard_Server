@@ -53,6 +53,13 @@ jobs:
     needs: [build-and-push]
     runs-on: ubuntu-22.04
     steps:
+      - name: Get Branch and Commit
+        id: vars
+        run: |
+          BRANCH_NAME=$(echo "${GITHUB_REF#refs/heads/}" | tr '/' '-')
+          COMMIT_HASH=$(git rev-parse --short HEAD)
+          echo "VERSION=${BRANCH_NAME}-${COMMIT_HASH}" >> $GITHUB_OUTPUT
+
       - name: Patch Image Tag to Infra Repo
         uses: actions/checkout@v3
         with:
@@ -63,7 +70,6 @@ jobs:
       - name: Update image tag in Helm values
         run: |
           cd infra
-          TAG=${{ steps.vars.outputs.VERSION }}
           echo "Updating image tag to: ${{ steps.vars.outputs.VERSION }}"
           
           sed -i "s|^\([[:space:]]*tag:\).*|\1 \"${{ steps.vars.outputs.VERSION }}\"|" charts/medi-guard/value/dev.yaml
