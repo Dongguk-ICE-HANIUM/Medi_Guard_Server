@@ -23,6 +23,10 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Build with Gradle
+        run: |
+          ./gradlew clean build
+
       - name: Get Branch and Commit
         id: vars
         run: |
