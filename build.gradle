@@ -81,7 +81,7 @@ springBoot {
 	buildInfo {
 		properties {
 			additional = [
-					'commitTime': new Date().toString()
+					'buildTime': new Date().toString()
 			]
 		}
 	}
