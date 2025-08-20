@@ -1,4 +1,4 @@
-package hanium.dongguk.user.patient;
+package hanium.dongguk.user.patient.domain;
 
 import hanium.dongguk.user.core.domain.*;
 import jakarta.persistence.Column;
@@ -17,7 +17,7 @@ import java.util.UUID;
 @Table(name = "user_patient")
 public class UserPatient extends User {
 
-    @Column(name = "birth", nullable = false)
+    @Column(name = "birth")
     private LocalDate birth;
 
     @Column(name = "height")
@@ -26,13 +26,13 @@ public class UserPatient extends User {
     @Column(name = "weight")
     private Integer weight;
 
-    @Column(name = "due_date", nullable = false) // 출산 예정일
+    @Column(name = "due_date") // 출산 예정일
     private LocalDate dueDate;
 
-    @Column(name = "pregnancy_weeks", nullable = false) //임신 주차
+    @Column(name = "pregnancy_weeks") //임신 주차
     private Integer pregnancyWeeks;
 
-    @Column(name = "feeding", nullable = false) //수유 여부
+    @Column(name = "feeding") //수유 여부
     private boolean feeding;
 
     @Builder
@@ -86,4 +86,31 @@ public class UserPatient extends User {
                 .build();
     }
 
+    public static UserPatient googleCreate(final String providerId, final String name){
+
+        return UserPatient.builder()
+                .serialId(providerId)
+                .password(UUID.randomUUID().toString())
+                .name(name)
+                .role(ERole.PATIENT)
+                .provider(EProvider.GOOGLE)
+                .status(EStatus.PENDING)
+                .build();
+    }
+
+    public void update(String name,
+                       LocalDate birthday,
+                       Integer height,
+                       Integer weight,
+                       LocalDate dueDate,
+                       Integer pregnancyWeek,
+                       boolean feeding){
+        super.updateName(name);
+        this.birth =  birthday;
+        this.height = height;
+        this.weight = weight;
+        this.dueDate = dueDate;
+        this.pregnancyWeeks = pregnancyWeek;
+        this.feeding = feeding;
+    }
 }
