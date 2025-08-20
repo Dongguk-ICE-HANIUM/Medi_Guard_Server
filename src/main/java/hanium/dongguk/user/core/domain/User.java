@@ -3,6 +3,7 @@ package hanium.dongguk.user.core.domain;
 import hanium.dongguk.global.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
@@ -12,6 +13,7 @@ import java.util.UUID;
 @DiscriminatorColumn(name = "user_type")
 @Table(name = "users")
 @Getter
+@NoArgsConstructor
 public abstract class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -42,4 +44,20 @@ public abstract class User extends BaseTimeEntity {
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private EStatus status;
+
+    public User(String serialId,
+                Email email,
+                String password,
+                String name,
+                ERole role,
+                EProvider provider,
+                EStatus status){
+        this.serialId = serialId;
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.role = role;
+        this.provider = provider;
+        this.status = status;
+    }
 }
