@@ -1,0 +1,70 @@
+name: Dev Branch Deploy (ECR, ArgoCD Infra Repo)
+
+on:
+  push:
+    branches: [dev]
+  workflow_dispatch:
+
+env:
+  ECR_REGISTRY: 677604542801.dkr.ecr.ap-northeast-2.amazonaws.com
+  IMAGE_NAME: medi-guard/image-container
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Get Branch and Commit
+        id: vars
+        run: |
+          BRANCH_NAME=$(echo "${GITHUB_REF#refs/heads/}" | tr '/' '-')
+          COMMIT_HASH=$(git rev-parse --short HEAD)
+          echo "VERSION=${BRANCH_NAME}-${COMMIT_HASH}" >> $GITHUB_OUTPUT
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and Push Docker to ECR
+        run: |
+          docker buildx build --platform linux/amd64 --load \
+            -t $ECR_REGISTRY/$IMAGE_NAME:${{ steps.vars.outputs.VERSION }} .
+          docker push $ECR_REGISTRY/$IMAGE_NAME:${{ steps.vars.outputs.VERSION }}
+  infra-repo-push:
+    needs: [build-and-push]
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Patch Image Tag to Infra Repo
+        uses: actions/checkout@v3
+        with:
+          repository: Dongguk-ICE-HANIUM/Medi_Guard_Infra
+          token: ${{ secrets.GIT_TOKEN }}
+          path: infra
+
+      - name: Update image tag in Helm values
+        run: |
+          cd infra
+          TAG=${{ steps.vars.outputs.VERSION }}
+          echo "Updating image tag to: $TAG"
+          
+          sed -i "s|^\([[:space:]]*tag:\).*|\1 \"$TAG\"|" charts/medi-guard/value/dev.yaml
+          
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git commit -am "chore: update image tag to $TAG"
+          git push
