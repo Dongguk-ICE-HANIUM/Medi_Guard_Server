@@ -66,6 +66,12 @@ dependencies {
 
 	// json
 	implementation 'net.minidev:json-smart:2.5.2'
+
+	//oauth
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	//webClient
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 }
 
 tasks.named('test') {

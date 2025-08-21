@@ -1,4 +1,4 @@
-package hanium.dongguk.user.patient;
+package hanium.dongguk.user.patient.domain;
 
 import hanium.dongguk.user.core.domain.*;
 import jakarta.persistence.Column;
@@ -86,4 +86,15 @@ public class UserPatient extends User {
                 .build();
     }
 
+    public static UserPatient googleCreate(final String providerId, final String name){
+
+        return UserPatient.builder()
+                .serialId(providerId)
+                .password(UUID.randomUUID().toString())
+                .name(name)
+                .role(ERole.PATIENT)
+                .provider(EProvider.GOOGLE)
+                .status(EStatus.PENDING)
+                .build();
+    }
 }

@@ -1,6 +1,7 @@
 package hanium.dongguk.user.core.validator;
 
 import hanium.dongguk.global.exception.CommonException;
+import hanium.dongguk.user.core.domain.EStatus;
 import hanium.dongguk.user.core.domain.Email;
 import hanium.dongguk.user.core.exception.UserErrorCode;
 import hanium.dongguk.user.core.service.UserRetriever;
@@ -43,4 +44,15 @@ public class UserValidator {
             throw CommonException.type(UserErrorCode.EMAIL_ALREADY_EXISTS);
         }
     }
+
+    public boolean isInactive(EStatus status){
+        return status == EStatus.INACTIVE;
+    }
+
+    public void validatePending(EStatus status){
+        if(status != EStatus.PENDING){
+            throw CommonException.type(UserErrorCode.ALREADY_COMPLETED_SIGNUP);
+        }
+    }
+
 }
