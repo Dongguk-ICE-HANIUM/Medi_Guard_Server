@@ -9,6 +9,14 @@ spring:
     activate:
       on-profile: local
 
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+
 ---
 
 spring:

@@ -11,7 +11,15 @@ public class Constants {
     public static String REFRESH_COOKIE_NAME = "refresh_token";
 
     public static List<String> NO_NEED_AUTH = List.of(
+            "/swagger",
+            "/swagger-ui.html",
+            "/swagger-ui/**",
+            "/api-docs",
+            "/api-docs/**",
+            "/v3/api-docs/**",
+            "/api/healthz",
             "/api/health-check",
-            "/api/auth/normal/login"
+            "/api/auth/normal/login",
+            "/api/auth/register"
     );
 }
