@@ -15,10 +15,8 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
     private final UserValidator userValidator;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final UserRetriever userRetriever;
     private final UserSaver userSaver;
 
     @Transactional
@@ -44,7 +42,7 @@ public class UserService {
                 request.pregnancyWeek(),
                 request.feeding());
 
-        userSaver.saveUser(userPatient);
+        userSaver.save(userPatient);
     }
 
 
