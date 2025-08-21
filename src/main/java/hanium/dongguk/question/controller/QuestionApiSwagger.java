@@ -4,6 +4,7 @@ import hanium.dongguk.question.dto.request.QuestionSaveRequestDto;
 import hanium.dongguk.question.dto.request.QuestionUpdateRequestDto;
 import hanium.dongguk.question.dto.response.QuestionResponseDto;
 import hanium.dongguk.global.annotation.UserId;
+import hanium.dongguk.global.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -52,11 +53,9 @@ public interface QuestionApiSwagger {
                                     summary = "질문 저장 완료",
                                     value = """
                                             {
-                                                "questionId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-                                                "questionType": "MOOD",
-                                                "response": "좋음",
-                                                "date": "2025-08-17",
-                                                "createdAt": "2025-08-17T10:30:00"
+                                                "errorCode": null,
+                                                "message": "OK",
+                                                "result": {}
                                             }
                                             """
                             )
@@ -112,8 +111,7 @@ public interface QuestionApiSwagger {
                     )
             )
     })
-    ResponseEntity<QuestionResponseDto> saveQuestions(
-            @Parameter(hidden = true) @UserId UUID userId,
+    ResponseEntity<ResponseDto<Void>> saveQuestions(
             @Parameter(
                     description = "질문 날짜 (ISO 날짜 형식: YYYY-MM-DD)",
                     required = true,
@@ -131,16 +129,23 @@ public interface QuestionApiSwagger {
                                     summary = "정상적인 질문 저장 요청",
                                     value = """
                                             {
-                                                "moodResponse": "좋음",
-                                                "symptomsResponse": "없음",
-                                                "medicationResponse": "정시 복용",
-                                                "sleepResponse": "8시간"
+                                                "questionList": [
+                                                    {
+                                                        "type": "PHYSICAL_SYMPTOMS",
+                                                        "answer": "두통이 있고 어지럽다."
+                                                    },
+                                                    {
+                                                        "type": "PATIENT_CONCERNS",
+                                                        "answer": "약물 부작용이 걱정됩니다."
+                                                    }
+                                                ]
                                             }
                                             """
                             )
                     )
             )
-            @Valid @RequestBody QuestionSaveRequestDto requestDto
+            @Valid @RequestBody QuestionSaveRequestDto requestDto,
+            @UserId UUID userId
     );
 
     @Operation(
@@ -171,11 +176,9 @@ public interface QuestionApiSwagger {
                                     summary = "질문 수정 완료",
                                     value = """
                                             {
-                                                "questionId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-                                                "questionType": "MOOD",
-                                                "response": "보통",
-                                                "date": "2025-08-17",
-                                                "updatedAt": "2025-08-17T14:30:00"
+                                                "errorCode": null,
+                                                "message": "OK",
+                                                "result": {}
                                             }
                                             """
                             )
@@ -200,8 +203,7 @@ public interface QuestionApiSwagger {
                     )
             )
     })
-    ResponseEntity<QuestionResponseDto> updateQuestions(
-            @Parameter(hidden = true) @UserId UUID userId,
+    ResponseEntity<ResponseDto<Void>> updateQuestions(
             @Parameter(
                     description = "질문 날짜 (ISO 날짜 형식: YYYY-MM-DD)",
                     required = true,
@@ -219,16 +221,25 @@ public interface QuestionApiSwagger {
                                     summary = "정상적인 질문 수정 요청",
                                     value = """
                                             {
-                                                "moodResponse": "보통",
-                                                "symptomsResponse": "경미한 두통",
-                                                "medicationResponse": "정시 복용",
-                                                "sleepResponse": "7시간"
+                                                "questionList": [
+                                                    {
+                                                        "id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                                                        "type": "PHYSICAL_SYMPTOMS",
+                                                        "answer": "두통이 많이 완화되었습니다."
+                                                    },
+                                                    {
+                                                        "id": "a47bc10b-58cc-4372-a567-0e02b2c3d480",
+                                                        "type": "PATIENT_CONCERNS",
+                                                        "answer": "부작용 걱정이 줄어들었습니다."
+                                                    }
+                                                ]
                                             }
                                             """
                             )
                     )
             )
-            @Valid @RequestBody QuestionUpdateRequestDto requestDto
+            @Valid @RequestBody QuestionUpdateRequestDto requestDto,
+            @UserId UUID userId
     );
 
     @Operation(
@@ -259,12 +270,22 @@ public interface QuestionApiSwagger {
                                     summary = "질문 조회 완료",
                                     value = """
                                             {
-                                                "questionId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-                                                "questionType": "MOOD",
-                                                "response": "좋음",
-                                                "date": "2025-08-17",
-                                                "createdAt": "2025-08-17T10:30:00",
-                                                "updatedAt": "2025-08-17T14:30:00"
+                                                "errorCode": null,
+                                                "message": "OK",
+                                                "result": {
+                                                    "questionList": [
+                                                        {
+                                                            "id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+                                                            "type": "PHYSICAL_SYMPTOMS",
+                                                            "answer": "두통이 있고 어지럽다."
+                                                        },
+                                                        {
+                                                            "id": "a47bc10b-58cc-4372-a567-0e02b2c3d480",
+                                                            "type": "PATIENT_CONCERNS",
+                                                            "answer": "약물 부작용이 걱정됩니다."
+                                                        }
+                                                    ]
+                                                }
                                             }
                                             """
                             )
@@ -289,13 +310,13 @@ public interface QuestionApiSwagger {
                     )
             )
     })
-    ResponseEntity<QuestionResponseDto> getQuestionsByDate(
-            @Parameter(hidden = true) @UserId UUID userId,
+    ResponseEntity<ResponseDto<QuestionResponseDto>> getQuestionsByDate(
             @Parameter(
                     description = "조회할 질문 날짜 (ISO 날짜 형식: YYYY-MM-DD)",
                     required = true,
                     example = "2025-08-17"
             )
-            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @UserId UUID userId
     );
 }

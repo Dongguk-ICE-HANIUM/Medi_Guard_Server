@@ -2,21 +2,14 @@ package hanium.dongguk.question.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import hanium.dongguk.question.domain.EQuestionType;
-import hanium.dongguk.question.domain.Question;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.UUID;
-
-public record QuestionDto(
-        @JsonProperty(value = "id")
-        @Schema(description = "질문 ID", example = "질문 ID을 작성해주세요.")
-        UUID id,
-        
+public record QuestionCreateDto(
         @JsonProperty(value = "type")
         @NotNull
-        @Schema(description = "질문 유형", example = "질문 유형을 선택해주세요.")
+        @Schema(description = "질문 유형", example = "질문 유형을 작성해주세요.")
         EQuestionType type,
         
         @JsonProperty(value = "answer")
@@ -24,11 +17,4 @@ public record QuestionDto(
         @Schema(description = "질문 응답", example = "질문 응답을 작성해주세요.")
         String answer
 ) {
-    public static QuestionDto of(Question question) {
-        return new QuestionDto(
-                question.getId(),
-                question.getType(),
-                question.getAnswer()
-        );
-    }
 }

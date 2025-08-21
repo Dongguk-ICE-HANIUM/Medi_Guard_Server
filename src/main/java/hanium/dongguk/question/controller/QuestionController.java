@@ -1,6 +1,7 @@
 package hanium.dongguk.question.controller;
 
 import hanium.dongguk.global.annotation.UserId;
+import hanium.dongguk.global.dto.ResponseDto;
 import hanium.dongguk.question.dto.request.QuestionSaveRequestDto;
 import hanium.dongguk.question.dto.request.QuestionUpdateRequestDto;
 import hanium.dongguk.question.dto.response.QuestionResponseDto;
@@ -23,36 +24,38 @@ public class QuestionController implements QuestionApiSwagger {
 
     @Override
     @PostMapping
-    public ResponseEntity<QuestionResponseDto> saveQuestions(
-            @UserId UUID userId,
+    public ResponseEntity<ResponseDto<Void>> saveQuestions(
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @Valid @RequestBody QuestionSaveRequestDto requestDto) {
+            @Valid @RequestBody QuestionSaveRequestDto requestDto,
+            @UserId UUID userId) {
 
+        questionService.saveQuestions(userId, date, requestDto);
         return ResponseEntity.ok(
-                questionService.saveQuestions(userId, date, requestDto)
+                ResponseDto.success(null)
         );
     }
 
     @Override
     @PutMapping
-    public ResponseEntity<QuestionResponseDto> updateQuestions(
-            @UserId UUID userId,
+    public ResponseEntity<ResponseDto<Void>> updateQuestions(
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @Valid @RequestBody QuestionUpdateRequestDto requestDto) {
+            @Valid @RequestBody QuestionUpdateRequestDto requestDto,
+            @UserId UUID userId) {
 
+        questionService.updateQuestions(userId, date, requestDto);
         return ResponseEntity.ok(
-                questionService.updateQuestions(userId, date, requestDto)
+                ResponseDto.success(null)
         );
     }
 
     @Override
     @GetMapping
-    public ResponseEntity<QuestionResponseDto> getQuestionsByDate(
-            @UserId UUID userId,
-            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+    public ResponseEntity<ResponseDto<QuestionResponseDto>> getQuestionsByDate(
+            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @UserId UUID userId) {
 
         return ResponseEntity.ok(
-                questionService.getQuestionsByDate(userId, date)
+                ResponseDto.success(questionService.getQuestionsByDate(userId, date))
         );
     }
 }

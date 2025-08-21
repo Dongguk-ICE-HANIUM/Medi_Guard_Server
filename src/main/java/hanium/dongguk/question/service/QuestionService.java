@@ -8,6 +8,8 @@ import hanium.dongguk.calendar.exception.CalendarErrorCode;
 import hanium.dongguk.question.exception.QuestionErrorCode;
 import hanium.dongguk.user.core.exception.UserErrorCode;
 import hanium.dongguk.question.domain.Question;
+import hanium.dongguk.question.dto.QuestionCreateDto;
+import hanium.dongguk.question.dto.QuestionDto;
 import hanium.dongguk.question.dto.request.QuestionSaveRequestDto;
 import hanium.dongguk.question.dto.request.QuestionUpdateRequestDto;
 import hanium.dongguk.question.dto.response.QuestionResponseDto;
@@ -30,7 +32,6 @@ public class QuestionService {
 
     private final QuestionRetriever questionRetriever;
     private final QuestionSaver questionSaver;
-    private final QuestionValidator questionValidator;
     private final CalendarRetriever calendarRetriever;
     private final CalendarSaver calendarSaver;
     private final UserRepository userRepository;
@@ -43,11 +44,9 @@ public class QuestionService {
         User user = userRepository.findById(patientId)
                 .orElseThrow(() -> CommonException.type(UserErrorCode.NOT_FOUND_USER));
         
-        if (!(user instanceof UserPatient)) {
+        if (!(user instanceof UserPatient userPatient)) {
             throw CommonException.type(CalendarErrorCode.UNAUTHORIZED_ACCESS);
         }
-        
-        UserPatient userPatient = (UserPatient) user;
 
         Calendar calendar = calendarRetriever.findByDateAndUserPatient(date, userPatient)
                 .orElseGet(() -> calendarSaver.save(
@@ -60,7 +59,8 @@ public class QuestionService {
                         )
                 ));
 
-        List<Question> questions = requestDto.questionList().stream()
+        List<QuestionCreateDto> questionList = requestDto.questionList();
+        List<Question> questions = questionList.stream()
                 .map(item -> Question.createQuestion(item.type(), item.answer(), calendar))
                 .toList();
 
@@ -77,22 +77,18 @@ public class QuestionService {
         User user = userRepository.findById(patientId)
                 .orElseThrow(() -> CommonException.type(UserErrorCode.NOT_FOUND_USER));
         
-        if (!(user instanceof UserPatient)) {
+        if (!(user instanceof UserPatient userPatient)) {
             throw CommonException.type(CalendarErrorCode.UNAUTHORIZED_ACCESS);
         }
-        
-        UserPatient userPatient = (UserPatient) user;
 
         Calendar calendar = calendarRetriever.findByDateAndUserPatient(date, userPatient)
                 .orElseThrow(() -> CommonException.type(CalendarErrorCode.CALENDAR_NOT_FOUND));
 
-        List<Question> updatedQuestions = requestDto.questionList().stream()
+        List<QuestionDto> questionList = requestDto.questionList();
+        List<Question> updatedQuestions = questionList.stream()
                 .map(item -> {
-                    Question question = questionRetriever.findById(item.id())
-                            .orElseThrow(() -> CommonException.type(QuestionErrorCode.QUESTION_NOT_FOUND));
-
-                    questionValidator.validateQuestionBelongsToCalendar(question, calendar);
-
+                    Question question = questionRetriever.findByIdOrThrow(item.id());
+                    QuestionValidator.validateQuestionBelongsToCalendar(question, calendar);
                     question.updateAnswer(item.answer());
                     return question;
                 })
@@ -109,11 +105,9 @@ public class QuestionService {
         User user = userRepository.findById(patientId)
                 .orElseThrow(() -> CommonException.type(UserErrorCode.NOT_FOUND_USER));
         
-        if (!(user instanceof UserPatient)) {
+        if (!(user instanceof UserPatient userPatient)) {
             throw CommonException.type(CalendarErrorCode.UNAUTHORIZED_ACCESS);
         }
-        
-        UserPatient userPatient = (UserPatient) user;
 
         Calendar calendar = calendarRetriever.findByDateAndUserPatient(date, userPatient)
                 .orElseThrow(() -> CommonException.type(CalendarErrorCode.CALENDAR_NOT_FOUND));
