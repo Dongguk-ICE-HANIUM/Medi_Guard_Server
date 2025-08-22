@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -17,5 +18,9 @@ public class CalendarRetriever {
 
     public Optional<Calendar> findByDateAndUserPatient(LocalDate date, UserPatient userPatient) {
         return calendarRepository.findByDateAndUserPatient(date, userPatient);
+    }
+
+    public Optional<Calendar> findByIdAndUserPatient(UUID calendarId, UserPatient userPatient) {
+        return calendarRepository.findByIdAndUserPatient(calendarId, userPatient);
     }
 }
