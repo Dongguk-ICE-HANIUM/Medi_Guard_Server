@@ -1,21 +1,17 @@
 package hanium.dongguk.question.service;
 
 import hanium.dongguk.calendar.domain.Calendar;
-import hanium.dongguk.calendar.domain.EEmotion;
 import hanium.dongguk.calendar.exception.CalendarErrorCode;
 import hanium.dongguk.calendar.service.CalendarRetriever;
 import hanium.dongguk.calendar.service.CalendarSaver;
 import hanium.dongguk.global.exception.CommonException;
-import hanium.dongguk.question.domain.EQuestionType;
 import hanium.dongguk.question.domain.Question;
 import hanium.dongguk.question.dto.request.SaveQuestionDto;
 import hanium.dongguk.question.dto.request.SaveQuestionListRequestDto;
 import hanium.dongguk.question.dto.request.UpdateQuestionDto;
 import hanium.dongguk.question.dto.request.UpdateQuestionListRequestDto;
-import hanium.dongguk.question.dto.response.QuestionDto;
 import hanium.dongguk.question.dto.response.QuestionResponseDto;
 import hanium.dongguk.question.exception.QuestionErrorCode;
-import hanium.dongguk.user.core.domain.UserRepository;
 import hanium.dongguk.user.patient.domain.UserPatient;
 import hanium.dongguk.user.patient.service.UserPatientRetriever;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +30,6 @@ public class QuestionService {
     private final QuestionSaver questionSaver;
     private final CalendarRetriever calendarRetriever;
     private final CalendarSaver calendarSaver;
-    private final UserRepository userRepository;
     private final UserPatientRetriever userPatientRetriever;
 
     /**
@@ -42,18 +37,12 @@ public class QuestionService {
      */
     @Transactional
     public void saveQuestions(UUID patientId, LocalDate date, SaveQuestionListRequestDto requestDto) {
-
         UserPatient userPatient = userPatientRetriever.getUserPatient(patientId);
 
-        Calendar calendar = calendarRetriever.findByDateAndUserPatient(date, userPatient)
-                .orElseGet(() -> calendarSaver.save(
-                        Calendar.create(
-                                date,
-                                "자동 생성된 캘린더입니다.",         // description
-                                EEmotion.NEUTRAL,                        // emotion: enum 기본값
-                                userPatient
-                        )
-                ));
+        Calendar calendar = calendarRetriever.findByDateAndUserPatient(date, patientId)
+                .orElseGet(() -> calendarSaver.save(Calendar.createForQuestion(userPatient, date)));
+
+
 
         List<SaveQuestionDto> questionList = requestDto.saveQuestionList();
         List<Question> questions = questionList.stream()
@@ -69,13 +58,15 @@ public class QuestionService {
      */
     @Transactional
     public void updateQuestions(UUID patientId, LocalDate date, UpdateQuestionListRequestDto requestDto) {
-
-        UserPatient userPatient = userPatientRetriever.getUserPatient(patientId);
-
-        Calendar calendar = calendarRetriever.findByDateAndUserPatient(date, userPatient)
+        Calendar calendar = calendarRetriever.findByDateAndUserPatient(date, patientId)
                 .orElseThrow(() -> CommonException.type(CalendarErrorCode.CALENDAR_NOT_FOUND));
 
-        List<Question> existingQuestions = questionRetriever.findByCalendarId(calendar.getId());
+        List<Question> existingQuestions = questionRetriever.findByCalendarIdAndPatientId(calendar.getId(), patientId);
+
+            if(!existingQuestions.isEmpty()) {
+                throw CommonException.type(QuestionErrorCode.QUESTIONS_ALREADY_EXISTS);
+            }
+
         List<UpdateQuestionDto> updateRequests = requestDto.updateQuestionList();
 
 
@@ -94,13 +85,10 @@ public class QuestionService {
      */
     @Transactional(readOnly = true)
     public QuestionResponseDto getQuestionsByDate(UUID patientId, LocalDate date) {
-
-        UserPatient userPatient = userPatientRetriever.getUserPatient(patientId);
-
-        Calendar calendar = calendarRetriever.findByDateAndUserPatient(date, userPatient)
+        Calendar calendar = calendarRetriever.findByDateAndUserPatient(date, patientId)
                 .orElseThrow(() -> CommonException.type(CalendarErrorCode.CALENDAR_NOT_FOUND));
 
-        List<Question> questions = questionRetriever.findByCalendarId(calendar.getId());
+        List<Question> questions = questionRetriever.findByCalendarIdAndPatientId(calendar.getId(), patientId);
 
         return QuestionResponseDto.of(questions);
     }

@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Schema(description = "캘린더 생성 요청 DTO")
-public record SaveCalendarDto(
+public record SaveCalendarRequestDto(
         @JsonProperty("date")
         @NotNull(message = "날짜는 필수입니다.")
         @Schema(description = "날짜", example = "2025-08-04")

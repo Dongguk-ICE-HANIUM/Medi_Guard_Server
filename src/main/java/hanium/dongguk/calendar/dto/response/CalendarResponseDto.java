@@ -21,7 +21,7 @@ public record CalendarResponseDto(
         @Schema(description = "기분 설명", example = "두통이 있고 어지럽다.")
         String description
 ) {
-    public static CalendarResponseDto of(Calendar calendar) {
+    public static CalendarResponseDto from(Calendar calendar) {
         return new CalendarResponseDto(
                 calendar.getId(),
                 calendar.getEmotion(),

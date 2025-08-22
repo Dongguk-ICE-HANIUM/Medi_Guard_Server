@@ -1,9 +1,9 @@
 package hanium.dongguk.auth.provider.google;
 
+import hanium.dongguk.auth.exception.AuthErrorCode;
 import hanium.dongguk.auth.provider.google.dto.GoogleUserInfo;
 import hanium.dongguk.global.constants.Constants;
 import hanium.dongguk.global.exception.CommonException;
-import hanium.dongguk.user.core.exception.UserErrorCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -28,12 +28,12 @@ public class GoogleApiService {
 
             if(userInfo == null)
             {
-                throw CommonException.type(UserErrorCode.NOT_FOUND_GOOGLE_USER);
+                throw CommonException.type(AuthErrorCode.NOT_FOUND_GOOGLE_USER);
             }
 
             return userInfo;
         } catch (Exception e){
-            throw CommonException.type(UserErrorCode.GOOGLE_OAUTH_FAILED);
+            throw CommonException.type(AuthErrorCode.GOOGLE_OAUTH_FAILED);
         }
     }
 }

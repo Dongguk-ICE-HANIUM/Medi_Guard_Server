@@ -1,6 +1,5 @@
 package hanium.dongguk.question.service;
 
-import hanium.dongguk.calendar.domain.Calendar;
 import hanium.dongguk.global.exception.CommonException;
 import hanium.dongguk.question.domain.Question;
 import hanium.dongguk.question.domain.QuestionRepository;
@@ -18,8 +17,8 @@ public class QuestionRetriever {
 
     private final QuestionRepository questionRepository;
 
-    public List<Question> findByCalendarId(UUID calendarId) {
-        return questionRepository.findByCalendarId(calendarId);
+    public List<Question> findByCalendarIdAndPatientId(UUID calendarId, UUID patientId) {
+        return questionRepository.findByCalendarIdAndUserPatientId(calendarId, patientId);
     }
 
     public Optional<Question> findById(UUID questionId) {

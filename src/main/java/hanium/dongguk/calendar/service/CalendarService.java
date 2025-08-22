@@ -1,14 +1,12 @@
 package hanium.dongguk.calendar.service;
 
 import hanium.dongguk.calendar.domain.Calendar;
-import hanium.dongguk.calendar.dto.request.SaveCalendarDto;
-import hanium.dongguk.calendar.dto.request.UpdateCalendarDto;
+import hanium.dongguk.calendar.dto.request.SaveCalendarRequestDto;
+import hanium.dongguk.calendar.dto.request.UpdateCalendarRequestDto;
 import hanium.dongguk.calendar.dto.response.CalendarResponseDto;
 import hanium.dongguk.calendar.exception.CalendarErrorCode;
+import hanium.dongguk.calendar.validator.CalendarValidator;
 import hanium.dongguk.global.exception.CommonException;
-import hanium.dongguk.user.core.domain.User;
-import hanium.dongguk.user.core.domain.UserRepository;
-import hanium.dongguk.user.core.exception.UserErrorCode;
 import hanium.dongguk.user.patient.domain.UserPatient;
 import hanium.dongguk.user.patient.service.UserPatientRetriever;
 import lombok.RequiredArgsConstructor;
@@ -24,37 +22,23 @@ public class CalendarService {
 
     private final CalendarRetriever calendarRetriever;
     private final CalendarSaver calendarSaver;
-    private final UserRepository userRepository;
     private final UserPatientRetriever userPatientRetriever;
+    private final CalendarValidator calendarValidator;
 
     @Transactional(readOnly = true)
     public CalendarResponseDto getCalendarByDate(UUID patientId, LocalDate date) {
-        UserPatient userPatient = userPatientRetriever.getUserPatient(patientId);
-
-        Calendar calendar = calendarRetriever.findByDateAndUserPatient(date, userPatient)
+        Calendar calendar = calendarRetriever.findByDateAndUserPatient(date, patientId)
                 .orElseThrow(() -> CommonException.type(CalendarErrorCode.CALENDAR_NOT_FOUND));
 
-        return CalendarResponseDto.of(calendar);
+        return CalendarResponseDto.from(calendar);
     }
 
     @Transactional
-    public void saveCalendar(UUID patientId, SaveCalendarDto requestDto) {
-        // 미래 날짜 검증
-        if (requestDto.date().isAfter(LocalDate.now())) {
-            throw CommonException.type(CalendarErrorCode.FUTURE_DATE_NOT_ALLOWED);
-        }
-        
-        User user = userRepository.findById(patientId)
-                .orElseThrow(() -> CommonException.type(UserErrorCode.NOT_FOUND_USER));
-        
-        if (!(user instanceof UserPatient userPatient)) {
-            throw CommonException.type(UserErrorCode.NOT_FOUND_USER);
-        }
+    public void saveCalendar(UUID patientId, SaveCalendarRequestDto requestDto) {
+        calendarValidator.validateFutureDate(requestDto.date());
+        duplicateValidate(patientId, requestDto.date());
 
-        boolean exists = calendarRetriever.findByDateAndUserPatient(requestDto.date(), userPatient).isPresent();
-        if (exists) {
-            throw CommonException.type(CalendarErrorCode.CALENDAR_ALREADY_EXISTS);
-        }
+        UserPatient userPatient = userPatientRetriever.getUserPatient(patientId);
 
         Calendar calendar = Calendar.create(
                 requestDto.date(),
@@ -67,17 +51,18 @@ public class CalendarService {
     }
 
     @Transactional
-    public void updateCalendar(UUID patientId, UUID calendarId, UpdateCalendarDto requestDto) {
-        User user = userRepository.findById(patientId)
-                .orElseThrow(() -> CommonException.type(UserErrorCode.NOT_FOUND_USER));
-        
-        if (!(user instanceof UserPatient userPatient)) {
-            throw CommonException.type(UserErrorCode.NOT_FOUND_USER);
-        }
+    public void updateCalendar(UUID patientId, UUID calendarId, UpdateCalendarRequestDto requestDto) {
 
-        Calendar calendar = calendarRetriever.findByIdAndUserPatient(calendarId, userPatient)
+        Calendar calendar = calendarRetriever.findByIdAndUserPatient(calendarId, patientId)
                 .orElseThrow(() -> CommonException.type(CalendarErrorCode.CALENDAR_NOT_FOUND));
 
         calendar.updateEmotion(requestDto.emotion(), requestDto.description());
+    }
+
+    private void duplicateValidate(UUID patientId, LocalDate date) {
+        calendarRetriever.findByDateAndUserPatient(date, patientId)
+                .ifPresent((calendar) -> {
+                    throw CommonException.type(CalendarErrorCode.CALENDAR_ALREADY_EXISTS);
+                });
     }
 }

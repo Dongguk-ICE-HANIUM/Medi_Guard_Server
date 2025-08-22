@@ -1,7 +1,7 @@
 package hanium.dongguk.calendar.controller;
 
-import hanium.dongguk.calendar.dto.request.SaveCalendarDto;
-import hanium.dongguk.calendar.dto.request.UpdateCalendarDto;
+import hanium.dongguk.calendar.dto.request.SaveCalendarRequestDto;
+import hanium.dongguk.calendar.dto.request.UpdateCalendarRequestDto;
 import hanium.dongguk.calendar.dto.response.CalendarResponseDto;
 import hanium.dongguk.calendar.service.CalendarService;
 import hanium.dongguk.global.annotation.UserId;
@@ -25,32 +25,29 @@ public class CalendarController implements CalendarApiSwagger {
 
     @Override
     @GetMapping
-    public ResponseEntity<ResponseDto<CalendarResponseDto>> getCalendar(
+    public ResponseEntity<CalendarResponseDto> getCalendar(
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @UserId UUID userId) {
-
-        CalendarResponseDto response = calendarService.getCalendarByDate(userId, date);
-        return ResponseEntity.ok(new ResponseDto<>(null, "OK", response));
+        return ResponseEntity.ok(calendarService.getCalendarByDate(userId, date));
     }
 
     @Override
     @PostMapping
-    public ResponseEntity<ResponseDto<List<Object>>> saveCalendar(
-            @Valid @RequestBody SaveCalendarDto requestDto,
+    public ResponseEntity<Void> saveCalendar(
+            @Valid @RequestBody SaveCalendarRequestDto requestDto,
             @UserId UUID userId) {
-
         calendarService.saveCalendar(userId, requestDto);
-        return ResponseEntity.ok(new ResponseDto<>(null, "OK", List.of()));
+        return ResponseEntity.ok().build();
     }
 
     @Override
     @PatchMapping("/{calendarId}")
-    public ResponseEntity<ResponseDto<List<Object>>> updateCalendar(
+    public ResponseEntity<Void> updateCalendar(
             @PathVariable UUID calendarId,
-            @Valid @RequestBody UpdateCalendarDto requestDto,
+            @Valid @RequestBody UpdateCalendarRequestDto requestDto,
             @UserId UUID userId) {
 
         calendarService.updateCalendar(userId, calendarId, requestDto);
-        return ResponseEntity.ok(new ResponseDto<>(null, "OK", List.of()));
+        return ResponseEntity.ok().build();
     }
 }

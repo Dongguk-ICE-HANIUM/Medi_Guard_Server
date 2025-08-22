@@ -1,7 +1,7 @@
 package hanium.dongguk.calendar.controller;
 
-import hanium.dongguk.calendar.dto.request.SaveCalendarDto;
-import hanium.dongguk.calendar.dto.request.UpdateCalendarDto;
+import hanium.dongguk.calendar.dto.request.SaveCalendarRequestDto;
+import hanium.dongguk.calendar.dto.request.UpdateCalendarRequestDto;
 import hanium.dongguk.calendar.dto.response.CalendarResponseDto;
 import hanium.dongguk.global.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -77,7 +77,7 @@ public interface CalendarApiSwagger {
                     ))
             )
     })
-    ResponseEntity<ResponseDto<CalendarResponseDto>> getCalendar(
+    ResponseEntity<CalendarResponseDto> getCalendar(
             @Parameter(
                     description = "조회할 기분 기록 날짜 (ISO 날짜 형식: YYYY-MM-DD)",
                     required = true,
@@ -140,13 +140,13 @@ public interface CalendarApiSwagger {
                     ))
             )
     })
-    ResponseEntity<ResponseDto<List<Object>>> saveCalendar(
+    ResponseEntity<Void> saveCalendar(
             @Parameter(
                     description = "기분 저장 요청 정보",
                     required = true,
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = SaveCalendarDto.class),
+                            schema = @Schema(implementation = SaveCalendarRequestDto.class),
                             examples = @ExampleObject(
                                     name = "기분 저장 요청 예시",
                                     summary = "정상적인 기분 저장 요청",
@@ -161,7 +161,7 @@ public interface CalendarApiSwagger {
                             )
                     )
             )
-            SaveCalendarDto requestDto,
+            SaveCalendarRequestDto requestDto,
             UUID userId
     );
 
@@ -218,7 +218,7 @@ public interface CalendarApiSwagger {
                     ))
             )
     })
-    ResponseEntity<ResponseDto<List<Object>>> updateCalendar(
+    ResponseEntity<Void> updateCalendar(
             @Parameter(
                     description = "수정할 기분 기록의 캘린더 ID",
                     required = true,
@@ -230,7 +230,7 @@ public interface CalendarApiSwagger {
                     required = true,
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = UpdateCalendarDto.class),
+                            schema = @Schema(implementation = UpdateCalendarRequestDto.class),
                             examples = @ExampleObject(
                                     name = "기분 수정 요청 예시",
                                     summary = "정상적인 기분 수정 요청",
@@ -243,7 +243,7 @@ public interface CalendarApiSwagger {
                             )
                     )
             )
-            UpdateCalendarDto requestDto,
+            UpdateCalendarRequestDto requestDto,
             UUID userId
     );
 }

@@ -18,7 +18,10 @@ public enum QuestionErrorCode implements ErrorCode {
     // 답변이 비어 있을 때 (필요하다면)
     EMPTY_ANSWER(HttpStatus.BAD_REQUEST, "QUESTION_003", "답변을 입력해주세요."),
 
-    QUESTION_NOT_FOUND_FOR_TYPE(HttpStatus.NOT_FOUND, "QUESTION_004", "해당하는 유형 질문이 없습니다.");
+    QUESTION_NOT_FOUND_FOR_TYPE(HttpStatus.NOT_FOUND, "QUESTION_004", "해당하는 유형 질문이 없습니다."),
+
+    QUESTIONS_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "QUESTION_005", "이미 질문이 존재합니다.")
+    ;
     private final HttpStatus status;
     private final String errorCode;
     private final String message;

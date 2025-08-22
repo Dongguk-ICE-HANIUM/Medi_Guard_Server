@@ -1,6 +1,7 @@
 package hanium.dongguk.calendar.domain;
 
 import hanium.dongguk.global.base.BaseTimeEntity;
+import hanium.dongguk.question.domain.Question;
 import hanium.dongguk.user.patient.domain.UserPatient;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,7 +27,7 @@ public class Calendar extends BaseTimeEntity {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "emotion", nullable = false)
+    @Column(name = "emotion")
     @Enumerated(EnumType.STRING)
     private EEmotion emotion;
 
@@ -55,6 +56,13 @@ public class Calendar extends BaseTimeEntity {
                 .date(date)
                 .description(description)
                 .emotion(emotion)
+                .userPatient(userPatient)
+                .build();
+    }
+
+    public static Calendar createForQuestion(final UserPatient userPatient, final LocalDate date) {
+        return Calendar.builder()
+                .date(date)
                 .userPatient(userPatient)
                 .build();
     }

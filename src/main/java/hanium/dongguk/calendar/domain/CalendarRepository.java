@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface CalendarRepository extends JpaRepository<Calendar, UUID> {
-    Optional<Calendar> findByDateAndUserPatient(LocalDate date, UserPatient userPatient);
-    Optional<Calendar> findByIdAndUserPatient(UUID id, UserPatient userPatient);
+    Optional<Calendar> findByDateAndUserPatientId(LocalDate date, UUID userPatientId);
+    Optional<Calendar> findByIdAndUserPatientId(UUID id, UUID userPatientId);
+
 }

@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Schema(description = "캘린더 수정 요청 DTO")
-public record UpdateCalendarDto(
+public record UpdateCalendarRequestDto(
         @JsonProperty("description")
         @NotBlank(message = "설명은 필수입니다.")
         @Schema(description = "기분 설명", example = "기분이 많이 좋아졌습니다.")
