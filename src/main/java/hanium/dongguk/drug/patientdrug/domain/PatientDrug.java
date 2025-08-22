@@ -122,7 +122,7 @@ public class PatientDrug extends BaseTimeEntity {
                 .build();
     }
 
-    public void update(final Boolean isEssential) {
-        this.isEssential = isEssential;
+    public void update(final Boolean isActive) {
+        this.isActive = isActive;
     }
 }

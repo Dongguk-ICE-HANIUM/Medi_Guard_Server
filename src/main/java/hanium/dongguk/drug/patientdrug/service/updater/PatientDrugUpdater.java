@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class PatientDrugUpdater {
-    public void update(PatientDrug target, final Boolean isEssential) {
-        target.update(isEssential);
+    public void update(PatientDrug target, final Boolean isActive) {
+        target.update(isActive);
     }
 }

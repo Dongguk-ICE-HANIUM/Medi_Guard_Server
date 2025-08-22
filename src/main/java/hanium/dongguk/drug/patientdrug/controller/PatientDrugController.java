@@ -27,14 +27,14 @@ public class PatientDrugController implements PatientDrugApiSwagger {
     }
 
     @PatchMapping("/{patientDrugId}")
-    public ResponseEntity<?> patchIsEssential(
+    public ResponseEntity<?> patchIsActive(
             @UserId UUID userId,
             @PathVariable("patientDrugId")
             UUID patientDrugId,
             @Valid @RequestBody
             PatchPatientDrugIsEssentialRequestDto requestDto) {
         return ResponseEntity.ok(
-                patientDrugService.patchIsEssential(
+                patientDrugService.patchIsActive(
                         userId,
                         patientDrugId,
                         requestDto

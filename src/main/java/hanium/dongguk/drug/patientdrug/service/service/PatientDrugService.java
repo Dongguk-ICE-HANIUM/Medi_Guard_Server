@@ -93,13 +93,13 @@ public class PatientDrugService {
     }
 
     @Transactional
-    public Void patchIsEssential(
+    public Void patchIsActive(
             UUID userId,
             UUID patientDrugId,
             PatchPatientDrugIsEssentialRequestDto requestDto) {
         PatientDrug patientDrug
                 = patientDrugRetriever.findByIdAndUserId(patientDrugId, userId);
-        patientDrugUpdater.update(patientDrug, requestDto.isEssential());
+        patientDrugUpdater.update(patientDrug, requestDto.isActive());
 
         return null;
     }
