@@ -44,7 +44,7 @@ public class QuestionService {
                 .orElseThrow(() -> CommonException.type(UserErrorCode.NOT_FOUND_USER));
         
         if (!(user instanceof UserPatient userPatient)) {
-            throw CommonException.type(CalendarErrorCode.UNAUTHORIZED_ACCESS);
+            throw CommonException.type(UserErrorCode.NOT_FOUND_USER);
         }
 
         Calendar calendar = calendarRetriever.findByDateAndUserPatient(date, userPatient)
@@ -76,7 +76,7 @@ public class QuestionService {
                 .orElseThrow(() -> CommonException.type(UserErrorCode.NOT_FOUND_USER));
         
         if (!(user instanceof UserPatient userPatient)) {
-            throw CommonException.type(CalendarErrorCode.UNAUTHORIZED_ACCESS);
+            throw CommonException.type(UserErrorCode.NOT_FOUND_USER);
         }
 
         Calendar calendar = calendarRetriever.findByDateAndUserPatient(date, userPatient)
@@ -102,7 +102,7 @@ public class QuestionService {
                 .orElseThrow(() -> CommonException.type(UserErrorCode.NOT_FOUND_USER));
         
         if (!(user instanceof UserPatient userPatient)) {
-            throw CommonException.type(CalendarErrorCode.UNAUTHORIZED_ACCESS);
+            throw CommonException.type(UserErrorCode.NOT_FOUND_USER);
         }
 
         Calendar calendar = calendarRetriever.findByDateAndUserPatient(date, userPatient)

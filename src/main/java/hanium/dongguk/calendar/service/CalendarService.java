@@ -31,7 +31,7 @@ public class CalendarService {
                 .orElseThrow(() -> CommonException.type(UserErrorCode.NOT_FOUND_USER));
         
         if (!(user instanceof UserPatient userPatient)) {
-            throw CommonException.type(CalendarErrorCode.UNAUTHORIZED_ACCESS);
+            throw CommonException.type(UserErrorCode.NOT_FOUND_USER);
         }
 
         Calendar calendar = calendarRetriever.findByDateAndUserPatient(date, userPatient)
@@ -46,7 +46,7 @@ public class CalendarService {
                 .orElseThrow(() -> CommonException.type(UserErrorCode.NOT_FOUND_USER));
         
         if (!(user instanceof UserPatient userPatient)) {
-            throw CommonException.type(CalendarErrorCode.UNAUTHORIZED_ACCESS);
+            throw CommonException.type(UserErrorCode.NOT_FOUND_USER);
         }
 
         boolean exists = calendarRetriever.findByDateAndUserPatient(requestDto.date(), userPatient).isPresent();
@@ -71,7 +71,7 @@ public class CalendarService {
                 .orElseThrow(() -> CommonException.type(UserErrorCode.NOT_FOUND_USER));
         
         if (!(user instanceof UserPatient userPatient)) {
-            throw CommonException.type(CalendarErrorCode.UNAUTHORIZED_ACCESS);
+            throw CommonException.type(UserErrorCode.NOT_FOUND_USER);
         }
 
         Calendar calendar = calendarRetriever.findByIdAndUserPatient(calendarId, userPatient)

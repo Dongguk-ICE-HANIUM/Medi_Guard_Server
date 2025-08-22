@@ -1,37 +1,24 @@
 package hanium.dongguk.calendar.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import hanium.dongguk.calendar.domain.Calendar;
 import hanium.dongguk.calendar.domain.EEmotion;
-import hanium.dongguk.calendar.dto.CalendarDto;
-import hanium.dongguk.question.domain.EQuestionType;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.time.LocalDate;
-import java.util.UUID;
-
+@Schema(description = "캘린더 응답 DTO")
 public record CalendarResponseDto(
-        UUID id,
-        LocalDate date,
-        String description,
+        @JsonProperty("emotion")
+        @Schema(description = "감정 상태", example = "NEUTRAL")
         EEmotion emotion,
-        EQuestionType questionType
+        
+        @JsonProperty("description")
+        @Schema(description = "기분 설명", example = "두통이 있고 어지럽다.")
+        String description
 ) {
     public static CalendarResponseDto of(Calendar calendar) {
         return new CalendarResponseDto(
-                calendar.getId(),
-                calendar.getDate(),
-                calendar.getDescription(),
                 calendar.getEmotion(),
-                calendar.getQuestionType()
-        );
-    }
-
-    public static CalendarResponseDto from(CalendarDto calendarDto) {
-        return new CalendarResponseDto(
-                calendarDto.id(),
-                calendarDto.date(),
-                calendarDto.description(),
-                calendarDto.emotion(),
-                calendarDto.questionType()
+                calendar.getDescription()
         );
     }
 }
