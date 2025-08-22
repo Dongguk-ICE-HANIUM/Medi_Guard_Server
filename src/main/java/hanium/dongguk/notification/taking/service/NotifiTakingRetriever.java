@@ -1,4 +1,4 @@
-package hanium.dongguk.notification.taking.service.retriever;
+package hanium.dongguk.notification.taking.service;
 
 import hanium.dongguk.notification.taking.domain.NotifiTaking;
 import hanium.dongguk.notification.taking.domain.NotifiTakingRepository;
@@ -13,7 +13,7 @@ import java.util.UUID;
 public class NotifiTakingRetriever {
     private final NotifiTakingRepository notifiTakingRepository;
 
-    public List<NotifiTaking> findAllOptionalByPatientDrugId(final UUID patientDrugId) {
+    public List<NotifiTaking> findAllByPatientDrugId(final UUID patientDrugId) {
         return notifiTakingRepository.findAllByPatientDrugId(patientDrugId);
     }
 }
