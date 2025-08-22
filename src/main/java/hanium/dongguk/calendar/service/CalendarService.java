@@ -10,6 +10,7 @@ import hanium.dongguk.user.core.domain.User;
 import hanium.dongguk.user.core.domain.UserRepository;
 import hanium.dongguk.user.core.exception.UserErrorCode;
 import hanium.dongguk.user.patient.domain.UserPatient;
+import hanium.dongguk.user.patient.service.UserPatientRetriever;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,15 +25,11 @@ public class CalendarService {
     private final CalendarRetriever calendarRetriever;
     private final CalendarSaver calendarSaver;
     private final UserRepository userRepository;
+    private final UserPatientRetriever userPatientRetriever;
 
     @Transactional(readOnly = true)
     public CalendarResponseDto getCalendarByDate(UUID patientId, LocalDate date) {
-        User user = userRepository.findById(patientId)
-                .orElseThrow(() -> CommonException.type(UserErrorCode.NOT_FOUND_USER));
-        
-        if (!(user instanceof UserPatient userPatient)) {
-            throw CommonException.type(UserErrorCode.NOT_FOUND_USER);
-        }
+        UserPatient userPatient = userPatientRetriever.getUserPatient(patientId);
 
         Calendar calendar = calendarRetriever.findByDateAndUserPatient(date, userPatient)
                 .orElseThrow(() -> CommonException.type(CalendarErrorCode.CALENDAR_NOT_FOUND));
@@ -63,7 +60,6 @@ public class CalendarService {
                 requestDto.date(),
                 requestDto.description(),
                 requestDto.emotion(),
-                requestDto.questionType(),
                 userPatient
         );
 

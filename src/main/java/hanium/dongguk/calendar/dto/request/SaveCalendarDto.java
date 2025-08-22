@@ -2,7 +2,6 @@ package hanium.dongguk.calendar.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import hanium.dongguk.calendar.domain.EEmotion;
-import hanium.dongguk.question.domain.EQuestionType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -30,19 +29,6 @@ public record SaveCalendarDto(
                         "VERY_HAPPY", "HAPPY", "NEUTRAL", "SAD", "ANGRY"
                 }
         )
-        EEmotion emotion,
-        
-        @JsonProperty("questionType")
-        @NotNull(message = "질문 유형은 필수입니다.")
-        @Schema(
-                description = "질문 유형",
-                example = "PHYSICAL_SYMPTOMS",
-                allowableValues = {
-                        "PHYSICAL_SYMPTOMS", "FETAL_MOVEMENT", "MEDICATION_COMPLIANCE",
-                        "MEDICATION_SIDE_EFFECTS", "MOOD_STATUS", "MENTAL_HEALTH",
-                        "DAILY_LIFE", "FAMILY_SUPPORT", "PATIENT_CONCERNS"
-                }
-        )
-        EQuestionType questionType
+        EEmotion emotion
 ) {
 }

@@ -1,7 +1,6 @@
 package hanium.dongguk.calendar.domain;
 
 import hanium.dongguk.global.base.BaseTimeEntity;
-import hanium.dongguk.question.domain.EQuestionType;
 import hanium.dongguk.user.patient.domain.UserPatient;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,10 +30,6 @@ public class Calendar extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private EEmotion emotion;
 
-    @Column(name = "question_type", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private EQuestionType questionType;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", nullable = false)
     private UserPatient userPatient;
@@ -44,12 +39,10 @@ public class Calendar extends BaseTimeEntity {
     private Calendar(final LocalDate date,
                      final String description,
                      final EEmotion emotion,
-                     final EQuestionType questionType,
                      final UserPatient userPatient) {
         this.date = date;
         this.description = description;
         this.emotion = emotion;
-        this.questionType = questionType;
         this.userPatient = userPatient;
     }
 
@@ -57,13 +50,11 @@ public class Calendar extends BaseTimeEntity {
     public static Calendar create(final LocalDate date,
                                   final String description,
                                   final EEmotion emotion,
-                                  final EQuestionType questionType,
                                   final UserPatient userPatient) {
         return Calendar.builder()
                 .date(date)
                 .description(description)
                 .emotion(emotion)
-                .questionType(questionType)
                 .userPatient(userPatient)
                 .build();
     }

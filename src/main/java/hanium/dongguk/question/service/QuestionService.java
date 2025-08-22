@@ -51,7 +51,6 @@ public class QuestionService {
                                 date,
                                 "자동 생성된 캘린더입니다.",         // description
                                 EEmotion.NEUTRAL,                        // emotion: enum 기본값
-                                EQuestionType.PHYSICAL_SYMPTOMS,         // questionType: enum 기본값
                                 userPatient
                         )
                 ));
