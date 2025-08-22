@@ -5,6 +5,8 @@ import hanium.dongguk.drug.drug.service.DrugRetriever;
 import hanium.dongguk.drug.patientdrug.domain.*;
 import hanium.dongguk.drug.patientdrug.dto.request.CreatePatientDrugRequestDto;
 import hanium.dongguk.drug.patientdrug.dto.request.PatchPatientDrugIsEssentialRequestDto;
+import hanium.dongguk.drug.patientdrug.dto.response.RetrievePatientDrugNotifiTakingResponseDto;
+import hanium.dongguk.drug.patientdrug.dto.response.RetrievePatientDrugResponseDto;
 import hanium.dongguk.drug.patientdrug.exception.TakingTypeErrorCode;
 import hanium.dongguk.drug.patientdrug.service.retriever.DrugGroupRetriever;
 import hanium.dongguk.drug.patientdrug.service.retriever.PatientDrugRetriever;
@@ -14,6 +16,8 @@ import hanium.dongguk.drug.patientdrug.service.saver.TakingTypeSaver;
 import hanium.dongguk.drug.patientdrug.service.updater.PatientDrugUpdater;
 import hanium.dongguk.drug.patientdrug.util.TakingTypeFactory;
 import hanium.dongguk.global.exception.CommonException;
+import hanium.dongguk.notification.taking.domain.NotifiTaking;
+import hanium.dongguk.notification.taking.service.retriever.NotifiTakingRetriever;
 import hanium.dongguk.user.patient.domain.UserPatient;
 import hanium.dongguk.user.patient.service.UserPatientRetriever;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +40,7 @@ public class PatientDrugService {
     private final DrugGroupRetriever drugGroupRetriever;
     private final TakingTypeSaver takingTypeSaver;
     private final ParticularDateSaver particularDateSaver;
+    private final NotifiTakingRetriever notifiTakingRetriever;
 
     @Transactional
     public URI createPatientDrug(
@@ -100,5 +102,31 @@ public class PatientDrugService {
         patientDrugUpdater.update(patientDrug, requestDto.isEssential());
 
         return null;
+    }
+
+    public RetrievePatientDrugResponseDto retrieve(
+            UUID userId,
+            UUID patientDrugId) {
+        PatientDrug targetPatientDrug
+                = patientDrugRetriever.findByIdAndUserId(patientDrugId, userId);
+
+        Drug targetDrug = targetPatientDrug.getDrug();
+        DrugGroup targetDrugGroup = targetPatientDrug.getDrugGroup();
+        TakingType targetTakingType = targetPatientDrug.getTakingType();
+        List<NotifiTaking> targetNotifiTaking
+                = notifiTakingRetriever.findAllOptionalByPatientDrugId(patientDrugId);
+
+        List<RetrievePatientDrugNotifiTakingResponseDto> notifiTakingDtoList
+                = targetNotifiTaking.stream()
+                    .map(RetrievePatientDrugNotifiTakingResponseDto::from)
+                    .toList();
+
+        return RetrievePatientDrugResponseDto.of(
+                targetPatientDrug,
+                targetDrug,
+                targetDrugGroup,
+                targetTakingType,
+                notifiTakingDtoList
+        );
     }
 }

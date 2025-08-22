@@ -41,4 +41,14 @@ public class PatientDrugController implements PatientDrugApiSwagger {
                 )
         );
     }
+
+    @GetMapping("/{patientDrugId}")
+    public ResponseEntity<?> retrievePatientDrug(
+            @UserId UUID userId,
+            @PathVariable("patientDrugId") UUID patientDrugId
+    ) {
+        return ResponseEntity.ok(
+                patientDrugService.retrieve(userId, patientDrugId)
+        );
+    }
 }
