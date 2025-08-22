@@ -1,4 +1,4 @@
-package hanium.dongguk.user.core.dto.request;
+package hanium.dongguk.auth.dto;
 
 import hanium.dongguk.user.core.domain.Email;
 import io.swagger.v3.oas.annotations.media.Schema;
