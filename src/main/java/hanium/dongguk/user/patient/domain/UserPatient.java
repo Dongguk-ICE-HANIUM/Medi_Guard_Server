@@ -86,14 +86,16 @@ public class UserPatient extends User {
                 .build();
     }
 
-    public static UserPatient googleCreate(final String providerId, final String name){
+    public static UserPatient socialCreate(final String providerId,
+                                           final String name,
+                                           final EProvider provider){
 
         return UserPatient.builder()
                 .serialId(providerId)
                 .password(UUID.randomUUID().toString())
                 .name(name)
                 .role(ERole.PATIENT)
-                .provider(EProvider.GOOGLE)
+                .provider(provider)
                 .status(EStatus.PENDING)
                 .build();
     }

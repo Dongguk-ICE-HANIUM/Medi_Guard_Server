@@ -1,4 +1,4 @@
-package hanium.dongguk.user.patient.dto.request;
+package hanium.dongguk.auth.provider.google.dto;
 
 public record GoogleLoginRequestDto(
 

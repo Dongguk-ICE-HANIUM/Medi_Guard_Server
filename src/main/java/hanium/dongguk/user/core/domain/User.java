@@ -68,4 +68,5 @@ public abstract class User extends BaseTimeEntity {
     protected void updateName(String name){
         this.name = name;
     }
+
 }

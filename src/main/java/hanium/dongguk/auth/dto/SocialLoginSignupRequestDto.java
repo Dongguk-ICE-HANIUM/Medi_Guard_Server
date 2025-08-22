@@ -1,4 +1,4 @@
-package hanium.dongguk.user.patient.dto.request;
+package hanium.dongguk.auth.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;

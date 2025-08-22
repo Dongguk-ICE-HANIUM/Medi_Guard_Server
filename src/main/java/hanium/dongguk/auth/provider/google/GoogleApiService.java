@@ -1,16 +1,22 @@
-package hanium.dongguk.auth.oauth;
+package hanium.dongguk.auth.provider.google;
 
+import hanium.dongguk.auth.provider.google.dto.GoogleUserInfo;
+import hanium.dongguk.global.constants.Constants;
 import hanium.dongguk.global.exception.CommonException;
 import hanium.dongguk.user.core.exception.UserErrorCode;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Component
-@RequiredArgsConstructor
-public class GoogleOauthClient {
+public class GoogleApiService {
 
     private final WebClient webClient;
+
+    public GoogleApiService(WebClient webClient) {
+        this.webClient = webClient.mutate()
+                .baseUrl(Constants.GOOGLE_BASEURL)
+                .build();
+    }
 
     public GoogleUserInfo getUserInfo(String accessToken) {
         try{

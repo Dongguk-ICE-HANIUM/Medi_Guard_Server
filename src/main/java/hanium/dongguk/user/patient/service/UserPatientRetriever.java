@@ -15,7 +15,7 @@ public class UserPatientRetriever {
 
     private final UserPatientRepository userPatientRepository;
 
-    UserPatient getUserPatient(UUID userId) {
+    public UserPatient getUserPatient(UUID userId) {
         return userPatientRepository.findById(userId)
                     .orElseThrow(() -> CommonException.type(UserErrorCode.NOT_FOUND_USER));
     }
