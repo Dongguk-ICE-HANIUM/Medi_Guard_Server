@@ -24,38 +24,32 @@ public class QuestionController implements QuestionApiSwagger {
 
     @Override
     @PostMapping
-    public ResponseEntity<ResponseDto<Void>> saveQuestions(
+    public ResponseEntity<Void> saveQuestions(
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @Valid @RequestBody QuestionSaveRequestDto requestDto,
             @UserId UUID userId) {
 
         questionService.saveQuestions(userId, date, requestDto);
-        return ResponseEntity.ok(
-                ResponseDto.success(null)
-        );
+        return ResponseEntity.ok().build();
     }
 
     @Override
     @PutMapping
-    public ResponseEntity<ResponseDto<Void>> updateQuestions(
+    public ResponseEntity<Void> updateQuestions(
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @Valid @RequestBody QuestionUpdateRequestDto requestDto,
             @UserId UUID userId) {
 
         questionService.updateQuestions(userId, date, requestDto);
-        return ResponseEntity.ok(
-                ResponseDto.success(null)
-        );
+        return ResponseEntity.ok().build();
     }
 
     @Override
     @GetMapping
-    public ResponseEntity<ResponseDto<QuestionResponseDto>> getQuestionsByDate(
+    public ResponseEntity<QuestionResponseDto> getQuestionsByDate(
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @UserId UUID userId) {
 
-        return ResponseEntity.ok(
-                ResponseDto.success(questionService.getQuestionsByDate(userId, date))
-        );
+        return ResponseEntity.ok(questionService.getQuestionsByDate(userId, date));
     }
 }

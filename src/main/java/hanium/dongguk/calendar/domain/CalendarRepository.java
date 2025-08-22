@@ -1,6 +1,7 @@
 package hanium.dongguk.calendar.domain;
 
-import hanium.dongguk.user.patient.UserPatient;
+import hanium.dongguk.user.patient.domain.UserPatient;
+import hanium.dongguk.user.patient.domain.UserPatient;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;

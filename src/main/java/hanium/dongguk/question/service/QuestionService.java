@@ -1,23 +1,22 @@
 package hanium.dongguk.question.service;
 
 import hanium.dongguk.calendar.domain.Calendar;
+import hanium.dongguk.calendar.domain.EEmotion;
+import hanium.dongguk.calendar.exception.CalendarErrorCode;
 import hanium.dongguk.calendar.service.CalendarRetriever;
 import hanium.dongguk.calendar.service.CalendarSaver;
 import hanium.dongguk.global.exception.CommonException;
-import hanium.dongguk.calendar.exception.CalendarErrorCode;
-import hanium.dongguk.question.exception.QuestionErrorCode;
-import hanium.dongguk.user.core.exception.UserErrorCode;
+import hanium.dongguk.question.domain.EQuestionType;
 import hanium.dongguk.question.domain.Question;
 import hanium.dongguk.question.dto.QuestionCreateDto;
 import hanium.dongguk.question.dto.QuestionDto;
 import hanium.dongguk.question.dto.request.QuestionSaveRequestDto;
 import hanium.dongguk.question.dto.request.QuestionUpdateRequestDto;
 import hanium.dongguk.question.dto.response.QuestionResponseDto;
-import hanium.dongguk.user.patient.UserPatient;
 import hanium.dongguk.user.core.domain.User;
 import hanium.dongguk.user.core.domain.UserRepository;
-import hanium.dongguk.calendar.domain.EEmotion;
-import hanium.dongguk.question.domain.EQuestionType;
+import hanium.dongguk.user.core.exception.UserErrorCode;
+import hanium.dongguk.user.patient.domain.UserPatient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +39,7 @@ public class QuestionService {
      * 오늘의 질문 저장
      */
     @Transactional
-    public QuestionResponseDto saveQuestions(UUID patientId, LocalDate date, QuestionSaveRequestDto requestDto) {
+    public void saveQuestions(UUID patientId, LocalDate date, QuestionSaveRequestDto requestDto) {
         User user = userRepository.findById(patientId)
                 .orElseThrow(() -> CommonException.type(UserErrorCode.NOT_FOUND_USER));
         
@@ -66,14 +65,13 @@ public class QuestionService {
 
         questionSaver.saveAll(questions);
 
-        return QuestionResponseDto.of(questions);
     }
 
     /**
      * 오늘의 질문 수정
      */
     @Transactional
-    public QuestionResponseDto updateQuestions(UUID patientId, LocalDate date, QuestionUpdateRequestDto requestDto) {
+    public void updateQuestions(UUID patientId, LocalDate date, QuestionUpdateRequestDto requestDto) {
         User user = userRepository.findById(patientId)
                 .orElseThrow(() -> CommonException.type(UserErrorCode.NOT_FOUND_USER));
         
@@ -93,8 +91,6 @@ public class QuestionService {
                     return question;
                 })
                 .toList();
-
-        return QuestionResponseDto.of(updatedQuestions);
     }
 
     /**

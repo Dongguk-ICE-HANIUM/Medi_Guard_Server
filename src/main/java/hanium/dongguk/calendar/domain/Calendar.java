@@ -2,7 +2,7 @@ package hanium.dongguk.calendar.domain;
 
 import hanium.dongguk.global.base.BaseTimeEntity;
 import hanium.dongguk.question.domain.EQuestionType;
-import hanium.dongguk.user.patient.UserPatient;
+import hanium.dongguk.user.patient.domain.UserPatient;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;

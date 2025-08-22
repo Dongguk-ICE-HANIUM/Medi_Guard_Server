@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -41,6 +42,7 @@ public interface QuestionApiSwagger {
                     - 인증: 로그인된 사용자만 접근 가능
                     """
     )
+    @SecurityRequirement(name = "JWT")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -111,7 +113,7 @@ public interface QuestionApiSwagger {
                     )
             )
     })
-    ResponseEntity<ResponseDto<Void>> saveQuestions(
+    ResponseEntity<Void> saveQuestions(
             @Parameter(
                     description = "질문 날짜 (ISO 날짜 형식: YYYY-MM-DD)",
                     required = true,
@@ -164,6 +166,7 @@ public interface QuestionApiSwagger {
                     - 수정 권한 검증 (본인 질문만 수정 가능)
                     """
     )
+    @SecurityRequirement(name = "JWT")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -203,7 +206,7 @@ public interface QuestionApiSwagger {
                     )
             )
     })
-    ResponseEntity<ResponseDto<Void>> updateQuestions(
+    ResponseEntity<Void> updateQuestions(
             @Parameter(
                     description = "질문 날짜 (ISO 날짜 형식: YYYY-MM-DD)",
                     required = true,
@@ -258,6 +261,7 @@ public interface QuestionApiSwagger {
                     - 데이터가 없는 경우 404 응답
                     """
     )
+    @SecurityRequirement(name = "JWT")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -310,7 +314,7 @@ public interface QuestionApiSwagger {
                     )
             )
     })
-    ResponseEntity<ResponseDto<QuestionResponseDto>> getQuestionsByDate(
+    ResponseEntity<QuestionResponseDto> getQuestionsByDate(
             @Parameter(
                     description = "조회할 질문 날짜 (ISO 날짜 형식: YYYY-MM-DD)",
                     required = true,
