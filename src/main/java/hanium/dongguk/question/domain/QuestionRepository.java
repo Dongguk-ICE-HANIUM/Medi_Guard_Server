@@ -6,5 +6,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface QuestionRepository extends JpaRepository<Question, UUID> {
-    List<Question> findByCalendarIdAndUserPatientId(UUID calendarId, UUID userPatientId);
+    List<Question> findByCalendarIdAndCalendarUserPatientId(UUID calendarId, UUID userPatientId);
 }

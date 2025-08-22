@@ -32,7 +32,7 @@ public record QuestionDto(
         @Schema(description = "질문 응답", example = "질문 응답을 작성해주세요.")
         String answer
 ) {
-    public static QuestionDto of(Question question) {
+    public static QuestionDto from(Question question) {
         return new QuestionDto(
                 question.getId(),
                 question.getType(),

@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -42,7 +43,7 @@ public class QuestionService {
         Calendar calendar = calendarRetriever.findByDateAndUserPatient(date, patientId)
                 .orElseGet(() -> calendarSaver.save(Calendar.createForQuestion(userPatient, date)));
 
-
+        validateDuplicate(patientId, calendar.getId());
 
         List<SaveQuestionDto> questionList = requestDto.saveQuestionList();
         List<Question> questions = questionList.stream()
@@ -63,12 +64,11 @@ public class QuestionService {
 
         List<Question> existingQuestions = questionRetriever.findByCalendarIdAndPatientId(calendar.getId(), patientId);
 
-            if(!existingQuestions.isEmpty()) {
-                throw CommonException.type(QuestionErrorCode.QUESTIONS_ALREADY_EXISTS);
-            }
+        if(existingQuestions.isEmpty()) {
+            throw CommonException.type(QuestionErrorCode.QUESTION_NOT_FOUND);
+        }
 
         List<UpdateQuestionDto> updateRequests = requestDto.updateQuestionList();
-
 
         updateRequests.forEach(updateRequest -> {
             Question question = existingQuestions.stream()
@@ -85,11 +85,23 @@ public class QuestionService {
      */
     @Transactional(readOnly = true)
     public QuestionResponseDto getQuestionsByDate(UUID patientId, LocalDate date) {
-        Calendar calendar = calendarRetriever.findByDateAndUserPatient(date, patientId)
-                .orElseThrow(() -> CommonException.type(CalendarErrorCode.CALENDAR_NOT_FOUND));
+
+        Optional<Calendar> calendarOpt = calendarRetriever.findByDateAndUserPatient(date, patientId);
+
+        if(calendarOpt.isEmpty()) {
+            return QuestionResponseDto.empty();
+        }
+
+        Calendar calendar = calendarOpt.get();
 
         List<Question> questions = questionRetriever.findByCalendarIdAndPatientId(calendar.getId(), patientId);
 
-        return QuestionResponseDto.of(questions);
+        return QuestionResponseDto.from(questions);
+    }
+
+    private void validateDuplicate (UUID patientId, UUID calendarId) {
+        if(!questionRetriever.findByCalendarIdAndPatientId(calendarId, patientId).isEmpty()){
+            throw CommonException.type(QuestionErrorCode.QUESTIONS_ALREADY_EXISTS);
+        }
     }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import hanium.dongguk.question.domain.Question;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.util.Collections;
 import java.util.List;
 
 public record QuestionResponseDto(
@@ -11,11 +12,15 @@ public record QuestionResponseDto(
         @Schema(description = "질문 목록")
         List<QuestionDto> questionList
 ) {
-    public static QuestionResponseDto of(List<Question> questions) {
+    public static QuestionResponseDto from(List<Question> questions) {
         return new QuestionResponseDto(
                 questions.stream()
-                        .map(QuestionDto::of)
+                        .map(QuestionDto::from)
                         .toList()
         );
+    }
+
+    public static QuestionResponseDto empty() {
+        return  new QuestionResponseDto(null);
     }
 }

@@ -148,7 +148,7 @@ public class AuthService {
 
     private void validateEmailNotExist(Email email){
         if(userRetriever.existsByEmail(email)){
-            throw CommonException.type(AuthErrorCode.)
+            throw CommonException.type(AuthErrorCode.EMAIL_ALREADY_EXISTS);
         }
     }
 

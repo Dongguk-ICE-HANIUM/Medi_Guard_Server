@@ -18,7 +18,7 @@ public class QuestionRetriever {
     private final QuestionRepository questionRepository;
 
     public List<Question> findByCalendarIdAndPatientId(UUID calendarId, UUID patientId) {
-        return questionRepository.findByCalendarIdAndUserPatientId(calendarId, patientId);
+        return questionRepository.findByCalendarIdAndCalendarUserPatientId(calendarId, patientId);
     }
 
     public Optional<Question> findById(UUID questionId) {

@@ -23,19 +23,6 @@ public record UpdateCalendarRequestDto(
                         "VERY_HAPPY", "HAPPY", "NEUTRAL", "SAD", "ANGRY"
                 }
         )
-        EEmotion emotion,
-        
-        @JsonProperty("questionType")
-        @NotNull(message = "질문 유형은 필수입니다.")
-        @Schema(
-                description = "질문 유형",
-                example = "PHYSICAL_SYMPTOMS",
-                allowableValues = {
-                        "PHYSICAL_SYMPTOMS", "FETAL_MOVEMENT", "MEDICATION_COMPLIANCE",
-                        "MEDICATION_SIDE_EFFECTS", "MOOD_STATUS", "MENTAL_HEALTH",
-                        "DAILY_LIFE", "FAMILY_SUPPORT", "PATIENT_CONCERNS"
-                }
-        )
-        EQuestionType questionType
+        EEmotion emotion
 ) {
 }
