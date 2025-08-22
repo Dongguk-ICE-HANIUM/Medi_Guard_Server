@@ -14,7 +14,8 @@ public class UserRetriever {
 
     private final UserRepository userRepository;
 
-    public boolean existsByEmail(Email email) {
+    public boolean existsByEmail(Email email)
+    {
         return userRepository.existsByEmail(email);
     }
 

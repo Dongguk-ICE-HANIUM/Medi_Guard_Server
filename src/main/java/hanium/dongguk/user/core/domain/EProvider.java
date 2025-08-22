@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 public enum EProvider {
     BASIC("BASIC"),
     KAKAO("KAKAO"),
-    GOOGLE("GOOGLE");
+    GOOGLE("GOOGLE"),
+    APPLE("APPLE");
 
     private final String name;
 }
