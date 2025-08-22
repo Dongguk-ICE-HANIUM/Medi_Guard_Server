@@ -1,12 +1,11 @@
 package hanium.dongguk.global.security.info;
 
-import hanium.dongguk.global.constants.Constants;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import hanium.dongguk.global.dto.JwtDto;
 import hanium.dongguk.global.exception.ErrorCode;
 import hanium.dongguk.global.exception.GlobalErrorCode;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.JSONValue;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,6 +13,9 @@ import java.util.Map;
 
 @Slf4j
 public class AuthenticationResponse {
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
     public static void makeLoginSuccessResponse(
             HttpServletResponse response,
             JwtDto jwtDto,
@@ -44,6 +46,6 @@ public class AuthenticationResponse {
         body.put("message", errorCode.getMessage());
         body.put("result", result);
 
-        response.getWriter().write(JSONValue.toJSONString(body));
+        response.getWriter().write(objectMapper.writeValueAsString(body));
     }
 }

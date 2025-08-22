@@ -2,6 +2,7 @@ package hanium.dongguk.calendar.domain;
 
 import hanium.dongguk.global.base.BaseTimeEntity;
 import hanium.dongguk.question.domain.EQuestionType;
+import hanium.dongguk.user.patient.domain.UserPatient;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -30,32 +31,40 @@ public class Calendar extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private EEmotion emotion;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "question_type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private EQuestionType questionType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient_id", nullable = false)
+    private UserPatient userPatient;
 
     // 빌더: 외부에서 받아야 하는 필드만
     @Builder
     private Calendar(final LocalDate date,
                      final String description,
                      final EEmotion emotion,
-                     final EQuestionType question) {
+                     final EQuestionType questionType,
+                     final UserPatient userPatient) {
         this.date = date;
         this.description = description;
         this.emotion = emotion;
-        this.questionType = question;
+        this.questionType = questionType;
+        this.userPatient = userPatient;
     }
 
     // 정적 팩토리 메서드
     public static Calendar create(final LocalDate date,
                                   final String description,
                                   final EEmotion emotion,
-                                  final EQuestionType question) {
+                                  final EQuestionType questionType,
+                                  final UserPatient userPatient) {
         return Calendar.builder()
                 .date(date)
                 .description(description)
                 .emotion(emotion)
-                .question(question)
+                .questionType(questionType)
+                .userPatient(userPatient)
                 .build();
     }
 
