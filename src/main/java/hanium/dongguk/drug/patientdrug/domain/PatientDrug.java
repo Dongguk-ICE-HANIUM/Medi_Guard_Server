@@ -125,4 +125,8 @@ public class PatientDrug extends BaseTimeEntity {
     public void update(final Boolean isActive) {
         this.isActive = isActive;
     }
+
+    public void detachDrugGroup() {
+        this.drugGroup = null;
+    }
 }

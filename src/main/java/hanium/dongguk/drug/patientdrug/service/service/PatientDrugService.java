@@ -141,4 +141,19 @@ public class PatientDrugService {
 
         patientDrugRemover.deleteByIdAndUserId(patientDrugId, userId);
     }
+
+    @Transactional
+    public Void detachDrugGroupFromPatientDrug(UUID userId, UUID patientDrugId) {
+
+        PatientDrug targetPatientDrug
+                = patientDrugRetriever.findByIdAndUserId(patientDrugId, userId);
+
+        DrugGroup targetDrugGroup = targetPatientDrug.getDrugGroup();
+
+        if (targetDrugGroup != null) {
+            targetPatientDrug.detachDrugGroup();
+        }
+
+        return null;
+    }
 }

@@ -27,4 +27,8 @@ public class PatientDrugRetriever {
     public Boolean existsByIdAndUserId(final UUID id, final UUID userId) {
         return patientDrugRepository.existsByIdAndUserPatientId(id, userId);
     }
+
+    public Integer countByDrugGroupId(final UUID drugGroupId) {
+        return patientDrugRepository.countByDrugGroupId(drugGroupId);
+    }
 }
