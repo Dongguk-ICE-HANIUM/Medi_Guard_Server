@@ -30,7 +30,7 @@ public interface PatientDrugApiSwagger {
             @PathVariable("patientDrugId")
             UUID patientDrugId,
             @Valid @RequestBody
-            PatchPatientDrugIsEssentialRequestDto requestDto)
+            PatchPatientDrugIsEssentialRequestDto requestDto);
 
     @GetMapping("/{patientDrugId}")
     public ResponseEntity<?> retrievePatientDrug(
