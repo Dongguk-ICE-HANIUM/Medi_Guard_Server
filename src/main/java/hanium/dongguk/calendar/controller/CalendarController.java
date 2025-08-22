@@ -1,7 +1,7 @@
 package hanium.dongguk.calendar.controller;
 
-import hanium.dongguk.calendar.dto.request.CalendarSaveRequestDto;
-import hanium.dongguk.calendar.dto.request.CalendarUpdateRequestDto;
+import hanium.dongguk.calendar.dto.request.SaveCalendarDto;
+import hanium.dongguk.calendar.dto.request.UpdateCalendarDto;
 import hanium.dongguk.calendar.dto.response.CalendarResponseDto;
 import hanium.dongguk.calendar.service.CalendarService;
 import hanium.dongguk.global.annotation.UserId;
@@ -30,27 +30,27 @@ public class CalendarController implements CalendarApiSwagger {
             @UserId UUID userId) {
 
         CalendarResponseDto response = calendarService.getCalendarByDate(userId, date);
-        return ResponseEntity.ok(ResponseDto.success(response));
+        return ResponseEntity.ok(new ResponseDto<>(null, "OK", response));
     }
 
     @Override
     @PostMapping
     public ResponseEntity<ResponseDto<List<Object>>> saveCalendar(
-            @Valid @RequestBody CalendarSaveRequestDto requestDto,
+            @Valid @RequestBody SaveCalendarDto requestDto,
             @UserId UUID userId) {
 
         calendarService.saveCalendar(userId, requestDto);
-        return ResponseEntity.ok(ResponseDto.success(List.of()));
+        return ResponseEntity.ok(new ResponseDto<>(null, "OK", List.of()));
     }
 
     @Override
-    @PutMapping("/{calendarId}")
+    @PatchMapping("/{calendarId}")
     public ResponseEntity<ResponseDto<List<Object>>> updateCalendar(
             @PathVariable UUID calendarId,
-            @Valid @RequestBody CalendarUpdateRequestDto requestDto,
+            @Valid @RequestBody UpdateCalendarDto requestDto,
             @UserId UUID userId) {
 
         calendarService.updateCalendar(userId, calendarId, requestDto);
-        return ResponseEntity.ok(ResponseDto.success(List.of()));
+        return ResponseEntity.ok(new ResponseDto<>(null, "OK", List.of()));
     }
 }

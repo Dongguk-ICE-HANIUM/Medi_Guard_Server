@@ -33,7 +33,7 @@ public class QuestionController implements QuestionApiSwagger {
     }
 
     @Override
-    @PutMapping
+    @PatchMapping
     public ResponseEntity<Void> updateQuestions(
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @Valid @RequestBody UpdateQuestionListRequestDto requestDto,

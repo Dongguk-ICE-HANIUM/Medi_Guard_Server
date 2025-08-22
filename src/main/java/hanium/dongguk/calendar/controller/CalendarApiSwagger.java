@@ -1,7 +1,7 @@
 package hanium.dongguk.calendar.controller;
 
-import hanium.dongguk.calendar.dto.request.CalendarSaveRequestDto;
-import hanium.dongguk.calendar.dto.request.CalendarUpdateRequestDto;
+import hanium.dongguk.calendar.dto.request.SaveCalendarDto;
+import hanium.dongguk.calendar.dto.request.UpdateCalendarDto;
 import hanium.dongguk.calendar.dto.response.CalendarResponseDto;
 import hanium.dongguk.global.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -146,7 +146,7 @@ public interface CalendarApiSwagger {
                     required = true,
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = CalendarSaveRequestDto.class),
+                            schema = @Schema(implementation = SaveCalendarDto.class),
                             examples = @ExampleObject(
                                     name = "기분 저장 요청 예시",
                                     summary = "정상적인 기분 저장 요청",
@@ -161,24 +161,24 @@ public interface CalendarApiSwagger {
                             )
                     )
             )
-            CalendarSaveRequestDto requestDto,
+            SaveCalendarDto requestDto,
             UUID userId
     );
 
     @Operation(
-            summary = "오늘의 기분 수정",
+            summary = "오늘의 기분 부분 수정",
             description = """
-                    로그인된 환자의 기존 기분 기록을 수정합니다.
+                    로그인된 환자의 기존 기분 기록을 부분적으로 수정합니다.
                     
                     **주요 기능:**
-                    - 감정 상태 변경
-                    - 기분 설명 텍스트 수정
+                    - 감정 상태 부분 변경
+                    - 기분 설명 텍스트 부분 수정
                     - 기록 소유자 권한 검증
                     - 기록 존재 여부 확인
                     
                     **검증 규칙:**
                     - 캘린더 ID: 유효한 UUID 형식이어야 함
-                    - 감정: HAPPY, SAD, ANGRY, ANXIOUS, NEUTRAL 중 하나
+                    - 감정: VERY_HAPPY, HAPPY, NEUTRAL, SAD, ANGRY 중 하나
                     - 설명: 필수 입력값 (최대 1000자)
                     - 권한: 본인의 기록만 수정 가능
                     - 존재성: 수정할 기록이 존재해야 함
@@ -230,7 +230,7 @@ public interface CalendarApiSwagger {
                     required = true,
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = CalendarUpdateRequestDto.class),
+                            schema = @Schema(implementation = UpdateCalendarDto.class),
                             examples = @ExampleObject(
                                     name = "기분 수정 요청 예시",
                                     summary = "정상적인 기분 수정 요청",
@@ -243,7 +243,7 @@ public interface CalendarApiSwagger {
                             )
                     )
             )
-            CalendarUpdateRequestDto requestDto,
+            UpdateCalendarDto requestDto,
             UUID userId
     );
 }

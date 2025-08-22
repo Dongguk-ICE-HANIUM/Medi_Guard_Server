@@ -154,7 +154,7 @@ public interface QuestionApiSwagger {
     );
 
     @Operation(
-            summary = "오늘의 질문 수정",
+            summary = "오늘의 질문 부분 수정",
             description = """
                     로그인된 환자의 기존 질문 응답을 수정합니다.
                     

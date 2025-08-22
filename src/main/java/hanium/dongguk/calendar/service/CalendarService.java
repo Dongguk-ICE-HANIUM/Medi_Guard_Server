@@ -1,8 +1,8 @@
 package hanium.dongguk.calendar.service;
 
 import hanium.dongguk.calendar.domain.Calendar;
-import hanium.dongguk.calendar.dto.request.CalendarSaveRequestDto;
-import hanium.dongguk.calendar.dto.request.CalendarUpdateRequestDto;
+import hanium.dongguk.calendar.dto.request.SaveCalendarDto;
+import hanium.dongguk.calendar.dto.request.UpdateCalendarDto;
 import hanium.dongguk.calendar.dto.response.CalendarResponseDto;
 import hanium.dongguk.calendar.exception.CalendarErrorCode;
 import hanium.dongguk.global.exception.CommonException;
@@ -41,7 +41,7 @@ public class CalendarService {
     }
 
     @Transactional
-    public void saveCalendar(UUID patientId, CalendarSaveRequestDto requestDto) {
+    public void saveCalendar(UUID patientId, SaveCalendarDto requestDto) {
         // 미래 날짜 검증
         if (requestDto.date().isAfter(LocalDate.now())) {
             throw CommonException.type(CalendarErrorCode.FUTURE_DATE_NOT_ALLOWED);
@@ -71,7 +71,7 @@ public class CalendarService {
     }
 
     @Transactional
-    public void updateCalendar(UUID patientId, UUID calendarId, CalendarUpdateRequestDto requestDto) {
+    public void updateCalendar(UUID patientId, UUID calendarId, UpdateCalendarDto requestDto) {
         User user = userRepository.findById(patientId)
                 .orElseThrow(() -> CommonException.type(UserErrorCode.NOT_FOUND_USER));
         
