@@ -1,15 +1,13 @@
 package hanium.dongguk.drug.patientdrug.controller;
 
 import hanium.dongguk.drug.patientdrug.dto.request.CreatePatientDrugRequestDto;
+import hanium.dongguk.drug.patientdrug.dto.request.PatchPatientDrugIsEssentialRequestDto;
 import hanium.dongguk.drug.patientdrug.service.service.PatientDrugService;
 import hanium.dongguk.global.annotation.UserId;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -26,5 +24,21 @@ public class PatientDrugController implements PatientDrugApiSwagger {
         return ResponseEntity.created(
                 patientDrugService.createPatientDrug(userId, requestDto)
         ).build();
+    }
+
+    @PatchMapping("/{patientDrugId}")
+    public ResponseEntity<?> patchIsEssential(
+            @UserId UUID userId,
+            @PathVariable("patientDrugId")
+            UUID patientDrugId,
+            @Valid @RequestBody
+            PatchPatientDrugIsEssentialRequestDto requestDto) {
+        return ResponseEntity.ok(
+                patientDrugService.patchIsEssential(
+                        userId,
+                        patientDrugId,
+                        requestDto
+                )
+        );
     }
 }

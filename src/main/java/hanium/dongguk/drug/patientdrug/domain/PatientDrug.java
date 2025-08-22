@@ -121,4 +121,8 @@ public class PatientDrug extends BaseTimeEntity {
                 .drugGroup(drugGroup)
                 .build();
     }
+
+    public void update(final Boolean isEssential) {
+        this.isEssential = isEssential;
+    }
 }

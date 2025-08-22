@@ -4,11 +4,14 @@ import hanium.dongguk.drug.drug.domain.Drug;
 import hanium.dongguk.drug.drug.service.DrugRetriever;
 import hanium.dongguk.drug.patientdrug.domain.*;
 import hanium.dongguk.drug.patientdrug.dto.request.CreatePatientDrugRequestDto;
+import hanium.dongguk.drug.patientdrug.dto.request.PatchPatientDrugIsEssentialRequestDto;
 import hanium.dongguk.drug.patientdrug.exception.TakingTypeErrorCode;
 import hanium.dongguk.drug.patientdrug.service.retriever.DrugGroupRetriever;
+import hanium.dongguk.drug.patientdrug.service.retriever.PatientDrugRetriever;
 import hanium.dongguk.drug.patientdrug.service.saver.ParticularDateSaver;
 import hanium.dongguk.drug.patientdrug.service.saver.PatientDrugSaver;
 import hanium.dongguk.drug.patientdrug.service.saver.TakingTypeSaver;
+import hanium.dongguk.drug.patientdrug.service.updater.PatientDrugUpdater;
 import hanium.dongguk.drug.patientdrug.util.TakingTypeFactory;
 import hanium.dongguk.global.exception.CommonException;
 import hanium.dongguk.user.patient.domain.UserPatient;
@@ -28,7 +31,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PatientDrugService {
 
+    private final PatientDrugRetriever patientDrugRetriever;
     private final PatientDrugSaver patientDrugSaver;
+    private final PatientDrugUpdater patientDrugUpdater;
     private final UserPatientRetriever userPatientRetriever;
     private final DrugRetriever drugRetriever;
     private final DrugGroupRetriever drugGroupRetriever;
@@ -83,5 +88,17 @@ public class PatientDrugService {
                 );
 
         return URI.create(newPatientDrug.getId().toString());
+    }
+
+    @Transactional
+    public Void patchIsEssential(
+            UUID userId,
+            UUID patientDrugId,
+            PatchPatientDrugIsEssentialRequestDto requestDto) {
+        PatientDrug patientDrug
+                = patientDrugRetriever.findByIdAndUserId(patientDrugId, userId);
+        patientDrugUpdater.update(patientDrug, requestDto.isEssential());
+
+        return null;
     }
 }
