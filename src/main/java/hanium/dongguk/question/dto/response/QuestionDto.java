@@ -1,4 +1,4 @@
-package hanium.dongguk.question.dto;
+package hanium.dongguk.question.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import hanium.dongguk.question.domain.EQuestionType;
@@ -13,10 +13,18 @@ public record QuestionDto(
         @JsonProperty(value = "id")
         @Schema(description = "질문 ID", example = "질문 ID을 작성해주세요.")
         UUID id,
-        
+
         @JsonProperty(value = "type")
         @NotNull
-        @Schema(description = "질문 유형", example = "질문 유형을 선택해주세요.")
+        @Schema(
+                description = "질문 유형",
+                example = "PHYSICAL_SYMPTOMS",
+                allowableValues = {
+                        "PHYSICAL_SYMPTOMS", "FETAL_MOVEMENT", "MEDICATION_COMPLIANCE",
+                        "MEDICATION_SIDE_EFFECTS", "MOOD_STATUS", "MENTAL_HEALTH",
+                        "DAILY_LIFE", "FAMILY_SUPPORT", "PATIENT_CONCERNS"
+                }
+        )
         EQuestionType type,
         
         @JsonProperty(value = "answer")

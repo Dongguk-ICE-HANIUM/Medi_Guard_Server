@@ -16,8 +16,9 @@ public enum QuestionErrorCode implements ErrorCode {
     INVALID_QUESTION_TYPE(HttpStatus.BAD_REQUEST, "QUESTION_002", "유효하지 않은 질문 타입입니다."),
 
     // 답변이 비어 있을 때 (필요하다면)
-    EMPTY_ANSWER(HttpStatus.BAD_REQUEST, "QUESTION_003", "답변을 입력해주세요.");
+    EMPTY_ANSWER(HttpStatus.BAD_REQUEST, "QUESTION_003", "답변을 입력해주세요."),
 
+    QUESTION_NOT_FOUND_FOR_TYPE(HttpStatus.NOT_FOUND, "QUESTION_004", "해당하는 유형 질문이 없습니다.");
     private final HttpStatus status;
     private final String errorCode;
     private final String message;

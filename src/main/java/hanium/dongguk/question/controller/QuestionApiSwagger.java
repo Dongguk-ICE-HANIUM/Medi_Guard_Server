@@ -1,10 +1,9 @@
 package hanium.dongguk.question.controller;
 
-import hanium.dongguk.question.dto.request.QuestionSaveRequestDto;
-import hanium.dongguk.question.dto.request.QuestionUpdateRequestDto;
+import hanium.dongguk.question.dto.request.SaveQuestionListRequestDto;
+import hanium.dongguk.question.dto.request.UpdateQuestionListRequestDto;
 import hanium.dongguk.question.dto.response.QuestionResponseDto;
 import hanium.dongguk.global.annotation.UserId;
-import hanium.dongguk.global.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -125,7 +124,7 @@ public interface QuestionApiSwagger {
                     required = true,
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = QuestionSaveRequestDto.class),
+                            schema = @Schema(implementation = SaveQuestionListRequestDto.class),
                             examples = @ExampleObject(
                                     name = "질문 저장 요청 예시",
                                     summary = "정상적인 질문 저장 요청",
@@ -139,6 +138,10 @@ public interface QuestionApiSwagger {
                                                     {
                                                         "type": "PATIENT_CONCERNS",
                                                         "answer": "약물 부작용이 걱정됩니다."
+                                                    },
+                                                    {
+                                                        "type": "MEDICATION_COMPLIANCE",
+                                                        "answer": "매일 규칙적으로 복용하고 있습니다."
                                                     }
                                                 ]
                                             }
@@ -146,7 +149,7 @@ public interface QuestionApiSwagger {
                             )
                     )
             )
-            @Valid @RequestBody QuestionSaveRequestDto requestDto,
+            @Valid @RequestBody SaveQuestionListRequestDto requestDto,
             @UserId UUID userId
     );
 
@@ -192,17 +195,30 @@ public interface QuestionApiSwagger {
                     description = "질문 데이터를 찾을 수 없음",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(
-                                    name = "데이터 없음",
-                                    summary = "해당 날짜의 질문 데이터가 없음",
-                                    value = """
-                                            {
-                                               "errorCode": "QUESTION_003",
-                                               "message": "해당 날짜의 질문 데이터를 찾을 수 없습니다.",
-                                               "result": null
-                                            }
-                                            """
-                            )
+                            examples = {
+                                    @ExampleObject(
+                                            name = "캘린더 없음",
+                                            summary = "해당 날짜의 캘린더가 없음",
+                                            value = """
+                                                    {
+                                                       "errorCode": "CALENDAR_001",
+                                                       "message": "해당 날짜의 캘린더를 찾을 수 없습니다.",
+                                                       "result": null
+                                                    }
+                                                    """
+                                    ),
+                                    @ExampleObject(
+                                            name = "질문 타입 없음",
+                                            summary = "해당 타입의 질문이 없음",
+                                            value = """
+                                                    {
+                                                       "errorCode": "QUESTION_004",
+                                                       "message": "해당하는 유형 질문이 없습니다.",
+                                                       "result": null
+                                                    }
+                                                    """
+                                    )
+                            }
                     )
             )
     })
@@ -218,7 +234,7 @@ public interface QuestionApiSwagger {
                     required = true,
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = QuestionUpdateRequestDto.class),
+                            schema = @Schema(implementation = UpdateQuestionListRequestDto.class),
                             examples = @ExampleObject(
                                     name = "질문 수정 요청 예시",
                                     summary = "정상적인 질문 수정 요청",
@@ -226,14 +242,16 @@ public interface QuestionApiSwagger {
                                             {
                                                 "questionList": [
                                                     {
-                                                        "id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-                                                        "type": "PHYSICAL_SYMPTOMS",
-                                                        "answer": "두통이 많이 완화되었습니다."
+                                                        "type": "MEDICATION_COMPLIANCE",
+                                                        "answer": "약물 복용을 잊어버린 날이 있었습니다."
                                                     },
                                                     {
-                                                        "id": "a47bc10b-58cc-4372-a567-0e02b2c3d480",
-                                                        "type": "PATIENT_CONCERNS",
-                                                        "answer": "부작용 걱정이 줄어들었습니다."
+                                                        "type": "MEDICATION_SIDE_EFFECTS",
+                                                        "answer": "가벼운 메스꺼움이 있었습니다."
+                                                    },
+                                                    {
+                                                        "type": "PHYSICAL_SYMPTOMS",
+                                                        "answer": "증상이 이전보다 악화된 것 같습니다."
                                                     }
                                                 ]
                                             }
@@ -241,7 +259,7 @@ public interface QuestionApiSwagger {
                             )
                     )
             )
-            @Valid @RequestBody QuestionUpdateRequestDto requestDto,
+            @Valid @RequestBody UpdateQuestionListRequestDto requestDto,
             @UserId UUID userId
     );
 
@@ -300,17 +318,30 @@ public interface QuestionApiSwagger {
                     description = "질문 데이터를 찾을 수 없음",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(
-                                    name = "데이터 없음",
-                                    summary = "해당 날짜의 질문 데이터가 없음",
-                                    value = """
-                                            {
-                                               "errorCode": "QUESTION_003",
-                                               "message": "해당 날짜의 질문 데이터를 찾을 수 없습니다.",
-                                               "result": null
-                                            }
-                                            """
-                            )
+                            examples = {
+                                    @ExampleObject(
+                                            name = "캘린더 없음",
+                                            summary = "해당 날짜의 캘린더가 없음",
+                                            value = """
+                                                    {
+                                                       "errorCode": "CALENDAR_001",
+                                                       "message": "해당 날짜의 캘린더를 찾을 수 없습니다.",
+                                                       "result": null
+                                                    }
+                                                    """
+                                    ),
+                                    @ExampleObject(
+                                            name = "질문 타입 없음",
+                                            summary = "해당 타입의 질문이 없음",
+                                            value = """
+                                                    {
+                                                       "errorCode": "QUESTION_004",
+                                                       "message": "해당하는 유형 질문이 없습니다.",
+                                                       "result": null
+                                                    }
+                                                    """
+                                    )
+                            }
                     )
             )
     })

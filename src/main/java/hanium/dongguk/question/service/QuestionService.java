@@ -8,15 +8,16 @@ import hanium.dongguk.calendar.service.CalendarSaver;
 import hanium.dongguk.global.exception.CommonException;
 import hanium.dongguk.question.domain.EQuestionType;
 import hanium.dongguk.question.domain.Question;
-import hanium.dongguk.question.dto.QuestionCreateDto;
-import hanium.dongguk.question.dto.QuestionDto;
-import hanium.dongguk.question.dto.request.QuestionSaveRequestDto;
-import hanium.dongguk.question.dto.request.QuestionUpdateRequestDto;
+import hanium.dongguk.question.dto.request.SaveQuestionDto;
+import hanium.dongguk.question.dto.request.SaveQuestionListRequestDto;
+import hanium.dongguk.question.dto.request.UpdateQuestionDto;
+import hanium.dongguk.question.dto.request.UpdateQuestionListRequestDto;
+import hanium.dongguk.question.dto.response.QuestionDto;
 import hanium.dongguk.question.dto.response.QuestionResponseDto;
-import hanium.dongguk.user.core.domain.User;
+import hanium.dongguk.question.exception.QuestionErrorCode;
 import hanium.dongguk.user.core.domain.UserRepository;
-import hanium.dongguk.user.core.exception.UserErrorCode;
 import hanium.dongguk.user.patient.domain.UserPatient;
+import hanium.dongguk.user.patient.service.UserPatientRetriever;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,18 +35,15 @@ public class QuestionService {
     private final CalendarRetriever calendarRetriever;
     private final CalendarSaver calendarSaver;
     private final UserRepository userRepository;
+    private final UserPatientRetriever userPatientRetriever;
 
     /**
      * 오늘의 질문 저장
      */
     @Transactional
-    public void saveQuestions(UUID patientId, LocalDate date, QuestionSaveRequestDto requestDto) {
-        User user = userRepository.findById(patientId)
-                .orElseThrow(() -> CommonException.type(UserErrorCode.NOT_FOUND_USER));
-        
-        if (!(user instanceof UserPatient userPatient)) {
-            throw CommonException.type(CalendarErrorCode.UNAUTHORIZED_ACCESS);
-        }
+    public void saveQuestions(UUID patientId, LocalDate date, SaveQuestionListRequestDto requestDto) {
+
+        UserPatient userPatient = userPatientRetriever.getUserPatient(patientId);
 
         Calendar calendar = calendarRetriever.findByDateAndUserPatient(date, userPatient)
                 .orElseGet(() -> calendarSaver.save(
@@ -58,7 +56,7 @@ public class QuestionService {
                         )
                 ));
 
-        List<QuestionCreateDto> questionList = requestDto.questionList();
+        List<SaveQuestionDto> questionList = requestDto.saveQuestionList();
         List<Question> questions = questionList.stream()
                 .map(item -> Question.createQuestion(item.type(), item.answer(), calendar))
                 .toList();
@@ -71,26 +69,25 @@ public class QuestionService {
      * 오늘의 질문 수정
      */
     @Transactional
-    public void updateQuestions(UUID patientId, LocalDate date, QuestionUpdateRequestDto requestDto) {
-        User user = userRepository.findById(patientId)
-                .orElseThrow(() -> CommonException.type(UserErrorCode.NOT_FOUND_USER));
-        
-        if (!(user instanceof UserPatient userPatient)) {
-            throw CommonException.type(CalendarErrorCode.UNAUTHORIZED_ACCESS);
-        }
+    public void updateQuestions(UUID patientId, LocalDate date, UpdateQuestionListRequestDto requestDto) {
+
+        UserPatient userPatient = userPatientRetriever.getUserPatient(patientId);
 
         Calendar calendar = calendarRetriever.findByDateAndUserPatient(date, userPatient)
                 .orElseThrow(() -> CommonException.type(CalendarErrorCode.CALENDAR_NOT_FOUND));
 
-        List<QuestionDto> questionList = requestDto.questionList();
-        List<Question> updatedQuestions = questionList.stream()
-                .map(item -> {
-                    Question question = questionRetriever.findByIdOrThrow(item.id());
-                    QuestionValidator.validateQuestionBelongsToCalendar(question, calendar);
-                    question.updateAnswer(item.answer());
-                    return question;
-                })
-                .toList();
+        List<Question> existingQuestions = questionRetriever.findByCalendarId(calendar.getId());
+        List<UpdateQuestionDto> updateRequests = requestDto.updateQuestionList();
+
+
+        updateRequests.forEach(updateRequest -> {
+            Question question = existingQuestions.stream()
+                    .filter(q -> q.getType() == updateRequest.type())
+                    .findFirst()
+                    .orElseThrow(() -> CommonException.type(QuestionErrorCode.QUESTION_NOT_FOUND_FOR_TYPE));
+
+            question.updateAnswer(updateRequest.answer());
+        });
     }
 
     /**
@@ -98,12 +95,8 @@ public class QuestionService {
      */
     @Transactional(readOnly = true)
     public QuestionResponseDto getQuestionsByDate(UUID patientId, LocalDate date) {
-        User user = userRepository.findById(patientId)
-                .orElseThrow(() -> CommonException.type(UserErrorCode.NOT_FOUND_USER));
-        
-        if (!(user instanceof UserPatient userPatient)) {
-            throw CommonException.type(CalendarErrorCode.UNAUTHORIZED_ACCESS);
-        }
+
+        UserPatient userPatient = userPatientRetriever.getUserPatient(patientId);
 
         Calendar calendar = calendarRetriever.findByDateAndUserPatient(date, userPatient)
                 .orElseThrow(() -> CommonException.type(CalendarErrorCode.CALENDAR_NOT_FOUND));

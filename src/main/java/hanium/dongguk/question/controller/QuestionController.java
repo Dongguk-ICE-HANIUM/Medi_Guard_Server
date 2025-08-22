@@ -1,9 +1,8 @@
 package hanium.dongguk.question.controller;
 
 import hanium.dongguk.global.annotation.UserId;
-import hanium.dongguk.global.dto.ResponseDto;
-import hanium.dongguk.question.dto.request.QuestionSaveRequestDto;
-import hanium.dongguk.question.dto.request.QuestionUpdateRequestDto;
+import hanium.dongguk.question.dto.request.SaveQuestionListRequestDto;
+import hanium.dongguk.question.dto.request.UpdateQuestionListRequestDto;
 import hanium.dongguk.question.dto.response.QuestionResponseDto;
 import hanium.dongguk.question.service.QuestionService;
 import jakarta.validation.Valid;
@@ -26,7 +25,7 @@ public class QuestionController implements QuestionApiSwagger {
     @PostMapping
     public ResponseEntity<Void> saveQuestions(
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @Valid @RequestBody QuestionSaveRequestDto requestDto,
+            @Valid @RequestBody SaveQuestionListRequestDto requestDto,
             @UserId UUID userId) {
 
         questionService.saveQuestions(userId, date, requestDto);
@@ -37,7 +36,7 @@ public class QuestionController implements QuestionApiSwagger {
     @PutMapping
     public ResponseEntity<Void> updateQuestions(
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @Valid @RequestBody QuestionUpdateRequestDto requestDto,
+            @Valid @RequestBody UpdateQuestionListRequestDto requestDto,
             @UserId UUID userId) {
 
         questionService.updateQuestions(userId, date, requestDto);

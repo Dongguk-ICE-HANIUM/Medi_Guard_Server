@@ -2,7 +2,6 @@ package hanium.dongguk.question.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import hanium.dongguk.question.domain.Question;
-import hanium.dongguk.question.dto.QuestionDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
