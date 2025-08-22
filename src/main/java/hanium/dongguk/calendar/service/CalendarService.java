@@ -42,6 +42,11 @@ public class CalendarService {
 
     @Transactional
     public void saveCalendar(UUID patientId, CalendarSaveRequestDto requestDto) {
+        // 미래 날짜 검증
+        if (requestDto.date().isAfter(LocalDate.now())) {
+            throw CommonException.type(CalendarErrorCode.FUTURE_DATE_NOT_ALLOWED);
+        }
+        
         User user = userRepository.findById(patientId)
                 .orElseThrow(() -> CommonException.type(UserErrorCode.NOT_FOUND_USER));
         
