@@ -51,4 +51,13 @@ public class PatientDrugController implements PatientDrugApiSwagger {
                 patientDrugService.retrieve(userId, patientDrugId)
         );
     }
+
+    @DeleteMapping("/{patientDrugId}")
+    public ResponseEntity<?> deletePatientDrug(
+            @UserId UUID userId,
+            @PathVariable("patientDrugId") UUID patientDrugId
+    ) {
+        patientDrugService.delete(userId, patientDrugId);
+        return ResponseEntity.noContent().build();
+    }
 }

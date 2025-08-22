@@ -24,4 +24,7 @@ public class PatientDrugRetriever {
                .orElseThrow(() -> CommonException.type(PatientDrugErrorCode.NOT_FOUND));
     }
 
+    public Boolean existsByIdAndUserId(final UUID id, final UUID userId) {
+        return patientDrugRepository.existsByIdAndUserPatientId(id, userId);
+    }
 }

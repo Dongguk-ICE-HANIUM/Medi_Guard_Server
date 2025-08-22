@@ -7,7 +7,9 @@ import hanium.dongguk.drug.patientdrug.dto.request.CreatePatientDrugRequestDto;
 import hanium.dongguk.drug.patientdrug.dto.request.PatchPatientDrugIsEssentialRequestDto;
 import hanium.dongguk.drug.patientdrug.dto.response.RetrievePatientDrugNotifiTakingResponseDto;
 import hanium.dongguk.drug.patientdrug.dto.response.RetrievePatientDrugResponseDto;
+import hanium.dongguk.drug.patientdrug.exception.PatientDrugErrorCode;
 import hanium.dongguk.drug.patientdrug.exception.TakingTypeErrorCode;
+import hanium.dongguk.drug.patientdrug.service.remover.PatientDrugRemover;
 import hanium.dongguk.drug.patientdrug.service.retriever.DrugGroupRetriever;
 import hanium.dongguk.drug.patientdrug.service.retriever.PatientDrugRetriever;
 import hanium.dongguk.drug.patientdrug.service.saver.ParticularDateSaver;
@@ -35,6 +37,7 @@ public class PatientDrugService {
     private final PatientDrugRetriever patientDrugRetriever;
     private final PatientDrugSaver patientDrugSaver;
     private final PatientDrugUpdater patientDrugUpdater;
+    private final PatientDrugRemover patientDrugRemover;
     private final UserPatientRetriever userPatientRetriever;
     private final DrugRetriever drugRetriever;
     private final DrugGroupRetriever drugGroupRetriever;
@@ -128,5 +131,14 @@ public class PatientDrugService {
                 targetTakingType,
                 notifiTakingDtoList
         );
+    }
+
+    @Transactional
+    public void delete(UUID userId, UUID patientDrugId) {
+        if (!patientDrugRetriever.existsByIdAndUserId(patientDrugId, userId)) {
+            throw CommonException.type(PatientDrugErrorCode.NOT_FOUND);
+        }
+
+        patientDrugRemover.deleteByIdAndUserId(patientDrugId, userId);
     }
 }
