@@ -1,4 +1,4 @@
-package hanium.dongguk.user.patient.auth.dto;
+package hanium.dongguk.auth.provider.apple.dto;
 
 import jakarta.validation.constraints.NotBlank;
 

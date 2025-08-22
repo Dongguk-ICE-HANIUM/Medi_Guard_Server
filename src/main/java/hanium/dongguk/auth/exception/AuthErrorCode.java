@@ -1,4 +1,4 @@
-package hanium.dongguk.user.patient.exception;
+package hanium.dongguk.auth.exception;
 
 import hanium.dongguk.global.exception.ErrorCode;
 import lombok.Getter;

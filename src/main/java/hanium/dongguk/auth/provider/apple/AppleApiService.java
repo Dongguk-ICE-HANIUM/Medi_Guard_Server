@@ -1,10 +1,10 @@
-package hanium.dongguk.user.patient.auth;
+package hanium.dongguk.auth.provider.apple;
 
+import hanium.dongguk.auth.exception.AuthErrorCode;
+import hanium.dongguk.auth.provider.apple.dto.AppleAuthTokenResponseDto;
+import hanium.dongguk.auth.provider.apple.dto.ApplePublicKeyList;
+import hanium.dongguk.global.constants.Constants;
 import hanium.dongguk.global.exception.CommonException;
-import hanium.dongguk.user.patient.auth.dto.AppleAuthTokenResponseDto;
-import hanium.dongguk.user.patient.auth.dto.ApplePublicKeysResponseDto;
-import hanium.dongguk.user.patient.exception.AuthErrorCode;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -17,8 +17,10 @@ import reactor.core.publisher.Mono;
 public class AppleApiService {
     private final WebClient appleWebClient;
 
-    public AppleApiService(@Qualifier("appleWebClient") WebClient appleWebClient) {
-        this.appleWebClient = appleWebClient;
+    public AppleApiService(WebClient webClient) {
+        this.appleWebClient = webClient.mutate()
+                .baseUrl(Constants.APPLE_BASEURL)
+                .build();
     }
 
     public AppleAuthTokenResponseDto generateToken(String code, String clientId, String clientSecret, String grantType){
@@ -37,14 +39,14 @@ public class AppleApiService {
                 .block();
     }
 
-    public ApplePublicKeysResponseDto getAppleAuthPublicKey(){
+    public ApplePublicKeyList getAppleAuthPublicKey(){
 
         return appleWebClient.get()
                 .uri("/keys")
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, response ->
                         Mono.error(CommonException.type(AuthErrorCode.APPLE_PUBLIC_KEY_REQUEST_FAILED)))
-                .bodyToMono(ApplePublicKeysResponseDto.class)
+                .bodyToMono(ApplePublicKeyList.class)
                 .block();
 
     }

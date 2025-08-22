@@ -1,4 +1,4 @@
-package hanium.dongguk.user.patient.auth.dto;
+package hanium.dongguk.auth.provider.apple.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

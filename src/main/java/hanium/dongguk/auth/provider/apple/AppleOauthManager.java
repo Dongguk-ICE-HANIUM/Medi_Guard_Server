@@ -1,9 +1,9 @@
-package hanium.dongguk.user.patient.auth;
+package hanium.dongguk.auth.provider.apple;
 
 import hanium.dongguk.global.exception.CommonException;
-import hanium.dongguk.user.patient.auth.dto.ApplePublicKey;
-import hanium.dongguk.user.patient.auth.dto.ApplePublicKeysResponseDto;
-import hanium.dongguk.user.patient.exception.AuthErrorCode;
+import hanium.dongguk.auth.provider.apple.dto.ApplePublicKey;
+import hanium.dongguk.auth.provider.apple.dto.ApplePublicKeyList;
+import hanium.dongguk.auth.exception.AuthErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +20,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AppleOauthManager {
 
-    public PublicKey generatePublicKey (Map<String, String> tokenHeaders, ApplePublicKeysResponseDto response){
+    public PublicKey generatePublicKey (Map<String, String> tokenHeaders, ApplePublicKeyList response){
         ApplePublicKey applePublicKey = getMatchedKey(tokenHeaders.get("kid"), tokenHeaders.get("alg"), response);
 
         return getPublicKey(applePublicKey);
     }
 
-    private ApplePublicKey getMatchedKey (String kid, String alg, ApplePublicKeysResponseDto response){
+    private ApplePublicKey getMatchedKey (String kid, String alg, ApplePublicKeyList response){
         return response.keyList().stream()
                 .filter(key -> key.kid().equals(kid) && key.alg().equals(alg))
                 .findAny()

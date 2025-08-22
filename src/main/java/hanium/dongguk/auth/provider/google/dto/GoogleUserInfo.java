@@ -1,4 +1,4 @@
-package hanium.dongguk.auth.oauth;
+package hanium.dongguk.auth.provider.google.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

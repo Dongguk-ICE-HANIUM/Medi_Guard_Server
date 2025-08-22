@@ -2,22 +2,22 @@ package hanium.dongguk.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.netty.http.client.HttpClient;
+
+import java.time.Duration;
 
 @Configuration
 public class WebClientConfig {
 
-    @Bean("googleWebClient")
-    public WebClient googleWebClient(){
-        return WebClient.builder()
-                .baseUrl("https://www.googleapis.com/oauth2/v1")
-                .build();
-    }
-
-    @Bean("appleWebClient")
-    public WebClient appleWebClient(){
-        return WebClient.builder()
-                .baseUrl("https://appleid.apple.com/auth")
+    @Bean
+    WebClient webClient(WebClient.Builder builder) {
+        HttpClient httpClient = HttpClient.create()
+                .responseTimeout(Duration.ofMillis(20000))
+                .proxyWithSystemProperties();
+        return builder
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }
 
