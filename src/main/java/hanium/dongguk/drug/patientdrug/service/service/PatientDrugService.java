@@ -19,7 +19,7 @@ import hanium.dongguk.drug.patientdrug.service.updater.PatientDrugUpdater;
 import hanium.dongguk.drug.patientdrug.util.TakingTypeFactory;
 import hanium.dongguk.global.exception.CommonException;
 import hanium.dongguk.notification.taking.domain.NotifiTaking;
-import hanium.dongguk.notification.taking.service.retriever.NotifiTakingRetriever;
+import hanium.dongguk.notification.taking.service.NotifiTakingRetriever;
 import hanium.dongguk.user.patient.domain.UserPatient;
 import hanium.dongguk.user.patient.service.UserPatientRetriever;
 import lombok.RequiredArgsConstructor;
@@ -117,7 +117,7 @@ public class PatientDrugService {
         DrugGroup targetDrugGroup = targetPatientDrug.getDrugGroup();
         TakingType targetTakingType = targetPatientDrug.getTakingType();
         List<NotifiTaking> targetNotifiTaking
-                = notifiTakingRetriever.findAllOptionalByPatientDrugId(patientDrugId);
+                = notifiTakingRetriever.findAllByPatientDrugId(patientDrugId);
 
         List<RetrievePatientDrugNotifiTakingResponseDto> notifiTakingDtoList
                 = targetNotifiTaking.stream()
