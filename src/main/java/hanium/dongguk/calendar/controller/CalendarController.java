@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -34,22 +35,22 @@ public class CalendarController implements CalendarApiSwagger {
 
     @Override
     @PostMapping
-    public ResponseEntity<ResponseDto<Void>> saveCalendar(
+    public ResponseEntity<ResponseDto<List<Object>>> saveCalendar(
             @Valid @RequestBody CalendarSaveRequestDto requestDto,
             @UserId UUID userId) {
 
         calendarService.saveCalendar(userId, requestDto);
-        return ResponseEntity.ok(new ResponseDto<>(null));
+        return ResponseEntity.ok(ResponseDto.success(List.of()));
     }
 
     @Override
     @PutMapping("/{calendarId}")
-    public ResponseEntity<ResponseDto<Void>> updateCalendar(
+    public ResponseEntity<ResponseDto<List<Object>>> updateCalendar(
             @PathVariable UUID calendarId,
             @Valid @RequestBody CalendarUpdateRequestDto requestDto,
             @UserId UUID userId) {
 
         calendarService.updateCalendar(userId, calendarId, requestDto);
-        return ResponseEntity.ok(new ResponseDto<>(null));
+        return ResponseEntity.ok(ResponseDto.success(List.of()));
     }
 }

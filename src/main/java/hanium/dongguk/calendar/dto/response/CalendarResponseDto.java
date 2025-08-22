@@ -2,15 +2,36 @@ package hanium.dongguk.calendar.dto.response;
 
 import hanium.dongguk.calendar.domain.Calendar;
 import hanium.dongguk.calendar.domain.EEmotion;
+import hanium.dongguk.calendar.dto.CalendarDto;
+import hanium.dongguk.question.domain.EQuestionType;
+
+import java.time.LocalDate;
+import java.util.UUID;
 
 public record CalendarResponseDto(
+        UUID id,
+        LocalDate date,
+        String description,
         EEmotion emotion,
-        String description
+        EQuestionType questionType
 ) {
     public static CalendarResponseDto of(Calendar calendar) {
         return new CalendarResponseDto(
+                calendar.getId(),
+                calendar.getDate(),
+                calendar.getDescription(),
                 calendar.getEmotion(),
-                calendar.getDescription()
+                calendar.getQuestionType()
+        );
+    }
+
+    public static CalendarResponseDto from(CalendarDto calendarDto) {
+        return new CalendarResponseDto(
+                calendarDto.id(),
+                calendarDto.date(),
+                calendarDto.description(),
+                calendarDto.emotion(),
+                calendarDto.questionType()
         );
     }
 }
