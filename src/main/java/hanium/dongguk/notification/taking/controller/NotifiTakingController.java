@@ -20,10 +20,19 @@ public class NotifiTakingController implements NotifiTakingApiSwagger {
     public ResponseEntity<?> createNotifiTaking(
             @UserId UUID userId,
             @PathVariable("patientDrugId") UUID patientDrugId,
-            @Valid @RequestBody NotifiTakingRequestDto requestDto
-            ) {
+            @Valid @RequestBody NotifiTakingRequestDto requestDto) {
         return ResponseEntity.created(
                 notifiTakingService.create(userId, patientDrugId, requestDto)
         ).build();
+    }
+
+    @PatchMapping("/patient-drug/{patientDrugId}/notifi-taking")
+    public ResponseEntity<?> patchNotifiTaking(
+            @UserId UUID userId,
+            @PathVariable("patientDrugId") UUID patientDrugId,
+            @Valid @RequestBody NotifiTakingRequestDto requestDto) {
+        return ResponseEntity.ok(
+                notifiTakingService.patch(userId, patientDrugId, requestDto)
+        );
     }
 }

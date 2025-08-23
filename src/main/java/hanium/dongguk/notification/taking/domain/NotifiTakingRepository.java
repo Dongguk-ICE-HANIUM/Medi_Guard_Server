@@ -7,4 +7,5 @@ import java.util.UUID;
 
 public interface NotifiTakingRepository extends JpaRepository<NotifiTaking, UUID> {
     List<NotifiTaking> findAllByPatientDrugId(UUID patientDrugId);
+    List<NotifiTaking> findAllByIdInAndPatientDrugId(List<UUID> notifiTakingIdList, UUID patientDrugId);
 }

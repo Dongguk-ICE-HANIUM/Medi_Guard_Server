@@ -16,4 +16,8 @@ public class NotifiTakingRetriever {
     public List<NotifiTaking> findAllByPatientDrugId(final UUID patientDrugId) {
         return notifiTakingRepository.findAllByPatientDrugId(patientDrugId);
     }
+
+    public List<NotifiTaking> findAllByIdInAndPatientDrugId(final List<UUID> idList, final UUID patientDrugId) {
+       return notifiTakingRepository.findAllByIdInAndPatientDrugId(idList, patientDrugId);
+    }
 }
