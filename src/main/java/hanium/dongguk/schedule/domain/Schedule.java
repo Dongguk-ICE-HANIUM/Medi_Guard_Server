@@ -26,7 +26,7 @@ public class Schedule {
     private LocalDateTime scheduleTime;
 
     @Column(name ="description", columnDefinition = "TEXT")
-    private String description;
+    private String warning;
 
     @Column(name = "symptom", columnDefinition = "TEXT")
     private String symptom;
