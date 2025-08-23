@@ -20,10 +20,36 @@ public class NotifiTakingController implements NotifiTakingApiSwagger {
     public ResponseEntity<?> createNotifiTaking(
             @UserId UUID userId,
             @PathVariable("patientDrugId") UUID patientDrugId,
-            @Valid @RequestBody NotifiTakingRequestDto requestDto
-            ) {
+            @Valid @RequestBody NotifiTakingRequestDto requestDto) {
         return ResponseEntity.created(
                 notifiTakingService.create(userId, patientDrugId, requestDto)
         ).build();
+    }
+
+    @PatchMapping("/patient-drug/{patientDrugId}/notifi-taking")
+    public ResponseEntity<?> patchNotifiTaking(
+            @UserId UUID userId,
+            @PathVariable("patientDrugId") UUID patientDrugId,
+            @Valid @RequestBody NotifiTakingRequestDto requestDto) {
+        return ResponseEntity.ok(
+                notifiTakingService.patch(userId, patientDrugId, requestDto)
+        );
+    }
+
+    @DeleteMapping("/notifi-taking/{notifiTakingId}")
+    public ResponseEntity<?> deleteNotifiTaking(
+           @UserId UUID userId,
+           @PathVariable("notifiTakingId") UUID notifiTakingId) {
+        notifiTakingService.delete(userId, notifiTakingId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/patient-drug/{patientDrugId}/notifi-taking")
+    public ResponseEntity<?> getListNotifiTaking(
+            @UserId UUID userId,
+            @PathVariable("patientDrugId") UUID patientDrugId) {
+        return ResponseEntity.ok(
+                notifiTakingService.getListNotifiTaking(userId, patientDrugId)
+        );
     }
 }

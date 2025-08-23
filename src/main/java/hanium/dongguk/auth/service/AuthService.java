@@ -1,17 +1,20 @@
 package hanium.dongguk.auth.service;
 
+import hanium.dongguk.auth.exception.AuthErrorCode;
 import hanium.dongguk.auth.provider.apple.AppleJwtTokenValidator;
 import hanium.dongguk.auth.provider.google.GoogleApiService;
 import hanium.dongguk.auth.provider.google.dto.GoogleUserInfo;
 import hanium.dongguk.global.dto.JwtDto;
+import hanium.dongguk.global.exception.CommonException;
 import hanium.dongguk.global.util.JwtUtil;
 import hanium.dongguk.user.core.domain.EProvider;
 import hanium.dongguk.user.core.domain.EStatus;
+import hanium.dongguk.user.core.domain.Email;
 import hanium.dongguk.user.core.domain.User;
 import hanium.dongguk.auth.dto.NormalRegisterRequestDto;
 import hanium.dongguk.user.core.service.UserRetriever;
 import hanium.dongguk.user.core.service.UserSaver;
-import hanium.dongguk.user.core.validator.UserValidator;
+import hanium.dongguk.auth.validator.AuthValidator;
 import hanium.dongguk.auth.provider.apple.dto.AppleLoginRequestDto;
 import hanium.dongguk.user.patient.domain.UserPatient;
 import hanium.dongguk.auth.provider.google.dto.GoogleLoginRequestDto;
@@ -35,7 +38,7 @@ public class AuthService {
     private final UserRetriever userRetriever;
     private final UserSaver userSaver;
     private final JwtUtil jwtUtil;
-    private final UserValidator userValidator;
+    private final AuthValidator authValidator;
     private final UserPatientRetriever userPatientRetriever;
     private final AppleJwtTokenValidator appleJwtTokenValidator;
     private final PasswordEncoder passwordEncoder;
@@ -47,9 +50,9 @@ public class AuthService {
         LocalDate birthday = LocalDate.parse(request.birthday());
         LocalDate dueDate = LocalDate.parse(request.dueDate());
 
-        userValidator.validateBirthday(birthday);
-        userValidator.validateDueDate(dueDate);
-        userValidator.validateEmailNotExist(request.email());
+        authValidator.validateBirthday(birthday);
+        authValidator.validateDueDate(dueDate);
+        validateEmailNotExist(request.email());
 
 
         UserPatient userPatient = UserPatient.normalCreate(
@@ -82,7 +85,7 @@ public class AuthService {
                     return userPatient;
                 });
 
-        if(userValidator.isInactive(user.getStatus()))
+        if(authValidator.isInactive(user.getStatus()))
         {
             user.activate();
         }
@@ -95,13 +98,13 @@ public class AuthService {
     public JwtDto socialLoginSignup(SocialLoginSignupRequestDto request){
         UserPatient userPatient = userPatientRetriever.getUserPatient(request.userId());
 
-        userValidator.validatePending(userPatient.getStatus());
+        authValidator.validatePending(userPatient.getStatus());
 
         LocalDate birthday = LocalDate.parse(request.birthday());
         LocalDate dueDate = LocalDate.parse(request.dueDate());
 
-        userValidator.validateBirthday(birthday);
-        userValidator.validateDueDate(dueDate);
+        authValidator.validateBirthday(birthday);
+        authValidator.validateDueDate(dueDate);
 
         userPatient.update(request.name(),
                 birthday,
@@ -128,7 +131,7 @@ public class AuthService {
                     return userPatient;
                 });
 
-        if(userValidator.isInactive(user.getStatus()))
+        if(authValidator.isInactive(user.getStatus()))
         {
             user.activate();
         }
@@ -141,6 +144,12 @@ public class AuthService {
         return user.getStatus() == EStatus.PENDING
                 ? SocialLoginResponseDto.of(null, true, user.getId())
                 : SocialLoginResponseDto.of(jwtUtil.generateTokens(user.getId(), user.getRole()),false, user.getId());
+    }
+
+    private void validateEmailNotExist(Email email){
+        if(userRetriever.existsByEmail(email)){
+            throw CommonException.type(AuthErrorCode.EMAIL_ALREADY_EXISTS);
+        }
     }
 
     // == password 암호화 == //
