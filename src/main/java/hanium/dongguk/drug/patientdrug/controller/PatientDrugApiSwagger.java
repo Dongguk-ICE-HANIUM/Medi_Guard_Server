@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +49,7 @@ public interface PatientDrugApiSwagger {
                     - 특정일 리스트: SPECIFIC_DATE 타입 시 필수 (비어있으면 안됨)
                     """
     )
+    @SecurityRequirement(name = "JWT")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
@@ -174,88 +176,6 @@ public interface PatientDrugApiSwagger {
     })
     @PostMapping
     public ResponseEntity<?> createPatientDrug(
-            @Parameter(
-                    description = "환자 약물 등록 요청 정보",
-                    required = true,
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = CreatePatientDrugRequestDto.class),
-                            examples = {
-                                    @ExampleObject(
-                                            name = "매일 복용 약물 등록",
-                                            summary = "매일 복용하는 약물 등록 예시",
-                                            value = """
-                                                    {
-                                                        "drugId": "123e4567-e89b-12d3-a456-426614174000",
-                                                        "name": "타이레놀",
-                                                        "startAt": "2025-01-01",
-                                                        "endAt": "2025-01-31",
-                                                        "takingType": "EVERY_DAY",
-                                                        "interval": 0,
-                                                        "specificDateList": [],
-                                                        "perDay": 3,
-                                                        "amount": 500.0,
-                                                        "groupId": null
-                                                    }
-                                                    """
-                                    ),
-                                    @ExampleObject(
-                                            name = "특정일 간격 복용",
-                                            summary = "3일 간격으로 복용하는 약물 등록 예시",
-                                            value = """
-                                                    {
-                                                        "drugId": "123e4567-e89b-12d3-a456-426614174000",
-                                                        "name": "비타민 D",
-                                                        "startAt": "2025-01-01",
-                                                        "endAt": "2025-03-31",
-                                                        "takingType": "PARTICULAR_INTERVAL",
-                                                        "interval": 3,
-                                                        "specificDateList": [],
-                                                        "perDay": 1,
-                                                        "amount": 1000.0,
-                                                        "groupId": "987f6543-d21c-43b2-9876-543210987654"
-                                                    }
-                                                    """
-                                    ),
-                                    @ExampleObject(
-                                            name = "특정 날짜 복용",
-                                            summary = "지정된 날짜에만 복용하는 약물 등록 예시",
-                                            value = """
-                                                    {
-                                                        "drugId": "123e4567-e89b-12d3-a456-426614174000",
-                                                        "name": "항생제",
-                                                        "startAt": "2025-01-01",
-                                                        "endAt": "2025-01-10",
-                                                        "takingType": "SPECIFIC_DATE",
-                                                        "interval": 0,
-                                                        "specificDateList": ["2025-01-01", "2025-01-03", "2025-01-05", "2025-01-07", "2025-01-09"],
-                                                        "perDay": 2,
-                                                        "amount": 250.0,
-                                                        "groupId": null
-                                                    }
-                                                    """
-                                    ),
-                                    @ExampleObject(
-                                            name = "필요시 복용",
-                                            summary = "필요할 때만 복용하는 약물 등록 예시",
-                                            value = """
-                                                    {
-                                                        "drugId": "123e4567-e89b-12d3-a456-426614174000",
-                                                        "name": "진통제",
-                                                        "startAt": "2025-01-01",
-                                                        "endAt": "2025-12-31",
-                                                        "takingType": "NEED",
-                                                        "interval": 0,
-                                                        "specificDateList": [],
-                                                        "perDay": 0,
-                                                        "amount": 500.0,
-                                                        "groupId": null
-                                                    }
-                                                    """
-                                    )
-                            }
-                    )
-            )
             @UserId UUID userId,
             @Valid @RequestBody CreatePatientDrugRequestDto requestDto);
 
@@ -279,6 +199,7 @@ public interface PatientDrugApiSwagger {
                     - isActive: 필수 입력값 (true/false)
                     """
     )
+    @SecurityRequirement(name = "JWT")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -415,6 +336,7 @@ public interface PatientDrugApiSwagger {
                     - 해당 사용자가 등록한 약물만 조회 가능
                     """
     )
+    @SecurityRequirement(name = "JWT")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -427,37 +349,28 @@ public interface PatientDrugApiSwagger {
                                     summary = "환자 약물 상세 정보",
                                     value = """
                                             {
-                                                "id": "123e4567-e89b-12d3-a456-426614174000",
+                                              "errorCode": null,
+                                              "message": "SUCCESS",
+                                              "result": {
+                                                "id": "69f257e3-1d65-4415-89bc-86268a3c87eb",
                                                 "name": "타이레놀",
-                                                "code": "A123456789",
-                                                "effect": "해열, 진통",
-                                                "warning": "간질환 환자 주의",
-                                                "sideEffect": "드물게 피부발진, 소화불량",
-                                                "interaction": "와파린과 병용 시 출혈 위험 증가",
-                                                "depositMethod": "실온보관, 직사광선 피함",
+                                                "code": "197000037",
+                                                "effect": "이 약은 육체피로, 임신ㆍ수유기, 병중ㆍ병후(병을 앓는 동안이나 회복 후)의 체력 저하 시, 노년기(간유, 비타민 D, E 함유시)의 비타민 B1, B2, B6, E, C의 보급과 신경통, 근육통, 관절통(요통, 어깨결림 등) 증상의 완화, 각기, 눈의 피로에 사용합니다.",
+                                                "warning": "",
+                                                "sideEffect": "위부불쾌감, 설사, 변비, 발진, 발적, 구역, 구토, 묽은 변, 구내염(입안염), 식욕부진, 복부팽만감, 생리가 예정보다 빨라지거나 양이 점점 많아질 수 있으며, 출혈이 오래 지속되는 증상이 나타나는 경우 즉각 복용을 중지하고 의사 또는 약사와 상의하십시오.",
+                                                "interaction": "레보도파와 함께 복용하지 마십시오. 에스트로겐을 포함한 경구용 피임제와 함께 복용 시 의사 또는 약사와 상의하십시오.",
+                                                "depositMethod": "습기와 빛을 피해 실온에서 보관하십시오. 어린이의 손이 닿지 않는 곳에 보관하십시오.",
                                                 "startAt": "2025-01-01",
                                                 "endAt": "2025-01-31",
                                                 "takingType": "EVERY_DAY",
                                                 "perDay": 3,
-                                                "amount": 500.0,
+                                                "amount": 500,
                                                 "isActive": true,
-                                                "isEssential": false,
-                                                "groupName": "감기약",
-                                                "groupId": "987f6543-d21c-43b2-9876-543210987654",
-                                                "notifiTakingList": [
-                                                    {
-                                                        "id": "111e1111-e11b-11d1-a111-111111111111",
-                                                        "time": "08:00:00"
-                                                    },
-                                                    {
-                                                        "id": "222e2222-e22b-22d2-a222-222222222222", 
-                                                        "time": "13:00:00"
-                                                    },
-                                                    {
-                                                        "id": "333e3333-e33b-33d3-a333-333333333333",
-                                                        "time": "18:00:00"
-                                                    }
-                                                ]
+                                                "isEssential": true,
+                                                "groupName": null,
+                                                "groupId": null,
+                                                "notifiTakingList": []
+                                              }
                                             }
                                             """
                             )
@@ -533,6 +446,7 @@ public interface PatientDrugApiSwagger {
                     - 해당 사용자가 등록한 약물만 삭제 가능
                     """
     )
+    @SecurityRequirement(name = "JWT")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "204",
@@ -608,6 +522,7 @@ public interface PatientDrugApiSwagger {
                     - 해당 사용자가 등록한 약물만 처리 가능
                     """
     )
+    @SecurityRequirement(name = "JWT")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",

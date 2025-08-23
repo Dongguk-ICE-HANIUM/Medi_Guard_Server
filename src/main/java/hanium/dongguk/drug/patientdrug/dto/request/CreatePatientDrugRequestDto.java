@@ -45,7 +45,7 @@ public record CreatePatientDrugRequestDto(
         Short takingInterval,
 
         @Schema(description = "특정 복용 날짜 리스트 (SPECIFIC_DATE 타입 시 필수)", 
-                example = "[\"2025-01-01\", \"2025-01-03\", \"2025-01-05\"]", requiredMode = Schema.RequiredMode.REQUIRED)
+                example = "[]", requiredMode = Schema.RequiredMode.REQUIRED)
         @NotNull(message = "특정일 리스트가 누락되었습니다.")
         @JsonProperty("specificDateList")
         List<LocalDate> requestSpecificDateList,
