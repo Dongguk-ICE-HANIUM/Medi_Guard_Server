@@ -42,7 +42,7 @@ public enum EDepartment {
     DENTISTRY("치과"),
 
     // 기타
-    OTHER("기타");
+    OTHER_DEPARTMENT("기타");
 
     private final String displayName;
 }
