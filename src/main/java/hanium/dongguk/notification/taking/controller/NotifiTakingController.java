@@ -35,4 +35,12 @@ public class NotifiTakingController implements NotifiTakingApiSwagger {
                 notifiTakingService.patch(userId, patientDrugId, requestDto)
         );
     }
+
+    @DeleteMapping("/notifi-taking/{notifiTakingId}")
+    public ResponseEntity<?> deleteNotifiTaking(
+           @UserId UUID userId,
+           @PathVariable("notifiTakingId") UUID notifiTakingId) {
+        notifiTakingService.delete(userId, notifiTakingId);
+        return ResponseEntity.noContent().build();
+    }
 }

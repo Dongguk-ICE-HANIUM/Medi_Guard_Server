@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 public class NotifiTakingService {
     private final NotifiTakingRetriever notifiTakingRetriever;
     private final NotifiTakingSaver notifiTakingSaver;
+    private final NotifiTakingRemover notifiTakingRemover;
     private final PatientDrugRetriever patientDrugRetriever;
     private final UserPatientRetriever userPatientRetriever;
 
@@ -140,5 +141,12 @@ public class NotifiTakingService {
             );
 
         return null;
+    }
+
+    public void delete(UUID userId, UUID notifiTakingId) {
+        NotifiTaking targetNotifiTaking
+                = notifiTakingRetriever.findByIdAndUserPatientId(notifiTakingId, userId);
+
+        notifiTakingRemover.deleteById(targetNotifiTaking.getId());
     }
 }
