@@ -6,6 +6,8 @@ import hanium.dongguk.global.exception.CommonException;
 import hanium.dongguk.notification.taking.domain.NotifiTaking;
 import hanium.dongguk.notification.taking.dto.request.NotifiTakingDto;
 import hanium.dongguk.notification.taking.dto.request.NotifiTakingRequestDto;
+import hanium.dongguk.notification.taking.dto.response.NotifiTakingResponseDto;
+import hanium.dongguk.notification.taking.dto.response.RetrieveNotifiTakingResponseDto;
 import hanium.dongguk.notification.taking.exception.NotifiTakingErrorCode;
 import hanium.dongguk.user.patient.domain.UserPatient;
 import hanium.dongguk.user.patient.service.UserPatientRetriever;
@@ -148,5 +150,22 @@ public class NotifiTakingService {
                 = notifiTakingRetriever.findByIdAndUserPatientId(notifiTakingId, userId);
 
         notifiTakingRemover.deleteById(targetNotifiTaking.getId());
+    }
+
+    public RetrieveNotifiTakingResponseDto getListNotifiTaking(UUID userId, UUID patientDrugId) {
+        PatientDrug targetPatient = patientDrugRetriever.findByIdAndUserId(patientDrugId, userId);
+
+        List<NotifiTaking> notifiTakingList
+                = notifiTakingRetriever.findAllByPatientDrugId(targetPatient.getId());
+
+        List<NotifiTakingResponseDto> notifiTakingResponseDtoList
+                = notifiTakingList.stream()
+                    .map(NotifiTakingResponseDto::from)
+                    .toList();
+
+
+        return RetrieveNotifiTakingResponseDto.of(
+            notifiTakingResponseDtoList
+        );
     }
 }

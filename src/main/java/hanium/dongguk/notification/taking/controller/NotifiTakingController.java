@@ -43,4 +43,13 @@ public class NotifiTakingController implements NotifiTakingApiSwagger {
         notifiTakingService.delete(userId, notifiTakingId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/patient-drug/{patientDrugId}/notifi-taking")
+    public ResponseEntity<?> getListNotifiTaking(
+            @UserId UUID userId,
+            @PathVariable("patientDrugId") UUID patientDrugId) {
+        return ResponseEntity.ok(
+                notifiTakingService.getListNotifiTaking(userId, patientDrugId)
+        );
+    }
 }
