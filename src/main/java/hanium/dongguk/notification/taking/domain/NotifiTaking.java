@@ -53,4 +53,11 @@ public class NotifiTaking extends Notification {
                 .patientDrug(patientDrug)
                 .build();
     }
+
+    public void update(
+            final LocalTime takingTime,
+            boolean isActive) {
+        this.takingTime = takingTime;
+        this.isActive = isActive;
+    }
 }

@@ -1,19 +1,16 @@
-package hanium.dongguk.notification.taking.service.retriever;
+package hanium.dongguk.notification.taking.service;
 
 import hanium.dongguk.notification.taking.domain.NotifiTaking;
 import hanium.dongguk.notification.taking.domain.NotifiTakingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.UUID;
-
 @Component
 @RequiredArgsConstructor
-public class NotifiTakingRetriever {
+public class NotifiTakingSaver {
     private final NotifiTakingRepository notifiTakingRepository;
 
-    public List<NotifiTaking> findAllOptionalByPatientDrugId(final UUID patientDrugId) {
-        return notifiTakingRepository.findAllByPatientDrugId(patientDrugId);
+    public NotifiTaking save(NotifiTaking notifiTaking) {
+        return notifiTakingRepository.save(notifiTaking);
     }
 }
