@@ -5,6 +5,7 @@ import hanium.dongguk.drug.patientdrug.domain.DrugGroupRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -15,5 +16,9 @@ public class DrugGroupRetriever {
 
     public Optional<DrugGroup> findOptionalById(final UUID id) {
         return drugGroupRepository.findById(id);
+    }
+
+    public List<DrugGroup> findAllByUserPatientId(final UUID patientId) {
+        return drugGroupRepository.findAllByUserPatientId(patientId);
     }
 }
