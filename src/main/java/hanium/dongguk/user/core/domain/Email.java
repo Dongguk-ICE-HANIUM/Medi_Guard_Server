@@ -1,7 +1,7 @@
 package hanium.dongguk.user.core.domain;
 
+import hanium.dongguk.auth.exception.AuthErrorCode;
 import hanium.dongguk.global.exception.CommonException;
-import hanium.dongguk.user.core.exception.UserErrorCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
@@ -26,7 +26,7 @@ public class Email {
 
     public static Email of(String email) {
         if (email == null || !email.matches(EMAIL_REGEX)) {
-            throw new CommonException(UserErrorCode.INVALID_EMAIL_FORMAT);
+            throw new CommonException(AuthErrorCode.INVALID_EMAIL_FORMAT);
         }
         return new Email(email);
     }

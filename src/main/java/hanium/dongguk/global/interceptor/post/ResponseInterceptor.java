@@ -30,6 +30,8 @@ public class ResponseInterceptor implements ResponseBodyAdvice<Object> {
     ) {
         if(body instanceof ErrorResponse)
             return ResponseDto.fail((ErrorResponse)body);
+        if(body instanceof ResponseDto)
+            return body;
         return ResponseDto.success(body);
     }
 }
