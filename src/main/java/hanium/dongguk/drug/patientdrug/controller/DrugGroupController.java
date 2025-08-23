@@ -6,10 +6,7 @@ import hanium.dongguk.global.annotation.UserId;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -26,5 +23,12 @@ public class DrugGroupController implements DrugGroupApiSwagger {
         return ResponseEntity.created(
                 drugGroupService.create(userId, requestDto)
         ).build();
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getListDrugDroup(@UserId UUID userId) {
+        return ResponseEntity.ok(
+                drugGroupService.getListDrugGroup(userId)
+        );
     }
 }
