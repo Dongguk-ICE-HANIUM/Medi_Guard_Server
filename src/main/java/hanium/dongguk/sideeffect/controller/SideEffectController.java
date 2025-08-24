@@ -31,7 +31,7 @@ public class SideEffectController implements SideEffectApiSwagger {
     public ResponseEntity<Void> saveSideEffect(
             @Valid @RequestBody SaveSideEffectRequestDto requestDto,
             @UserId UUID userId) {
-        sideEffectService.saveSideEffect(userId, requestDto);
+        sideEffectService.saveSideEffects(userId, requestDto);
         return ResponseEntity.ok().build();
     }
 

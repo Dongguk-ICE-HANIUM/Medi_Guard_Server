@@ -5,7 +5,9 @@ import hanium.dongguk.calendar.domain.CalendarDrugRepository;
 import hanium.dongguk.sideeffect.domain.SideEffect;
 import hanium.dongguk.sideeffect.domain.SideEffectRepository;
 import hanium.dongguk.sideeffect.dto.request.SaveSideEffectRequestDto;
+import hanium.dongguk.sideeffect.dto.request.SaveSideEffectDto;
 import hanium.dongguk.sideeffect.dto.request.UpdateSideEffectRequestDto;
+import hanium.dongguk.sideeffect.dto.request.UpdateSideEffectDto;
 import hanium.dongguk.sideeffect.dto.response.SideEffectDto;
 import hanium.dongguk.sideeffect.dto.response.SideEffectResponseDto;
 import hanium.dongguk.sideeffect.exception.SideEffectErrorCode;
@@ -28,22 +30,22 @@ public class SideEffectService {
     private final CalendarDrugRepository calendarDrugRepository;
     
     @Transactional
-    public void saveSideEffect(UUID patientId, SaveSideEffectRequestDto requestDto) {
-        // requestDto.id()는 CalendarDrug ID
-        CalendarDrug calendarDrug = calendarDrugRepository.findById(requestDto.id())
-                .orElseThrow(() -> CommonException.type(SideEffectErrorCode.CALENDAR_DRUG_NOT_FOUND));
-        
-        // 해당 CalendarDrug가 현재 환자의 것인지 확인
-        if (!calendarDrug.getCalendar().getUserPatient().getId().equals(patientId)) {
-            throw CommonException.type(SideEffectErrorCode.UNAUTHORIZED_ACCESS);
+    public void saveSideEffects(UUID patientId, SaveSideEffectRequestDto requestDto) {
+        for (SaveSideEffectDto sideEffectDto : requestDto.saveSideEffectList()) {
+            CalendarDrug calendarDrug = calendarDrugRepository.findById(sideEffectDto.id())
+                    .orElseThrow(() -> CommonException.type(SideEffectErrorCode.CALENDAR_DRUG_NOT_FOUND));
+
+            if (!calendarDrug.getCalendar().getUserPatient().getId().equals(patientId)) {
+                throw CommonException.type(SideEffectErrorCode.UNAUTHORIZED_ACCESS);
+            }
+            
+            SideEffect sideEffect = SideEffect.create(
+                    sideEffectDto.description(),
+                    calendarDrug
+            );
+            
+            sideEffectSaver.save(sideEffect);
         }
-        
-        SideEffect sideEffect = SideEffect.create(
-                requestDto.description(),
-                calendarDrug
-        );
-        
-        sideEffectSaver.save(sideEffect);
     }
     
     public SideEffectResponseDto getSideEffects(UUID patientId) {
