@@ -21,9 +21,9 @@ public class SideEffectController implements SideEffectApiSwagger {
 
     @Override
     @GetMapping
-    public ResponseEntity<SideEffectResponseDto> getSideEffects(
+    public ResponseEntity<SideEffectResponseDto> getSideEffect(
             @UserId UUID userId) {
-        return ResponseEntity.ok(sideEffectService.getSideEffects(userId));
+        return ResponseEntity.ok(sideEffectService.getSideEffect(userId));
     }
 
     @Override
@@ -31,7 +31,7 @@ public class SideEffectController implements SideEffectApiSwagger {
     public ResponseEntity<Void> saveSideEffect(
             @Valid @RequestBody SaveSideEffectRequestDto requestDto,
             @UserId UUID userId) {
-        sideEffectService.saveSideEffects(userId, requestDto);
+        sideEffectService.saveSideEffect(userId, requestDto);
         return ResponseEntity.ok().build();
     }
 

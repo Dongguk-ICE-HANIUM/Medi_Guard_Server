@@ -21,6 +21,6 @@ public record SideEffectResponseDto(
     }
 
     public static SideEffectResponseDto empty() {
-        return new SideEffectResponseDto(List.of());
+        return new SideEffectResponseDto(null);
     }
 }

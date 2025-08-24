@@ -231,7 +231,7 @@ public interface SideEffectApiSwagger {
                     )
             )
     })
-    ResponseEntity<SideEffectResponseDto> getSideEffects(UUID userId);
+    ResponseEntity<SideEffectResponseDto> getSideEffect(UUID userId);
 
     @Operation(
             summary = "부작용 기록 수정",

@@ -10,7 +10,7 @@ import java.util.UUID;
 public record SaveSideEffectDto(
         @JsonProperty("id")
         @NotNull(message = "약물 ID는 필수입니다.")
-        @Schema(description = "약물 ID (CalendarDrug ID)", example = "550e8400-e29b-41d4-a716-446655440000")
+        @Schema(description = "약물 ID", example = "550e8400-e29b-41d4-a716-446655440000")
         UUID id,
         
         @JsonProperty("description")

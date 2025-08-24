@@ -30,7 +30,7 @@ public class SideEffectService {
     private final CalendarDrugRepository calendarDrugRepository;
     
     @Transactional
-    public void saveSideEffects(UUID patientId, SaveSideEffectRequestDto requestDto) {
+    public void saveSideEffect(UUID patientId, SaveSideEffectRequestDto requestDto) {
         for (SaveSideEffectDto sideEffectDto : requestDto.saveSideEffectList()) {
             CalendarDrug calendarDrug = calendarDrugRepository.findById(sideEffectDto.id())
                     .orElseThrow(() -> CommonException.type(SideEffectErrorCode.CALENDAR_DRUG_NOT_FOUND));
@@ -48,7 +48,7 @@ public class SideEffectService {
         }
     }
     
-    public SideEffectResponseDto getSideEffects(UUID patientId) {
+    public SideEffectResponseDto getSideEffect(UUID patientId) {
         List<SideEffect> sideEffects = sideEffectRetriever.findByPatientId(patientId);
         
         return SideEffectResponseDto.from(sideEffects);
