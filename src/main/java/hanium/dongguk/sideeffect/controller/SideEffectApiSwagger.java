@@ -1,9 +1,9 @@
 package hanium.dongguk.sideeffect.controller;
 
-import hanium.dongguk.sideeffect.dto.request.SaveSideEffectRequestDto;
+import hanium.dongguk.sideeffect.dto.request.SaveSideEffectListRequestDto;
 import hanium.dongguk.sideeffect.dto.request.UpdateSideEffectRequestDto;
-import hanium.dongguk.sideeffect.dto.response.SideEffectDto;
 import hanium.dongguk.sideeffect.dto.response.SideEffectResponseDto;
+import hanium.dongguk.sideeffect.dto.response.SideEffectListResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -123,7 +123,7 @@ public interface SideEffectApiSwagger {
                     required = true,
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = SaveSideEffectRequestDto.class),
+                            schema = @Schema(implementation = SaveSideEffectListRequestDto.class),
                             examples = @ExampleObject(
                                     name = "부작용 저장 요청 예시",
                                     summary = "정상적인 부작용 저장 요청",
@@ -136,7 +136,7 @@ public interface SideEffectApiSwagger {
                             )
                     )
             )
-            @RequestBody SaveSideEffectRequestDto requestDto,
+            @RequestBody SaveSideEffectListRequestDto requestDto,
             UUID userId
     );
 
@@ -165,7 +165,7 @@ public interface SideEffectApiSwagger {
                     description = "부작용 기록 목록 조회 성공",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = SideEffectResponseDto.class),
+                            schema = @Schema(implementation = SideEffectListResponseDto.class),
                             examples = {
                                     @ExampleObject(
                                             name = "성공 응답 (데이터 있음)",
@@ -231,7 +231,7 @@ public interface SideEffectApiSwagger {
                     )
             )
     })
-    ResponseEntity<SideEffectResponseDto> getSideEffect(UUID userId);
+    ResponseEntity<SideEffectListResponseDto> getSideEffect(UUID userId);
 
     @Operation(
             summary = "부작용 기록 수정",

@@ -2,28 +2,20 @@ package hanium.dongguk.sideeffect.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.List;
+import java.util.UUID;
 
 public record SaveSideEffectRequestDto(
-        @JsonProperty(value = "sideEffectList")
-        @NotNull
-        @Schema(
-                description = "저장할 부작용 목록",
-                example = """
-    [
-        {
-            "id": "550e8400-e29b-41d4-a716-446655440000",
-            "description": "두통이 심하고 어지러움증이 있습니다. 복용 후 30분 정도 지나면 증상이 나타납니다."
-        },
-        {
-            "id": "550e8400-e29b-41d4-a716-446655440001", 
-            "description": "위장 장애와 메스꺼움이 발생했습니다."
-        }
-    ]
-    """
-        )
-        List<SaveSideEffectDto> saveSideEffectList
+        @JsonProperty("id")
+        @NotNull(message = "약물 ID는 필수입니다.")
+        @Schema(description = "약물 ID", example = "550e8400-e29b-41d4-a716-446655440000")
+        UUID id,
+        
+        @JsonProperty("description")
+        @NotBlank(message = "설명은 필수입니다.")
+        @Schema(description = "부작용 설명", example = "두통이 있고 어지럽다.")
+        String description
 ) {
 }

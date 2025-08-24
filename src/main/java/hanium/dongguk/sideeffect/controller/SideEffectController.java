@@ -1,9 +1,9 @@
 package hanium.dongguk.sideeffect.controller;
 
 import hanium.dongguk.global.annotation.UserId;
-import hanium.dongguk.sideeffect.dto.request.SaveSideEffectRequestDto;
+import hanium.dongguk.sideeffect.dto.request.SaveSideEffectListRequestDto;
 import hanium.dongguk.sideeffect.dto.request.UpdateSideEffectRequestDto;
-import hanium.dongguk.sideeffect.dto.response.SideEffectResponseDto;
+import hanium.dongguk.sideeffect.dto.response.SideEffectListResponseDto;
 import hanium.dongguk.sideeffect.service.SideEffectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class SideEffectController implements SideEffectApiSwagger {
 
     @Override
     @GetMapping
-    public ResponseEntity<SideEffectResponseDto> getSideEffect(
+    public ResponseEntity<SideEffectListResponseDto> getSideEffect(
             @UserId UUID userId) {
         return ResponseEntity.ok(sideEffectService.getSideEffect(userId));
     }
@@ -29,7 +29,7 @@ public class SideEffectController implements SideEffectApiSwagger {
     @Override
     @PostMapping
     public ResponseEntity<Void> saveSideEffect(
-            @Valid @RequestBody SaveSideEffectRequestDto requestDto,
+            @Valid @RequestBody SaveSideEffectListRequestDto requestDto,
             @UserId UUID userId) {
         sideEffectService.saveSideEffect(userId, requestDto);
         return ResponseEntity.ok().build();

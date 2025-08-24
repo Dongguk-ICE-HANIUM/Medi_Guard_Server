@@ -4,12 +4,11 @@ import hanium.dongguk.calendar.domain.CalendarDrug;
 import hanium.dongguk.calendar.domain.CalendarDrugRepository;
 import hanium.dongguk.sideeffect.domain.SideEffect;
 import hanium.dongguk.sideeffect.domain.SideEffectRepository;
+import hanium.dongguk.sideeffect.dto.request.SaveSideEffectListRequestDto;
 import hanium.dongguk.sideeffect.dto.request.SaveSideEffectRequestDto;
-import hanium.dongguk.sideeffect.dto.request.SaveSideEffectDto;
 import hanium.dongguk.sideeffect.dto.request.UpdateSideEffectRequestDto;
-import hanium.dongguk.sideeffect.dto.request.UpdateSideEffectDto;
-import hanium.dongguk.sideeffect.dto.response.SideEffectDto;
 import hanium.dongguk.sideeffect.dto.response.SideEffectResponseDto;
+import hanium.dongguk.sideeffect.dto.response.SideEffectListResponseDto;
 import hanium.dongguk.sideeffect.exception.SideEffectErrorCode;
 import hanium.dongguk.global.exception.CommonException;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +29,8 @@ public class SideEffectService {
     private final CalendarDrugRepository calendarDrugRepository;
     
     @Transactional
-    public void saveSideEffect(UUID patientId, SaveSideEffectRequestDto requestDto) {
-        for (SaveSideEffectDto sideEffectDto : requestDto.saveSideEffectList()) {
+    public void saveSideEffect(UUID patientId, SaveSideEffectListRequestDto requestDto) {
+        for (SaveSideEffectRequestDto sideEffectDto : requestDto.saveSideEffectList()) {
             CalendarDrug calendarDrug = calendarDrugRepository.findById(sideEffectDto.id())
                     .orElseThrow(() -> CommonException.type(SideEffectErrorCode.CALENDAR_DRUG_NOT_FOUND));
 
@@ -48,10 +47,10 @@ public class SideEffectService {
         }
     }
     
-    public SideEffectResponseDto getSideEffect(UUID patientId) {
+    public SideEffectListResponseDto getSideEffect(UUID patientId) {
         List<SideEffect> sideEffects = sideEffectRetriever.findByPatientId(patientId);
         
-        return SideEffectResponseDto.from(sideEffects);
+        return SideEffectListResponseDto.from(sideEffects);
     }
     
     @Transactional

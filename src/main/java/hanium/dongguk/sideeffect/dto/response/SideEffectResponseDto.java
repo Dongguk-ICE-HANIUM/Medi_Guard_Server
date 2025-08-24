@@ -4,23 +4,27 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import hanium.dongguk.sideeffect.domain.SideEffect;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.util.List;
+import java.util.UUID;
 
-@Schema(description = "부작용 목록 응답 DTO")
+@Schema(description = "부작용 정보 DTO")
 public record SideEffectResponseDto(
-        @JsonProperty("sideEffectList")
-        @Schema(description = "부작용 목록")
-        List<SideEffectDto> sideEffectList
+        @JsonProperty("id")
+        @Schema(description = "부작용 ID", example = "550e8400-e29b-41d4-a716-446655440000")
+        UUID id,
+        
+        @JsonProperty("drug_name")
+        @Schema(description = "약물명", example = "약물1")
+        String drugName,
+        
+        @JsonProperty("description")
+        @Schema(description = "부작용 설명", example = "두통이 있고 어지럽다.")
+        String description
 ) {
-    public static SideEffectResponseDto from(List<SideEffect> sideEffects) {
+    public static SideEffectResponseDto from(SideEffect sideEffect) {
         return new SideEffectResponseDto(
-                sideEffects.stream()
-                        .map(SideEffectDto::from)
-                        .toList()
+                sideEffect.getId(),
+                sideEffect.getCalendarDrug().getPatientDrug().getName(),
+                sideEffect.getDescription()
         );
-    }
-
-    public static SideEffectResponseDto empty() {
-        return new SideEffectResponseDto(null);
     }
 }
