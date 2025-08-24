@@ -20,8 +20,8 @@ public enum QuestionErrorCode implements ErrorCode {
 
     QUESTION_NOT_FOUND_FOR_TYPE(HttpStatus.NOT_FOUND, "QUESTION_004", "해당하는 유형 질문이 없습니다."),
 
-    QUESTIONS_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "QUESTION_005", "이미 질문이 존재합니다.")
-    ;
+    QUESTIONS_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "QUESTION_005", "이미 질문이 존재합니다.");
+
     private final HttpStatus status;
     private final String errorCode;
     private final String message;
