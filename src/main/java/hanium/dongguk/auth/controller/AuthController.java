@@ -1,5 +1,6 @@
 package hanium.dongguk.auth.controller;
 
+import hanium.dongguk.auth.provider.kakao.dto.KakaoLoginRequestDto;
 import hanium.dongguk.auth.service.AuthService;
 import hanium.dongguk.global.dto.JwtDto;
 import hanium.dongguk.auth.provider.apple.dto.AppleLoginRequestDto;
@@ -41,9 +42,14 @@ public class AuthController implements AuthApiSwagger {
         return ResponseEntity.ok(authService.socialLoginSignup(request));
     }
 
+    @PostMapping("/kakao/login")
+    public ResponseEntity<SocialLoginResponseDto> kakaoLogin(@RequestBody KakaoLoginRequestDto request) {
+        return ResponseEntity.ok(authService.kakaoLogin(request));
+    }
+
     @Override
     @PostMapping("/apple/login")
     public ResponseEntity<SocialLoginResponseDto> appleLogin (@RequestBody @Valid AppleLoginRequestDto request){
-        return ResponseEntity.ok(authService.login(request));
+        return ResponseEntity.ok(authService.appleLogin(request));
     }
 }
