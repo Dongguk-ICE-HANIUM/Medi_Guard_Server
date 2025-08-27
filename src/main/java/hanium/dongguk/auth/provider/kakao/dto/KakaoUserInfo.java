@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record KakaoUserInfo(
 
+        @JsonProperty("id")
         Long id,
 
         @JsonProperty("kakao_account")

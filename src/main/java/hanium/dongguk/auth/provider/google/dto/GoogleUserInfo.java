@@ -9,8 +9,13 @@ public record GoogleUserInfo (
     @JsonProperty("sub")
     String providerId,
 
+    @JsonProperty("name")
     String name,
+
+    @JsonProperty("email")
     String email,
+
+    @JsonProperty("picture")
     String picture
 
     ){
