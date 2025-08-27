@@ -1,7 +1,7 @@
 package hanium.dongguk.sideeffect.controller;
 
 import hanium.dongguk.global.annotation.UserId;
-import hanium.dongguk.sideeffect.dto.request.SaveSideEffectListRequestDto;
+import hanium.dongguk.sideeffect.dto.request.SaveSideEffectRequestDto;
 import hanium.dongguk.sideeffect.dto.request.UpdateSideEffectRequestDto;
 import hanium.dongguk.sideeffect.dto.response.SideEffectListResponseDto;
 import hanium.dongguk.sideeffect.service.SideEffectService;
@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -29,7 +30,7 @@ public class SideEffectController implements SideEffectApiSwagger {
     @Override
     @PostMapping
     public ResponseEntity<Void> saveSideEffect(
-            @Valid @RequestBody SaveSideEffectListRequestDto requestDto,
+            @Valid @RequestBody SaveSideEffectRequestDto requestDto,
             @UserId UUID userId) {
         sideEffectService.saveSideEffect(userId, requestDto);
         return ResponseEntity.ok().build();

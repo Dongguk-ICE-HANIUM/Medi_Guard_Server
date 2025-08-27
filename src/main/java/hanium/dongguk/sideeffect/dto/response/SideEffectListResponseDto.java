@@ -15,7 +15,10 @@ public record SideEffectListResponseDto(
     public static SideEffectListResponseDto from(List<SideEffect> sideEffects) {
         return new SideEffectListResponseDto(
                 sideEffects.stream()
-                        .map(SideEffectResponseDto::from)
+                        .map(sideEffect -> SideEffectResponseDto.of(
+                                sideEffect, 
+                                sideEffect.getCalendarDrug().getPatientDrug()
+                        ))
                         .toList()
         );
     }

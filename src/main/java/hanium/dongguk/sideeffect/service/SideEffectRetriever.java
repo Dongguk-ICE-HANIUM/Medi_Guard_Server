@@ -1,7 +1,9 @@
 package hanium.dongguk.sideeffect.service;
 
+import hanium.dongguk.global.exception.CommonException;
 import hanium.dongguk.sideeffect.domain.SideEffect;
 import hanium.dongguk.sideeffect.domain.SideEffectRepository;
+import hanium.dongguk.sideeffect.exception.SideEffectErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,5 +18,10 @@ public class SideEffectRetriever {
     
     public List<SideEffect> findByPatientId(UUID patientId) {
         return sideEffectRepository.findByCalendarDrugCalendarUserPatientId(patientId);
+    }
+    
+    public SideEffect findByIdAndPatientId(UUID sideEffectId, UUID patientId) {
+        return sideEffectRepository.findByIdAndCalendarDrugCalendarUserPatientId(sideEffectId, patientId)
+                .orElseThrow(() -> CommonException.type(SideEffectErrorCode.SIDE_EFFECT_NOT_FOUND));
     }
 }

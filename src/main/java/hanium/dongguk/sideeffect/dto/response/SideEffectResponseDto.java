@@ -1,6 +1,7 @@
 package hanium.dongguk.sideeffect.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import hanium.dongguk.drug.patientdrug.domain.PatientDrug;
 import hanium.dongguk.sideeffect.domain.SideEffect;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -20,10 +21,10 @@ public record SideEffectResponseDto(
         @Schema(description = "부작용 설명", example = "두통이 있고 어지럽다.")
         String description
 ) {
-    public static SideEffectResponseDto from(SideEffect sideEffect) {
+    public static SideEffectResponseDto of(SideEffect sideEffect, PatientDrug patientDrug) {
         return new SideEffectResponseDto(
                 sideEffect.getId(),
-                sideEffect.getCalendarDrug().getPatientDrug().getName(),
+                patientDrug.getName(),
                 sideEffect.getDescription()
         );
     }

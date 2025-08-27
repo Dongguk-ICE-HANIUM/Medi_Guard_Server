@@ -1,6 +1,6 @@
 package hanium.dongguk.sideeffect.controller;
 
-import hanium.dongguk.sideeffect.dto.request.SaveSideEffectListRequestDto;
+import hanium.dongguk.sideeffect.dto.request.SaveSideEffectRequestDto;
 import hanium.dongguk.sideeffect.dto.request.UpdateSideEffectRequestDto;
 import hanium.dongguk.sideeffect.dto.response.SideEffectResponseDto;
 import hanium.dongguk.sideeffect.dto.response.SideEffectListResponseDto;
@@ -123,7 +123,7 @@ public interface SideEffectApiSwagger {
                     required = true,
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = SaveSideEffectListRequestDto.class),
+                            schema = @Schema(implementation = SaveSideEffectRequestDto.class),
                             examples = @ExampleObject(
                                     name = "부작용 저장 요청 예시",
                                     summary = "정상적인 부작용 저장 요청",
@@ -136,7 +136,7 @@ public interface SideEffectApiSwagger {
                             )
                     )
             )
-            @RequestBody SaveSideEffectListRequestDto requestDto,
+            @RequestBody SaveSideEffectRequestDto requestDto,
             UUID userId
     );
 
