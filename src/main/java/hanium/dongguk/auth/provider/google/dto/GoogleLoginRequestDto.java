@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record GoogleLoginRequestDto(
 
-        @JsonProperty("access_token")
+        @JsonProperty("accessToken")
         String accessToken
 ) {
 }

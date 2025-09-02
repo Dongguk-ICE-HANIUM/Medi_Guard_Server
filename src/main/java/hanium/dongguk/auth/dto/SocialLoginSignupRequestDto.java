@@ -10,7 +10,7 @@ public record SocialLoginSignupRequestDto(
 
         @NotNull
         @Schema(example = "123e4567-e89b-12d3-a456-426614174000")
-        @JsonProperty("user_id")
+        @JsonProperty("userId")
         UUID userId,
 
         @NotBlank
@@ -39,13 +39,13 @@ public record SocialLoginSignupRequestDto(
         @NotBlank
         @Schema(example = "2025-08-24")
         @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "날짜 형식은 yyyy-MM-dd 이어야 합니다")
-        @JsonProperty("due_date")
+        @JsonProperty("dueDate")
         String dueDate,
 
         @NotNull
         @Max(50)
         @Schema(example = "24")
-        @JsonProperty("pregnancy_week")
+        @JsonProperty("pregnancyWeek")
         Integer pregnancyWeek,
 
         @NotNull

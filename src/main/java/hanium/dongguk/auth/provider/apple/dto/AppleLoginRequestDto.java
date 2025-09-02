@@ -14,7 +14,7 @@ public record AppleLoginRequestDto(
         String code,
 
         @NotBlank
-        @JsonProperty("id_token")
+        @JsonProperty("idToken")
         String idToken
 ) {
 }

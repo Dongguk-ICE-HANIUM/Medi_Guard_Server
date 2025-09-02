@@ -7,13 +7,13 @@ import java.util.UUID;
 
 public record SocialLoginResponseDto(
 
-        @JsonProperty("jwt_dto")
+        @JsonProperty("jwtDto")
         JwtDto jwtDto,
 
-        @JsonProperty("is_sign_up_needed")
+        @JsonProperty("isSignUpNeeded")
         boolean isSignUpNeeded,
 
-        @JsonProperty("user_id")
+        @JsonProperty("userId")
         String userId
 ) {
     public static SocialLoginResponseDto of(JwtDto jwtDto, boolean isSignUpNeeded, UUID userId) {

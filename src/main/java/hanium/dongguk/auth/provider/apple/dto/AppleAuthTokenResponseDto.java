@@ -4,19 +4,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record AppleAuthTokenResponseDto (
 
-        @JsonProperty("access_token")
+        @JsonProperty("accessToken")
         String accessToken,
 
-        @JsonProperty("expires_in")
+        @JsonProperty("expiresIn")
         Integer expiresIn,
 
-        @JsonProperty("id_token")
+        @JsonProperty("idToken")
         String idToken,
 
-        @JsonProperty("refresh_token")
+        @JsonProperty("refreshToken")
         String refreshToken,
 
-        @JsonProperty("token_type")
+        @JsonProperty("tokenType")
         String tokenType
 ){
 }
