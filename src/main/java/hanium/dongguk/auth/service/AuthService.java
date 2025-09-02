@@ -4,6 +4,9 @@ import hanium.dongguk.auth.exception.AuthErrorCode;
 import hanium.dongguk.auth.provider.apple.AppleJwtTokenValidator;
 import hanium.dongguk.auth.provider.google.GoogleApiService;
 import hanium.dongguk.auth.provider.google.dto.GoogleUserInfo;
+import hanium.dongguk.auth.provider.kakao.KakaoApiService;
+import hanium.dongguk.auth.provider.kakao.dto.KakaoLoginRequestDto;
+import hanium.dongguk.auth.provider.kakao.dto.KakaoUserInfo;
 import hanium.dongguk.global.dto.JwtDto;
 import hanium.dongguk.global.exception.CommonException;
 import hanium.dongguk.global.util.JwtUtil;
@@ -42,6 +45,7 @@ public class AuthService {
     private final UserPatientRetriever userPatientRetriever;
     private final AppleJwtTokenValidator appleJwtTokenValidator;
     private final PasswordEncoder passwordEncoder;
+    private final KakaoApiService kakaoApiService;
 
     @Transactional
     public void normalRegister(NormalRegisterRequestDto request)
@@ -121,7 +125,7 @@ public class AuthService {
     }
 
     @Transactional
-    public SocialLoginResponseDto login(AppleLoginRequestDto request){
+    public SocialLoginResponseDto appleLogin(AppleLoginRequestDto request){
         String appleSerialId = appleJwtTokenValidator.getAppleSerialId(request.idToken());
 
         User user = userRetriever.getUserBySerialId(appleSerialId)
@@ -139,6 +143,24 @@ public class AuthService {
         return createLoginResponse(user);
     }
 
+    public SocialLoginResponseDto kakaoLogin(KakaoLoginRequestDto request){
+        KakaoUserInfo userInfo = kakaoApiService.getUserInfo(request.accessToken());
+
+        User user = userRetriever.getUserBySerialId(userInfo.providerId())
+                .orElseGet(() -> {
+                    UserPatient userPatient = UserPatient.socialCreate(userInfo.providerId(),
+                            null,
+                            EProvider.GOOGLE);
+                    userSaver.save(userPatient);
+                    return userPatient;
+                });
+
+        if(authValidator.isInactive(user.getStatus())){
+            user.activate();
+        }
+
+        return createLoginResponse(user);
+    }
 
     private SocialLoginResponseDto createLoginResponse(User user){
         return user.getStatus() == EStatus.PENDING

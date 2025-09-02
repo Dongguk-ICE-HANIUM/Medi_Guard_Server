@@ -11,6 +11,7 @@ public class Constants {
     public static String REFRESH_COOKIE_NAME = "refresh_token";
     public static String APPLE_BASEURL = "https://appleid.apple.com/auth";
     public static String GOOGLE_BASEURL = "https://www.googleapis.com/oauth2/v1";
+    public static String KAKAO_BASEURL = "https://kapi.kakao.com/v2";
 
     public static List<String> NO_NEED_AUTH = List.of(
             "/swagger",
