@@ -9,7 +9,7 @@ public record KakaoUserInfo(
         @JsonProperty("id")
         Long id,
 
-        @JsonProperty("kakaoAccount")
+        @JsonProperty("kakao_account")
         KakaoAccount kakaoAccount
 ) {
     public String providerId(){
