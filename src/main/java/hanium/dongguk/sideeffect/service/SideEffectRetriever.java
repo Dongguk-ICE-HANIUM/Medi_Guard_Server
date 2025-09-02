@@ -16,8 +16,8 @@ public class SideEffectRetriever {
     
     private final SideEffectRepository sideEffectRepository;
     
-    public List<SideEffect> findByPatientId(UUID patientId) {
-        return sideEffectRepository.findByCalendarDrugCalendarUserPatientId(patientId);
+    public List<SideEffect> findByPatientIdWithPatientDrug(UUID patientId) {
+        return sideEffectRepository.findByPatientIdWithPatientDrug(patientId);
     }
     
     public SideEffect findByIdAndPatientId(UUID sideEffectId, UUID patientId) {
