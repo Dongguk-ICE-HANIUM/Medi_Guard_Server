@@ -75,7 +75,7 @@ public class Schedule {
         return Schedule.builder()
                 .scheduleTime(scheduleTime)
                 .patient(patient)
-                .patient(patient)
+                .status(EScheduleStatus.WAITING)
                 .build();
     }
 }
