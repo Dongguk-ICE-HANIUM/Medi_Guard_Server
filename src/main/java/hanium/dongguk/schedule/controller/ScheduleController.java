@@ -3,8 +3,10 @@ package hanium.dongguk.schedule.controller;
 import hanium.dongguk.global.annotation.UserId;
 import hanium.dongguk.global.dto.PageResponseDto;
 import hanium.dongguk.schedule.dto.request.SaveScheduleRequestDto;
+import hanium.dongguk.schedule.dto.response.GetScheduleDetailResponseDto;
 import hanium.dongguk.schedule.dto.response.GetTodayScheduleResponseDto;
 import hanium.dongguk.schedule.dto.response.ScheduleResponseDto;
+import hanium.dongguk.schedule.dto.response.StartScheduleResponseDto;
 import hanium.dongguk.schedule.service.ScheduleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,5 +42,19 @@ public class ScheduleController implements ScheduleApiSwagger {
     public ResponseEntity<PageResponseDto<ScheduleResponseDto>> getScheduleList(@UserId UUID userId,
                                                            @RequestParam(defaultValue = "0") Integer page) {
         return ResponseEntity.ok(scheduleService.getScheduleList(userId, page));
+    }
+
+    @Override
+    @GetMapping("/{scheduleId}")
+    public ResponseEntity<GetScheduleDetailResponseDto> getScheduleDetail(@UserId UUID userId,
+                                                                          @PathVariable UUID scheduleId) {
+        return ResponseEntity.ok(scheduleService.getScheduleDetail(userId, scheduleId));
+    }
+
+    @Override
+    @PostMapping("/{scheduleId}")
+    public ResponseEntity<StartScheduleResponseDto> startSchedule(@UserId UUID userId,
+                                                                  @PathVariable UUID scheduleId) {
+        return ResponseEntity.ok(scheduleService.startSchedule(userId, scheduleId));
     }
 }
