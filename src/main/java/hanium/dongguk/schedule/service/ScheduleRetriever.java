@@ -19,8 +19,9 @@ public class ScheduleRetriever {
     private final ScheduleRepository scheduleRepository;
 
     public boolean existsByScheduleTime(UUID userId, LocalDateTime scheduleTime) {
+        LocalDateTime startTime = scheduleTime.minusHours(1);
         LocalDateTime endTime = scheduleTime.plusHours(1);
-        return scheduleRepository.existsByPatientIdAndScheduleTimeBetween(userId, endTime, LocalDateTime.now());
+        return scheduleRepository.existsByPatientIdAndScheduleTimeBetween(userId, startTime, endTime);
     }
 
     public Optional<Schedule> getRecentSchedule(UUID userId){

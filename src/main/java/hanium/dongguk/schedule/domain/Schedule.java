@@ -70,11 +70,12 @@ public class Schedule {
     }
 
 
-    public static Schedule create(LocalDateTime scheduleTime, UserPatient patient) {
+    public static Schedule create(LocalDateTime scheduleTime, UserPatient patient, UserDoctor doctor) {
 
         return Schedule.builder()
                 .scheduleTime(scheduleTime)
                 .patient(patient)
+                .doctor(doctor)
                 .status(EScheduleStatus.WAITING)
                 .build();
     }
