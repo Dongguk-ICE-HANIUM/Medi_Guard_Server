@@ -1,6 +1,7 @@
 package hanium.dongguk.schedule.validator;
 
 import hanium.dongguk.global.exception.CommonException;
+import hanium.dongguk.schedule.domain.EScheduleStatus;
 import hanium.dongguk.schedule.exception.ScheduleErrorCode;
 import org.springframework.stereotype.Component;
 
@@ -15,5 +16,16 @@ public class ScheduleValidator {
         }
     }
 
+    public void validateWaitingScheduleStatus(EScheduleStatus status){
+        if(!status.equals(EScheduleStatus.WAITING)){
+            throw CommonException.type(ScheduleErrorCode.NOT_WAITING_SCHEDULE);
+        }
+    }
+
+    public void validateCompletedScheduleStatus(EScheduleStatus status){
+        if(!status.equals(EScheduleStatus.COMPLETED)){
+            throw CommonException.type(ScheduleErrorCode.NOT_COMPLETED_SCHEDULE);
+        }
+    }
 
 }

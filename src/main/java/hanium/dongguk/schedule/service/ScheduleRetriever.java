@@ -1,8 +1,10 @@
 package hanium.dongguk.schedule.service;
 
+import hanium.dongguk.global.exception.CommonException;
 import hanium.dongguk.schedule.domain.EScheduleStatus;
 import hanium.dongguk.schedule.domain.Schedule;
 import hanium.dongguk.schedule.domain.ScheduleRepository;
+import hanium.dongguk.schedule.exception.ScheduleErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,5 +38,10 @@ public class ScheduleRetriever {
         return scheduleRepository.findByPatientIdAndStatusOrderByScheduleTimeDesc(userId,
                                                                                   EScheduleStatus.COMPLETED,
                                                                                   pageable);
+    }
+
+    public Schedule getSchedule(UUID userId, UUID scheduleId) {
+        return scheduleRepository.findByPatientIdAndId(userId, scheduleId)
+                .orElseThrow(() -> CommonException.type(ScheduleErrorCode.NOT_FOUND_SCHEDULE));
     }
 }
