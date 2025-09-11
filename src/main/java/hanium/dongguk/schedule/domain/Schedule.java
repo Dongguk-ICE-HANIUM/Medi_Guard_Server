@@ -4,6 +4,7 @@ import hanium.dongguk.user.doctor.domain.UserDoctor;
 import hanium.dongguk.user.patient.domain.UserPatient;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
@@ -48,4 +49,34 @@ public class Schedule {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id")
     private UserDoctor doctor;
+
+    @Builder
+    private Schedule(LocalDateTime scheduleTime,
+                    String warning,
+                    String symptom,
+                    String diagnosis,
+                    String guidance,
+                    EScheduleStatus status,
+                    UserPatient patient,
+                    UserDoctor doctor) {
+        this.scheduleTime = scheduleTime;
+        this.warning = warning;
+        this.symptom = symptom;
+        this.diagnosis = diagnosis;
+        this.guidance = guidance;
+        this.status = status;
+        this.patient = patient;
+        this.doctor = doctor;
+    }
+
+
+    public static Schedule create(LocalDateTime scheduleTime, UserPatient patient, UserDoctor doctor) {
+
+        return Schedule.builder()
+                .scheduleTime(scheduleTime)
+                .patient(patient)
+                .doctor(doctor)
+                .status(EScheduleStatus.WAITING)
+                .build();
+    }
 }
