@@ -44,17 +44,17 @@ public class ScheduleController implements ScheduleApiSwagger {
         return ResponseEntity.ok(scheduleService.getScheduleList(userId, page));
     }
 
+    @Override
     @GetMapping("/{scheduleId}")
     public ResponseEntity<GetScheduleDetailResponseDto> getScheduleDetail(@UserId UUID userId,
                                                                           @PathVariable UUID scheduleId) {
         return ResponseEntity.ok(scheduleService.getScheduleDetail(userId, scheduleId));
     }
 
+    @Override
     @PostMapping("/{scheduleId}")
-    public ResponseEntity<StartScheduleResponseDto> stratSchedule(@UserId UUID userId,
-                                                                  @PathVariable UUID scheduleId){
+    public ResponseEntity<StartScheduleResponseDto> startSchedule(@UserId UUID userId,
+                                                                  @PathVariable UUID scheduleId) {
         return ResponseEntity.ok(scheduleService.startSchedule(userId, scheduleId));
     }
-
-
 }

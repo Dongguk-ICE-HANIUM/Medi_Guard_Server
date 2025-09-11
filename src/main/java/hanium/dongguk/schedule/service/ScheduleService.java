@@ -45,7 +45,7 @@ public class ScheduleService {
 
         LocalDateTime scheduleTime = request.scheduleTime();
 
-        scheduleValidator.validateScheduleTime(scheduleTime);
+        scheduleValidator.validateFutureScheduleTime(scheduleTime);
 
         if(scheduleRetriever.existsByScheduleTime(userId, scheduleTime)) {
             throw CommonException.type(ScheduleErrorCode.DUPLICATE_SCHEDULE_TIME);
@@ -107,6 +107,8 @@ public class ScheduleService {
         Schedule schedule = scheduleRetriever.getSchedule(userId, scheduleId);
 
         scheduleValidator.validateWaitingScheduleStatus(schedule.getStatus());
+
+        scheduleValidator.validateTodayScheduleDate(schedule.getScheduleTime());
 
         String authCode = generateAuthCode(scheduleId);
 

@@ -5,8 +5,10 @@ import hanium.dongguk.global.dto.PageResponseDto;
 import hanium.dongguk.global.dto.ResponseDto;
 import hanium.dongguk.global.exception.CommonException;
 import hanium.dongguk.schedule.dto.request.SaveScheduleRequestDto;
+import hanium.dongguk.schedule.dto.response.GetScheduleDetailResponseDto;
 import hanium.dongguk.schedule.dto.response.GetTodayScheduleResponseDto;
 import hanium.dongguk.schedule.dto.response.ScheduleResponseDto;
+import hanium.dongguk.schedule.dto.response.StartScheduleResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -16,6 +18,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -245,7 +248,159 @@ public interface ScheduleApiSwagger {
                     )
             )
     })
-    public ResponseEntity<PageResponseDto<ScheduleResponseDto>> getScheduleList(@UserId UUID userId,
-                                                                                @RequestParam Integer page);
+    ResponseEntity<PageResponseDto<ScheduleResponseDto>> getScheduleList(@UserId UUID userId,
+                                                                         @RequestParam Integer page);
 
+    @Operation(
+            summary = "완료된 진료 일정 상세 조회",
+            description = """
+                    환자의 완료된 일정 상세 조회로
+                    의사이름, 병원 이름, 일정 , 증상, 진료 내용 등.. 을 볼 수 있음
+                    """
+    )
+    @SecurityRequirement(name = "JWT")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "상세 조회 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseDto.class),
+                            examples = @ExampleObject(
+                                            name = "진료 일정 상세",
+                                            summary = "진료 일정 상세 보기",
+                                            value = """
+                                                    {
+                                                      "errorCode": null,
+                                                      "message": "SUCCESS",
+                                                      "result": {
+                                                        "scheduleId": "3293d66e-8edc-11f0-80f6-00155da312b9",
+                                                        "doctorName": "김의사",
+                                                        "hospitalName": "서울대학교병원",
+                                                        "dateTime": "2024-09-11T14:30:00",
+                                                        "symptom": "두통, 어지러움",
+                                                        "diagnosis": "편두통",
+                                                        "guidance": "충분한 휴식과 수분 섭취",
+                                                        "warning": "정기 검진"
+                                                      }
+                                                    }
+                                                    """
+                            )
+
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "진료 상세 조회 실패",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = CommonException.class),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "등록된 스케줄을 찾을 수 없는 경우",
+                                            summary = "스케줄을 찾을 수 없는 경우",
+                                            value = """
+                                                    {
+                                                      "errorCode": "SCHEDULE_003",
+                                                      "message": "등록된 진료 예정일을 찾을 수 없습니다.",
+                                                      "result": null
+                                                    }
+                                                    """
+
+                                    ),
+                                    @ExampleObject(
+                                            name = "완료된 상태의 스케줄이 아닐 경우",
+                                            summary = "완료된 상태의 스케줄이 아닐경우",
+                                            value = """
+                                                    {
+                                                      "errorCode": "SCHEDULE_005",
+                                                      "message": "완료된 진료를 선택해야 합니다.",
+                                                      "result": null
+                                                    }
+                                                    """
+                                    )
+                            }
+                    )
+            ),
+    })
+    ResponseEntity<GetScheduleDetailResponseDto> getScheduleDetail(@UserId UUID userId,
+                                                                   @PathVariable UUID scheduleId);
+    @Operation(
+            summary = "진료 시작시 OTP 코드 생성",
+            description = """
+                    진료 시작시 OTP 코드 생성
+                    6자리의 코드가 생성됨
+                    """
+    )
+    @SecurityRequirement(name = "JWT")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "오늘의 진료 시작 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "코드 생성",
+                                    summary = "코드 생성",
+                                    value = """
+                                            {
+                                              "errorCode": null,
+                                              "message": "SUCCESS",
+                                              "result": {
+                                                "code": "847236"
+                                              }
+                                            }
+                                            """
+                            )
+
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "진료 상세 조회 실패",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = CommonException.class),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "등록된 스케줄을 찾을 수 없는 경우",
+                                            summary = "스케줄을 찾을 수 없는 경우",
+                                            value = """
+                                                    {
+                                                      "errorCode": "SCHEDULE_003",
+                                                      "message": "등록된 진료 예정일을 찾을 수 없습니다.",
+                                                      "result": null
+                                                    }
+                                                    """
+
+                                    ),
+                                    @ExampleObject(
+                                            name = "대기중 상태의 스케줄이 아닐 경우",
+                                            summary = "대기중 상태의 스케줄이 아닐경우",
+                                            value = """
+                                                    {
+                                                      "errorCode": "SCHEDULE_004",
+                                                      "message": "대기중인 진료를 선택해야 합니다.",
+                                                      "result": null
+                                                    }
+                                                    """
+                                    ),
+                                    @ExampleObject(
+                                            name = "대기중 상태의 스케줄이 아닐 경우",
+                                            summary = "대기중 상태의 스케줄이 아닐경우",
+                                            value = """
+                                                    {
+                                                      "errorCode": "SCHEDULE_006",
+                                                      "message": "오늘의 일정의 진료만 시작가능합니다.",
+                                                      "result": null
+                                                    }
+                                                    """
+                                    )
+                            }
+                    )
+            ),
+    })
+    ResponseEntity<StartScheduleResponseDto> startSchedule(@UserId UUID userId,
+                                                           @PathVariable UUID scheduleId);
     }
