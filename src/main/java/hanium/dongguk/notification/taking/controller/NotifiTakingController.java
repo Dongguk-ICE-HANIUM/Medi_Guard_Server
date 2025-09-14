@@ -16,6 +16,7 @@ import java.util.UUID;
 public class NotifiTakingController implements NotifiTakingApiSwagger {
     private final NotifiTakingService notifiTakingService;
 
+    @Override
     @PostMapping("/patient-drug/{patientDrugId}/notifi-taking")
     public ResponseEntity<?> createNotifiTaking(
             @UserId UUID userId,
@@ -26,6 +27,7 @@ public class NotifiTakingController implements NotifiTakingApiSwagger {
         ).build();
     }
 
+    @Override
     @PatchMapping("/patient-drug/{patientDrugId}/notifi-taking")
     public ResponseEntity<?> patchNotifiTaking(
             @UserId UUID userId,
@@ -36,6 +38,7 @@ public class NotifiTakingController implements NotifiTakingApiSwagger {
         );
     }
 
+    @Override
     @DeleteMapping("/notifi-taking/{notifiTakingId}")
     public ResponseEntity<?> deleteNotifiTaking(
            @UserId UUID userId,
@@ -44,6 +47,7 @@ public class NotifiTakingController implements NotifiTakingApiSwagger {
         return ResponseEntity.noContent().build();
     }
 
+    @Override
     @GetMapping("/patient-drug/{patientDrugId}/notifi-taking")
     public ResponseEntity<?> getListNotifiTaking(
             @UserId UUID userId,
