@@ -14,7 +14,8 @@ public enum ScheduleErrorCode implements ErrorCode {
     NOT_FOUND_SCHEDULE(HttpStatus.NOT_FOUND, "SCHEDULE_003", "등록된 진료 예정일을 찾을 수 없습니다."),
     NOT_WAITING_SCHEDULE(HttpStatus.BAD_REQUEST, "SCHEDULE_004", "대기중인 진료를 선택해야 합니다."),
     NOT_COMPLETED_SCHEDULE(HttpStatus.BAD_REQUEST, "SCHEDULE_005", "완료된 진료를 선택해야 합니다."),
-    NOT_TODAY_SCHEDULE_TIME(HttpStatus.BAD_REQUEST, "SCHEDULE_006", "오늘의 일정의 진료만 시작가능합니다.")
+    NOT_TODAY_SCHEDULE_TIME(HttpStatus.BAD_REQUEST, "SCHEDULE_006", "오늘의 일정의 진료만 시작가능합니다."),
+    FAILED_GENERATE_AUTH_CODE(HttpStatus.INTERNAL_SERVER_ERROR, "SCHEDULE_007", "인증코드 생성 실패")
     ;
 
 

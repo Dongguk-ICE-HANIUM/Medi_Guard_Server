@@ -122,8 +122,17 @@ public class ScheduleService {
         SecureRandom secureRandom = new SecureRandom();
         String code;
 
+        int attempts = 0;
+        final int MAX_ATTEMPTS = 10;
+
         do{
             code = String.format("%08d", secureRandom.nextInt(100000000));
+            attempts++;
+
+            if(attempts > MAX_ATTEMPTS){
+                throw CommonException.type(ScheduleErrorCode.FAILED_GENERATE_AUTH_CODE);
+            }
+
         } while(redisTemplate.hasKey("auth:code:" + code));
 
         redisTemplate.opsForValue().set("auth:code:" + code, scheduleId.toString(), Duration.ofMinutes(2));
