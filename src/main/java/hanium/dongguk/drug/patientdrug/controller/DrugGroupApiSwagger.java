@@ -137,20 +137,20 @@ public interface DrugGroupApiSwagger {
                                     summary = "약물 그룹 목록 반환",
                                     value = """
                                             {
-                                                "errorCode": null,
-                                                "message": "SUCCESS",
-                                                "result": {
-                                                    "drugGroups": [
-                                                        {
-                                                            "id": "123e4567-e89b-12d3-a456-426614174000",
-                                                            "name": "아침 복용약",
-                                                        },
-                                                        {
-                                                            "id": "987e6543-e21c-34f5-b678-987654321000",
-                                                            "name": "저녁 복용약",
-                                                        }
-                                                    ]
-                                                }
+                                              "errorCode": null,
+                                              "message": "SUCCESS",
+                                              "result": {
+                                                "drugGroupList": [
+                                                  {
+                                                    "id": "20316e88-1aeb-45df-a6e4-ae450862dfea",
+                                                    "name": "위 염증 약"
+                                                  },
+                                                  {
+                                                    "id": "eee95960-754b-4a73-a1ec-27dc4eff6eb6",
+                                                    "name": "봄 감기 복용약"
+                                                  }
+                                                ]
+                                              }
                                             }
                                             """
                             )
