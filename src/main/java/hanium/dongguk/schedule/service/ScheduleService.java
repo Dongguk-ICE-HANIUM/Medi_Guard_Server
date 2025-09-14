@@ -22,11 +22,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -101,7 +101,7 @@ public class ScheduleService {
         return GetScheduleDetailResponseDto.from(schedule);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public StartScheduleResponseDto startSchedule(UUID userId, UUID scheduleId) {
 
         Schedule schedule = scheduleRetriever.getSchedule(userId, scheduleId);
@@ -112,14 +112,21 @@ public class ScheduleService {
 
         String authCode = generateAuthCode(scheduleId);
 
+        schedule.startSchedule();
+
         return StartScheduleResponseDto.from(authCode);
 
     }
 
     private String generateAuthCode(UUID scheduleId){
-        String code = String.format("%06d", new Random().nextInt(1000000));
-        String redisKey = "schedule:auth:" + scheduleId.toString();
-        redisTemplate.opsForValue().set(redisKey, code, Duration.ofMinutes(10));
+        SecureRandom secureRandom = new SecureRandom();
+        String code;
+
+        do{
+            code = String.format("%08d", secureRandom.nextInt(100000000));
+        } while(redisTemplate.hasKey("auth:code:" + code));
+
+        redisTemplate.opsForValue().set("auth:code:" + code, scheduleId.toString(), Duration.ofMinutes(2));
 
         return code;
     }

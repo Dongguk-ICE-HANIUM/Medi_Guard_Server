@@ -31,7 +31,7 @@ public record GetScheduleDetailResponseDto (
         @JsonProperty("warning")
         String warning
 ){
-    public static GetScheduleDetailResponseDto from (Schedule schedule){
+    public static GetScheduleDetailResponseDto from(Schedule schedule){
         return new GetScheduleDetailResponseDto(schedule.getId(),
                 schedule.getDoctor().getName(),
                 schedule.getDoctor().getHospitalName(),
