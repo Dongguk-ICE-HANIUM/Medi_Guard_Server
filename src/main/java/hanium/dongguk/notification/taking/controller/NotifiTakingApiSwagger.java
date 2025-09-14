@@ -219,6 +219,17 @@ public interface NotifiTakingApiSwagger {
                                                         "result": null
                                                     }
                                                     """
+                                    ),
+                                    @ExampleObject(
+                                            name = "알림 ID 값 누락",
+                                            summary = "수정할 알림 ID 값을 누락한 경우",
+                                            value = """
+                                                    {
+                                                        "errorCode": "NOTIFI_TAKING_003",
+                                                        "message": "알림을 수정할 ID 값이 누락되어있습니다.",
+                                                        "result": null
+                                                    }
+                                                    """
                                     )
                             }
                     )

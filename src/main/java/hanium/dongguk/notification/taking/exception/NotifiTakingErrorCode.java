@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 public enum NotifiTakingErrorCode implements ErrorCode {
     NOT_FOUND(HttpStatus.NOT_FOUND, "NOTIFI_TAKING_001", "존재하지 않는 복약 알림입니다."),
     DUPLICATED_TIME(HttpStatus.BAD_REQUEST, "NOTIFI_TAKING_002", "복약 알림 시간이 이미 존재합니다."),
+    MISSING_ID_FOR_UPDATE(HttpStatus.BAD_REQUEST, "NOTIFI_TAKING_003", "알림을 수정할 ID 값이 누락되어있습니다.");
     ;
 
     private final HttpStatus status;
