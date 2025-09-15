@@ -4,8 +4,10 @@ import hanium.dongguk.global.dto.PageResponseDto;
 import hanium.dongguk.global.exception.CommonException;
 import hanium.dongguk.schedule.domain.Schedule;
 import hanium.dongguk.schedule.dto.request.SaveScheduleRequestDto;
+import hanium.dongguk.schedule.dto.response.GetScheduleDetailResponseDto;
 import hanium.dongguk.schedule.dto.response.GetTodayScheduleResponseDto;
 import hanium.dongguk.schedule.dto.response.ScheduleResponseDto;
+import hanium.dongguk.schedule.dto.response.StartScheduleResponseDto;
 import hanium.dongguk.schedule.exception.ScheduleErrorCode;
 import hanium.dongguk.schedule.validator.ScheduleValidator;
 import hanium.dongguk.user.doctor.domain.UserDoctor;
@@ -16,9 +18,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -33,13 +38,14 @@ public class ScheduleService {
     private final UserPatientRetriever userPatientRetriever;
     private final ScheduleRetriever scheduleRetriever;
     private final UserDoctorRetriever userDoctorRetriever;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Transactional
     public void saveSchedule(SaveScheduleRequestDto request, UUID userId) {
 
         LocalDateTime scheduleTime = request.scheduleTime();
 
-        scheduleValidator.validateScheduleTime(scheduleTime);
+        scheduleValidator.validateFutureScheduleTime(scheduleTime);
 
         if(scheduleRetriever.existsByScheduleTime(userId, scheduleTime)) {
             throw CommonException.type(ScheduleErrorCode.DUPLICATE_SCHEDULE_TIME);
@@ -58,6 +64,7 @@ public class ScheduleService {
 
     @Transactional(readOnly = true)
     public GetTodayScheduleResponseDto getTodaySchedule(UUID userId) {
+
         Optional<Schedule> optionalSchedule = scheduleRetriever.getRecentSchedule(userId);
 
         if(optionalSchedule.isEmpty()){
@@ -82,5 +89,54 @@ public class ScheduleService {
                  .map(ScheduleResponseDto::from);
 
         return PageResponseDto.from(schedulePage);
+    }
+
+    @Transactional(readOnly = true)
+    public GetScheduleDetailResponseDto getScheduleDetail(UUID userId, UUID scheduleId) {
+
+        Schedule schedule = scheduleRetriever.getSchedule(userId, scheduleId);
+
+        scheduleValidator.validateCompletedScheduleStatus(schedule.getStatus());
+
+        return GetScheduleDetailResponseDto.from(schedule);
+    }
+
+    @Transactional
+    public StartScheduleResponseDto startSchedule(UUID userId, UUID scheduleId) {
+
+        Schedule schedule = scheduleRetriever.getSchedule(userId, scheduleId);
+
+        scheduleValidator.validateWaitingScheduleStatus(schedule.getStatus());
+
+        scheduleValidator.validateTodayScheduleDate(schedule.getScheduleTime());
+
+        String authCode = generateAuthCode(scheduleId);
+
+        schedule.startSchedule();
+
+        return StartScheduleResponseDto.from(authCode);
+
+    }
+
+    private String generateAuthCode(UUID scheduleId){
+        SecureRandom secureRandom = new SecureRandom();
+        String code;
+
+        int attempts = 0;
+        final int MAX_ATTEMPTS = 10;
+
+        do{
+            code = String.format("%08d", secureRandom.nextInt(100000000));
+            attempts++;
+
+            if(attempts > MAX_ATTEMPTS){
+                throw CommonException.type(ScheduleErrorCode.FAILED_GENERATE_AUTH_CODE);
+            }
+
+        } while(redisTemplate.hasKey("auth:code:" + code));
+
+        redisTemplate.opsForValue().set("auth:code:" + code, scheduleId.toString(), Duration.ofMinutes(2));
+
+        return code;
     }
 }

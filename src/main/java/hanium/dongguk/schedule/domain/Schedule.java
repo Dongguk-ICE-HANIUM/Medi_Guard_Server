@@ -79,4 +79,8 @@ public class Schedule {
                 .status(EScheduleStatus.WAITING)
                 .build();
     }
+
+    public void startSchedule(){
+        this.status = EScheduleStatus.STARTED;
+    }
 }

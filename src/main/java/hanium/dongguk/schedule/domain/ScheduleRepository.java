@@ -26,4 +26,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, UUID> {
     Page<Schedule> findByPatientIdAndStatusOrderByScheduleTimeDesc(UUID patientId,
                                                                    EScheduleStatus status,
                                                                    Pageable pageable);
+
+    Optional<Schedule> findByPatientIdAndId(UUID patientId, UUID scheduleId);
 }
