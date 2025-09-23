@@ -83,4 +83,6 @@ public class Schedule {
     public void startSchedule(){
         this.status = EScheduleStatus.STARTED;
     }
+
+    public void progressSchedule() {this.status = EScheduleStatus.IN_PROGRESS; }
 }

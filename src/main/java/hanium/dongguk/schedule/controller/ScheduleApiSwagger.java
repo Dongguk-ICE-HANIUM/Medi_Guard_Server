@@ -5,10 +5,8 @@ import hanium.dongguk.global.dto.PageResponseDto;
 import hanium.dongguk.global.dto.ResponseDto;
 import hanium.dongguk.global.exception.CommonException;
 import hanium.dongguk.schedule.dto.request.SaveScheduleRequestDto;
-import hanium.dongguk.schedule.dto.response.GetScheduleDetailResponseDto;
-import hanium.dongguk.schedule.dto.response.GetTodayScheduleResponseDto;
-import hanium.dongguk.schedule.dto.response.ScheduleResponseDto;
-import hanium.dongguk.schedule.dto.response.StartScheduleResponseDto;
+import hanium.dongguk.schedule.dto.request.VerifyCodeRequestDto;
+import hanium.dongguk.schedule.dto.response.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -17,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -267,24 +266,24 @@ public interface ScheduleApiSwagger {
                             mediaType = "application/json",
                             schema = @Schema(implementation = ResponseDto.class),
                             examples = @ExampleObject(
-                                            name = "진료 일정 상세",
-                                            summary = "진료 일정 상세 보기",
-                                            value = """
-                                                    {
-                                                      "errorCode": null,
-                                                      "message": "SUCCESS",
-                                                      "result": {
-                                                        "scheduleId": "3293d66e-8edc-11f0-80f6-00155da312b9",
-                                                        "doctorName": "김의사",
-                                                        "hospitalName": "서울대학교병원",
-                                                        "dateTime": "2024-09-11T14:30:00",
-                                                        "symptom": "두통, 어지러움",
-                                                        "diagnosis": "편두통",
-                                                        "guidance": "충분한 휴식과 수분 섭취",
-                                                        "warning": "정기 검진"
-                                                      }
-                                                    }
-                                                    """
+                                    name = "진료 일정 상세",
+                                    summary = "진료 일정 상세 보기",
+                                    value = """
+                                            {
+                                              "errorCode": null,
+                                              "message": "SUCCESS",
+                                              "result": {
+                                                "scheduleId": "3293d66e-8edc-11f0-80f6-00155da312b9",
+                                                "doctorName": "김의사",
+                                                "hospitalName": "서울대학교병원",
+                                                "dateTime": "2024-09-11T14:30:00",
+                                                "symptom": "두통, 어지러움",
+                                                "diagnosis": "편두통",
+                                                "guidance": "충분한 휴식과 수분 섭취",
+                                                "warning": "정기 검진"
+                                              }
+                                            }
+                                            """
                             )
 
                     )
@@ -325,6 +324,7 @@ public interface ScheduleApiSwagger {
     })
     ResponseEntity<GetScheduleDetailResponseDto> getScheduleDetail(@UserId UUID userId,
                                                                    @PathVariable UUID scheduleId);
+
     @Operation(
             summary = "진료 시작시 OTP 코드 생성",
             description = """
@@ -403,4 +403,113 @@ public interface ScheduleApiSwagger {
     })
     ResponseEntity<StartScheduleResponseDto> startSchedule(@UserId UUID userId,
                                                            @PathVariable UUID scheduleId);
-    }
+    @Operation(
+            summary = "의사 코드 인증 API",
+            description = """
+                    의사가 환자로부터 받은 8자리 코드를 입력하여 진료를 시작합니다.
+                    코드 인증이 성공하면 스케줄 상태가 STARTED에서 IN_PROGRESS로 변경됩니다.
+                    코드는 일회용이며, 인증 후 자동으로 만료됩니다.
+                    """
+    )
+    @SecurityRequirement(name = "JWT")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "코드 인증 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "코드 인증 성공",
+                                    summary = "의사 코드 인증 성공",
+                                    value = """
+                                            {
+                                              "errorCode": null,
+                                              "message": "SUCCESS",
+                                              "result": {
+                                                "scheduleId": "550e8400-e29b-41d4-a716-446655440000"
+                                              }
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "코드 인증 실패",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = CommonException.class),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "유효하지 않거나 만료된 코드",
+                                            summary = "잘못된 코드 입력",
+                                            value = """
+                                                    {
+                                                      "errorCode": "REDIS_003",
+                                                      "message": "유효하지않거나 만료된 코드입니다.",
+                                                      "result": null
+                                                    }
+                                                    """
+                                    ),
+                                    @ExampleObject(
+                                            name = "스케줄을 찾을 수 없는 경우",
+                                            summary = "스케줄 없음",
+                                            value = """
+                                                    {
+                                                      "errorCode": "SCHEDULE_003",
+                                                      "message": "등록된 진료 예정일을 찾을 수 없습니다.",
+                                                      "result": null
+                                                    }
+                                                    """
+                                    ),
+                                    @ExampleObject(
+                                            name = "의사가 해당 스케줄의 담당의가 아닌 경우",
+                                            summary = "권한 없는 의사",
+                                            value = """
+                                                    {
+                                                      "errorCode": "SCHEDULE_009",
+                                                      "message": "해당하는 일자에 대한 의사가 일치하지 않습니다.",
+                                                      "result": null
+                                                    }
+                                                    """
+                                    ),
+                                    @ExampleObject(
+                                            name = "스케줄이 STARTED 상태가 아닌 경우",
+                                            summary = "잘못된 스케줄 상태",
+                                            value = """
+                                                    {
+                                                      "errorCode": "SCHEDULE_010",
+                                                      "message": "시작되지 않은 스케줄입니다.",
+                                                      "result": null
+                                                    }
+                                                    """
+                                    )
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "서버 내부 오류",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = CommonException.class),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "데이터 역직렬화 실패",
+                                            summary = "Redis 데이터 처리 오류",
+                                            value = """
+                                                    {
+                                                      "errorCode": "REDIS_002",
+                                                      "message": "데이터 역직렬화에 실패했습니다.",
+                                                      "result": null
+                                                    }
+                                                    """
+                                    )
+                            }
+                    )
+            )
+    })
+    ResponseEntity<VerifyCodeResponseDto> verifyCode(@UserId UUID userId,
+                                                     @RequestBody @Valid VerifyCodeRequestDto request);
+}

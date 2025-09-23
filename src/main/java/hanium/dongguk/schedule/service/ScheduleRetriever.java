@@ -40,8 +40,8 @@ public class ScheduleRetriever {
                                                                                   pageable);
     }
 
-    public Schedule getSchedule(UUID userId, UUID scheduleId) {
-        return scheduleRepository.findByPatientIdAndId(userId, scheduleId)
+    public Schedule getSchedule(UUID patientId, UUID scheduleId) {
+        return scheduleRepository.findByPatientIdAndId(patientId, scheduleId)
                 .orElseThrow(() -> CommonException.type(ScheduleErrorCode.NOT_FOUND_SCHEDULE));
     }
 }
