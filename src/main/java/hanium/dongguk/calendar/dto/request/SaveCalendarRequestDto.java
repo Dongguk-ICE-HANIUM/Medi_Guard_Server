@@ -10,11 +10,6 @@ import java.time.LocalDate;
 
 @Schema(description = "캘린더 생성 요청 DTO")
 public record SaveCalendarRequestDto(
-        @JsonProperty("date")
-        @NotNull(message = "날짜는 필수입니다.")
-        @Schema(description = "날짜", example = "2025-08-04")
-        LocalDate date,
-        
         @JsonProperty("description")
         @NotBlank(message = "설명은 필수입니다.")
         @Schema(description = "기분 설명", example = "두통이 있고 어지럽다.")

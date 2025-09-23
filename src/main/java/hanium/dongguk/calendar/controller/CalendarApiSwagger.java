@@ -99,7 +99,6 @@ public interface CalendarApiSwagger {
                     - 중복 기록 방지 검증
                     
                     **검증 규칙:**
-                    - 날짜: 필수 입력값이며 ISO 날짜 형식(YYYY-MM-DD)
                     - 감정: HAPPY, SAD, ANGRY, ANXIOUS, NEUTRAL 중 하나
                     - 설명: 필수 입력값 (최대 1000자)
                     - 질문 유형: 유효한 질문 타입이어야 함
@@ -152,7 +151,6 @@ public interface CalendarApiSwagger {
                                     summary = "정상적인 기분 저장 요청",
                                     value = """
                                             {
-                                                "date": "2025-08-04",
                                                 "emotion": "NEUTRAL",
                                                 "description": "두통이 있고 어지럽다.",
                                                 "questionType": "PHYSICAL_SYMPTOMS"
