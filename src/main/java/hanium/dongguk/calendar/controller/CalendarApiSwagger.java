@@ -219,30 +219,6 @@ public interface CalendarApiSwagger {
             )
     })
     ResponseEntity<Void> updateCalendar(
-            @Parameter(
-                    description = "수정할 기분 기록의 캘린더 ID",
-                    required = true,
-                    example = "f47ac10b-58cc-4372-a567-0e02b2c3d479"
-            )
-            UUID calendarId,
-            @Parameter(
-                    description = "기분 수정 요청 정보",
-                    required = true,
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = UpdateCalendarRequestDto.class),
-                            examples = @ExampleObject(
-                                    name = "기분 수정 요청 예시",
-                                    summary = "정상적인 기분 수정 요청",
-                                    value = """
-                                            {
-                                                "emotion": "HAPPY",
-                                                "description": "기분이 많이 좋아졌습니다."
-                                            }
-                                            """
-                            )
-                    )
-            )
             UpdateCalendarRequestDto requestDto,
             UUID userId
     );

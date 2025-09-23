@@ -53,9 +53,9 @@ public class CalendarService {
     }
 
     @Transactional
-    public void updateCalendar(UUID patientId, UUID calendarId, UpdateCalendarRequestDto requestDto) {
+    public void updateCalendar(UUID patientId, UpdateCalendarRequestDto requestDto) {
 
-        Calendar calendar = calendarRetriever.findByIdAndUserPatient(calendarId, patientId)
+        Calendar calendar = calendarRetriever.getTodayCalendar(patientId)
                 .orElseThrow(() -> CommonException.type(CalendarErrorCode.CALENDAR_NOT_FOUND));
 
         calendar.updateEmotion(requestDto.emotion(), requestDto.description());

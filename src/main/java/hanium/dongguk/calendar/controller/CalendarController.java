@@ -41,13 +41,12 @@ public class CalendarController implements CalendarApiSwagger {
     }
 
     @Override
-    @PatchMapping("/{calendarId}")
+    @PatchMapping
     public ResponseEntity<Void> updateCalendar(
-            @PathVariable UUID calendarId,
             @Valid @RequestBody UpdateCalendarRequestDto requestDto,
             @UserId UUID userId) {
 
-        calendarService.updateCalendar(userId, calendarId, requestDto);
+        calendarService.updateCalendar(userId, requestDto);
         return ResponseEntity.ok().build();
     }
 }
