@@ -3,6 +3,7 @@ package hanium.dongguk.schedule.service;
 import hanium.dongguk.global.dto.PageResponseDto;
 import hanium.dongguk.global.exception.CommonException;
 import hanium.dongguk.global.util.RedisUtil;
+import hanium.dongguk.schedule.domain.EScheduleStatus;
 import hanium.dongguk.schedule.domain.Schedule;
 import hanium.dongguk.schedule.dto.request.SaveScheduleRequestDto;
 import hanium.dongguk.schedule.dto.request.VerifyCodeRequestDto;
@@ -126,6 +127,20 @@ public class ScheduleService {
         schedule.progressSchedule();
 
         return VerifyCodeResponseDto.from(schedule);
+    }
+
+@Transactional(readOnly = true)
+    public CheckProgressScheduleResponseDto checkProgressSchedule(UUID userId, UUID scheduleId) {
+
+        Schedule schedule = scheduleRetriever.getSchedule(userId, scheduleId);
+
+        if(schedule.getStatus().equals(EScheduleStatus.IN_PROGRESS)){
+            return CheckProgressScheduleResponseDto.progress();
+        }
+        if(schedule.getStatus().equals(EScheduleStatus.STARTED)){
+            return CheckProgressScheduleResponseDto.started();
+        }
+        throw CommonException.type(ScheduleErrorCode.NOT_STARTED_SCHEDULE);
     }
 
     private record ScheduleAuthDto(

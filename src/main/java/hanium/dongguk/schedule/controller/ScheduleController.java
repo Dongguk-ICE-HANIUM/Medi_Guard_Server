@@ -62,4 +62,12 @@ public class ScheduleController implements ScheduleApiSwagger {
                                                             @RequestBody @Valid VerifyCodeRequestDto request) {
         return ResponseEntity.ok(scheduleService.verifyCode(userId, request));
     }
+
+    @Override
+    @GetMapping("/{scheduleId}/status")
+    public ResponseEntity<CheckProgressScheduleResponseDto> checkProgressSchedule(@UserId UUID userId,
+                                                                                  @PathVariable UUID scheduleId) {
+        return ResponseEntity.ok(scheduleService.checkProgressSchedule(userId, scheduleId));
+    }
+
 }

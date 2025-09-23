@@ -329,7 +329,7 @@ public interface ScheduleApiSwagger {
             summary = "진료 시작시 OTP 코드 생성",
             description = """
                     진료 시작시 OTP 코드 생성
-                    6자리의 코드가 생성됨
+                    8자리의 코드가 생성됨
                     """
     )
     @SecurityRequirement(name = "JWT")
@@ -348,7 +348,7 @@ public interface ScheduleApiSwagger {
                                               "errorCode": null,
                                               "message": "SUCCESS",
                                               "result": {
-                                                "code": "847236"
+                                                "code": "84723622"
                                               }
                                             }
                                             """
@@ -512,4 +512,71 @@ public interface ScheduleApiSwagger {
     })
     ResponseEntity<VerifyCodeResponseDto> verifyCode(@UserId UUID userId,
                                                      @RequestBody @Valid VerifyCodeRequestDto request);
+
+    @Operation(
+            summary = "진료 진행을 위한 상태 체크",
+            description = """
+                    진료 진행을 위한 상태 체크
+                    """
+    )
+    @SecurityRequirement(name = "JWT")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "진료 진행을 위한 상태 체크",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "상태 체크",
+                                    summary = "상태 체크",
+                                    value = """
+                                            {
+                                              "errorCode": null,
+                                              "message": "SUCCESS",
+                                              "result": {
+                                                "isProgress" : true
+                                              }
+                                            }
+                                            """
+                            )
+
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "진료 상세 조회 실패",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = CommonException.class),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "등록된 스케줄을 찾을 수 없는 경우",
+                                            summary = "스케줄을 찾을 수 없는 경우",
+                                            value = """
+                                                    {
+                                                      "errorCode": "SCHEDULE_003",
+                                                      "message": "등록된 진료 예정일을 찾을 수 없습니다.",
+                                                      "result": null
+                                                    }
+                                                    """
+
+                                    ),
+                                    @ExampleObject(
+                                            name = "대기중 상태의 스케줄이 아닐 경우",
+                                            summary = "대기중 상태의 스케줄이 아닐경우",
+                                            value = """
+                                                    {
+                                                      "errorCode": "SCHEDULE_004",
+                                                      "message": "대기중인 진료를 선택해야 합니다.",
+                                                      "result": null
+                                                    }
+                                                    """
+                                    )
+                            }
+                    )
+            ),
+    })
+    ResponseEntity<CheckProgressScheduleResponseDto> checkProgressSchedule(@UserId UUID userId,
+                                                                          @PathVariable UUID scheduleId);
 }
