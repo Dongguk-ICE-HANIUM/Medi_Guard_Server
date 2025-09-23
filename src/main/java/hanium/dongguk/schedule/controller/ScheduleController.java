@@ -56,6 +56,7 @@ public class ScheduleController implements ScheduleApiSwagger {
         return ResponseEntity.ok(scheduleService.startSchedule(userId, scheduleId));
     }
 
+    @Override
     @PostMapping("/verify-doctor")
     public ResponseEntity<VerifyCodeResponseDto> verifyCode(@UserId UUID userId,
                                                             @RequestBody @Valid VerifyCodeRequestDto request) {

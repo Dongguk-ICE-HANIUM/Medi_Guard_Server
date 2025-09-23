@@ -17,11 +17,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -52,9 +50,7 @@ public class ScheduleService {
 
         UserPatient userPatient = userPatientRetriever.getUserPatient(userId);
 
-        UUID doctorUUID = UUID.fromString("ab36bc1a-8ece-11f0-80f6-00155da312b9");
-
-        UserDoctor userDoctor = userDoctorRetriever.getUserDoctor(doctorUUID);
+        UserDoctor userDoctor = userDoctorRetriever.getUserDoctor(request.doctorId());
 
         Schedule schedule = Schedule.create(scheduleTime, userPatient, userDoctor);
 

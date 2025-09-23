@@ -760,7 +760,5 @@ public interface AuthApiSwagger {
                     )
             )
     })
-    ResponseEntity<Void> doctorRegister(
-            @Valid @RequestBody DoctorRegisterRequestDto request
-    );
+    ResponseEntity<Void> doctorRegister(@Valid @RequestBody DoctorRegisterRequestDto request);
 }
