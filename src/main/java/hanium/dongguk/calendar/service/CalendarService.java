@@ -37,13 +37,12 @@ public class CalendarService {
 
     @Transactional
     public void saveCalendar(UUID patientId, SaveCalendarRequestDto requestDto) {
-        calendarValidator.validateFutureDate(requestDto.date());
-        duplicateValidate(patientId, requestDto.date());
+        duplicateValidate(patientId);
 
         UserPatient userPatient = userPatientRetriever.getUserPatient(patientId);
 
         Calendar calendar = Calendar.create(
-                requestDto.date(),
+                LocalDate.now(),
                 requestDto.description(),
                 requestDto.emotion(),
                 userPatient
@@ -53,16 +52,16 @@ public class CalendarService {
     }
 
     @Transactional
-    public void updateCalendar(UUID patientId, UUID calendarId, UpdateCalendarRequestDto requestDto) {
+    public void updateCalendar(UUID patientId, UpdateCalendarRequestDto requestDto) {
 
-        Calendar calendar = calendarRetriever.findByIdAndUserPatient(calendarId, patientId)
+        Calendar calendar = calendarRetriever.getTodayCalendar(patientId)
                 .orElseThrow(() -> CommonException.type(CalendarErrorCode.CALENDAR_NOT_FOUND));
 
         calendar.updateEmotion(requestDto.emotion(), requestDto.description());
     }
 
-    private void duplicateValidate(UUID patientId, LocalDate date) {
-        calendarRetriever.findByDateAndUserPatient(date, patientId)
+    private void duplicateValidate(UUID patientId) {
+        calendarRetriever.findByDateAndUserPatient(LocalDate.now(), patientId)
                 .ifPresent((calendar) -> {
                     throw CommonException.type(CalendarErrorCode.CALENDAR_ALREADY_EXISTS);
                 });
