@@ -129,7 +129,7 @@ public class ScheduleService {
         return VerifyCodeResponseDto.from(schedule);
     }
 
-@Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public CheckProgressScheduleResponseDto checkProgressSchedule(UUID userId, UUID scheduleId) {
 
         Schedule schedule = scheduleRetriever.getSchedule(userId, scheduleId);

@@ -3,7 +3,8 @@ package hanium.dongguk.user.doctor.controller;
 import hanium.dongguk.global.dto.ResponseDto;
 import hanium.dongguk.global.exception.CommonException;
 import hanium.dongguk.user.doctor.domain.EDepartment;
-import hanium.dongguk.user.doctor.dto.DoctorInfo;
+import hanium.dongguk.user.doctor.dto.response.DoctorInfoDto;
+import hanium.dongguk.user.doctor.dto.response.SearchDoctorListResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -41,24 +42,32 @@ public interface UserDoctorApiSwagger {
                                             name = "검색 결과가 있는 경우",
                                             summary = "의사 목록 반환",
                                             value = """
-                                                {
-                                                  "errorCode": null,
-                                                  "message": "SUCCESS",
-                                                  "result": [
                                                     {
-                                                      "id": "550e8400-e29b-41d4-a716-446655440000",
-                                                      "name": "김의사",
-                                                      "hospitalName": "서울대학교병원",
-                                                      "department": "CARDIOLOGY"
-                                                    },
-                                                    {
-                                                      "id": "660e8400-e29b-41d4-a716-446655440001",
-                                                      "name": "김심장",
-                                                      "hospitalName": "서울대학교병원",
-                                                      "department": "CARDIOLOGY"
+                                                      "errorCode": null,
+                                                      "message": "SUCCESS",
+                                                      "result": {
+                                                        "doctorInfoList": [
+                                                          {
+                                                            "doctorId": "5cf71052-2c9c-4721-8b87-7aa8f7ed1379",
+                                                            "name": "송민교",
+                                                            "hospitalName": "동국대병원",
+                                                            "department": "INTERNAL_MEDICINE"
+                                                          },
+                                                          {
+                                                            "doctorId": "88541408-b9f7-40e0-931f-4a9a682bd2b3",
+                                                            "name": "추상윤",
+                                                            "hospitalName": "동국대병원",
+                                                            "department": "INTERNAL_MEDICINE"
+                                                          },
+                                                          {
+                                                            "doctorId": "e454ffa7-d1a1-4936-9ab4-84cb4462f04b",
+                                                            "name": "추상윤",
+                                                            "hospitalName": "동국대병원",
+                                                            "department": "INTERNAL_MEDICINE"
+                                                          }
+                                                        ]
+                                                      }
                                                     }
-                                                  ]
-                                                }
                                                 """
                                     ),
                                     @ExampleObject(
@@ -95,7 +104,7 @@ public interface UserDoctorApiSwagger {
                     )
             )
     })
-    ResponseEntity<List<DoctorInfo>> searchDoctorList(
+    ResponseEntity<SearchDoctorListResponseDto> searchDoctorList(
             @RequestParam EDepartment department,
             @RequestParam(required = false) String nameKeyWord
     );

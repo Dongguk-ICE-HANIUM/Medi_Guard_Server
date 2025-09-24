@@ -2,7 +2,8 @@ package hanium.dongguk.user.doctor.service;
 
 import hanium.dongguk.user.doctor.domain.EDepartment;
 import hanium.dongguk.user.doctor.domain.UserDoctor;
-import hanium.dongguk.user.doctor.dto.DoctorInfo;
+import hanium.dongguk.user.doctor.dto.response.DoctorInfoDto;
+import hanium.dongguk.user.doctor.dto.response.SearchDoctorListResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +14,10 @@ import java.util.List;
 public class UserDoctorService {
     private final UserDoctorRetriever userDoctorRetriever;
 
-    public List<DoctorInfo> searchDoctorList(EDepartment department, String nameKeyWord) {
+    public SearchDoctorListResponseDto searchDoctorList(EDepartment department, String nameKeyWord) {
         List<UserDoctor> doctorList = userDoctorRetriever.searchUserDoctorList(department, nameKeyWord);
 
-        return doctorList.stream().map(DoctorInfo::from).toList();
+        return SearchDoctorListResponseDto.from(doctorList.stream().map(DoctorInfoDto::from).toList());
     }
 
 }

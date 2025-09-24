@@ -1,7 +1,8 @@
 package hanium.dongguk.user.doctor.controller;
 
 import hanium.dongguk.user.doctor.domain.EDepartment;
-import hanium.dongguk.user.doctor.dto.DoctorInfo;
+import hanium.dongguk.user.doctor.dto.response.DoctorInfoDto;
+import hanium.dongguk.user.doctor.dto.response.SearchDoctorListResponseDto;
 import hanium.dongguk.user.doctor.service.UserDoctorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,8 @@ public class UserDoctorController implements  UserDoctorApiSwagger {
     private final UserDoctorService userDoctorService;
 
     @Override
-    @GetMapping()
-    public ResponseEntity<List<DoctorInfo>> searchDoctorList(
+    @GetMapping
+    public ResponseEntity<SearchDoctorListResponseDto> searchDoctorList(
             @RequestParam EDepartment department,
             @RequestParam(required = false) String nameKeyWord
             ) {
