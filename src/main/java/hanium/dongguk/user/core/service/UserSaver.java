@@ -1,6 +1,7 @@
 package hanium.dongguk.user.core.service;
 
 import hanium.dongguk.user.core.domain.UserRepository;
+import hanium.dongguk.user.doctor.domain.UserDoctor;
 import hanium.dongguk.user.patient.domain.UserPatient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,5 +14,9 @@ public class UserSaver {
 
     public void save(UserPatient userPatient){
         userRepository.save(userPatient);
+    }
+
+    public void save(UserDoctor userDoctor){
+        userRepository.save(userDoctor);
     }
 }

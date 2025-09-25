@@ -1,12 +1,14 @@
 package hanium.dongguk.user.doctor.service;
 
 import hanium.dongguk.global.exception.CommonException;
+import hanium.dongguk.user.doctor.domain.EDepartment;
 import hanium.dongguk.user.doctor.domain.UserDoctor;
 import hanium.dongguk.user.doctor.domain.UserDoctorRepository;
 import hanium.dongguk.user.doctor.exception.UserDoctorErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -18,5 +20,9 @@ public class UserDoctorRetriever {
     public UserDoctor getUserDoctor (UUID doctorId){
         return userDoctorRepository.findById(doctorId)
                 .orElseThrow(() -> CommonException.type(UserDoctorErrorCode.NOT_FOUND_USER_DOCTOR));
+    }
+
+    public List<UserDoctor> searchUserDoctorList(EDepartment department, String nameKeyWord){
+        return userDoctorRepository.searchUserDoctorList(department, nameKeyWord);
     }
 }

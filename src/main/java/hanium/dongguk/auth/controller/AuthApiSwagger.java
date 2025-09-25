@@ -1,5 +1,6 @@
 package hanium.dongguk.auth.controller;
 
+import hanium.dongguk.auth.dto.DoctorRegisterRequestDto;
 import hanium.dongguk.auth.provider.apple.dto.AppleLoginRequestDto;
 import hanium.dongguk.auth.provider.kakao.dto.KakaoLoginRequestDto;
 import hanium.dongguk.global.dto.JwtDto;
@@ -653,4 +654,111 @@ public interface AuthApiSwagger {
     ResponseEntity<SocialLoginResponseDto> appleLogin(
             @Valid @RequestBody AppleLoginRequestDto request
     );
+
+    @Operation(
+            summary = "의사 회원가입",
+            description = """
+                    의료진 사용자의 회원가입을 처리합니다.
+                    
+                    **주요 기능:**
+                    - 이메일 중복 검증
+                    - 비밀번호 암호화 저장
+                    - 의료진 정보 등록 (병원명, 진료과)
+                    - 의사 권한으로 계정 생성
+                    
+                    **검증 규칙:**
+                    - 이메일: 올바른 이메일 형식이어야 합니다
+                    - 비밀번호: 필수 입력값입니다
+                    - 이름: 필수 입력값입니다
+                    - 병원명: 필수 입력값입니다
+                    - 진료과: 유효한 진료과 코드여야 합니다
+                    
+                    **진료과 코드:**
+                    - 내과계: INTERNAL_MEDICINE, CARDIOLOGY, GASTROENTEROLOGY, ENDOCRINOLOGY, NEPHROLOGY, HEMATOLOGY, ONCOLOGY, RHEUMATOLOGY, NEUROLOGY, PULMONOLOGY
+                    - 외과계: GENERAL_SURGERY, ORTHOPEDIC_SURGERY, NEUROSURGERY, PLASTIC_SURGERY, THORACIC_SURGERY, UROLOGY
+                    - 전문과: PEDIATRICS, OBSTETRICS_GYNECOLOGY, OPHTHALMOLOGY, OTOLARYNGOLOGY, DERMATOLOGY, PSYCHIATRY, ANESTHESIOLOGY, RADIOLOGY, PATHOLOGY, FAMILY_MEDICINE, EMERGENCY_MEDICINE, REHABILITATION, DENTISTRY
+                    - 기타: OTHER_DEPARTMENT
+                    """
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "의사 회원가입 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "성공 응답",
+                                    summary = "의사 회원가입 완료",
+                                    value = """
+                                            {
+                                                "errorCode": null,
+                                                "message": "SUCCESS",
+                                                "result": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "잘못된 요청 - 입력값 검증 실패",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = {
+                                    @ExampleObject(
+                                            name = "이메일 중복",
+                                            summary = "이미 가입된 이메일",
+                                            value = """
+                                                    {
+                                                       "errorCode": "AUTH_009",
+                                                       "message": "이미 존재하는 이메일입니다.",
+                                                       "result": null
+                                                    }
+                                                    """
+                                    ),
+                                    @ExampleObject(
+                                            name = "이메일 형식 오류",
+                                            summary = "잘못된 이메일 형식",
+                                            value = """
+                                                    {
+                                                       "result": null,
+                                                       "errorCode": "REQUEST_001",
+                                                       "message": "잘못된 요청입니다."
+                                                    }
+                                                    """
+                                    ),
+                                    @ExampleObject(
+                                            name = "필수 필드 누락",
+                                            summary = "필수 필드가 누락된 경우",
+                                            value = """
+                                                    {
+                                                        "success": false,
+                                                        "message": "입력값이 올바르지 않습니다",
+                                                        "errors": {
+                                                            "password": "비밀번호는 필수 입력값입니다",
+                                                            "name": "이름은 필수 입력값입니다",
+                                                            "hospitalName": "병원명은 필수 입력값입니다",
+                                                            "department": "진료과는 필수 입력값입니다"
+                                                        }
+                                                    }
+                                                    """
+                                    ),
+                                    @ExampleObject(
+                                            name = "잘못된 진료과 코드",
+                                            summary = "유효하지 않은 진료과 코드",
+                                            value = """
+                                                    {
+                                                        "success": false,
+                                                        "message": "입력값이 올바르지 않습니다",
+                                                        "errors": {
+                                                            "department": "유효하지 않은 진료과 코드입니다"
+                                                        }
+                                                    }
+                                                    """
+                                    )
+                            }
+                    )
+            )
+    })
+    ResponseEntity<Void> doctorRegister(@Valid @RequestBody DoctorRegisterRequestDto request);
 }

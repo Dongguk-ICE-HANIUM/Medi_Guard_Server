@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Component
 public class ScheduleValidator {
@@ -32,6 +33,18 @@ public class ScheduleValidator {
     public void validateTodayScheduleDate(LocalDateTime scheduleTime){
         if(!scheduleTime.toLocalDate().equals(LocalDate.now())){
             throw CommonException.type(ScheduleErrorCode.NOT_TODAY_SCHEDULE_TIME);
+        }
+    }
+
+    public void validateDoctorOwnsSchedule(UUID doctorId, UUID scheduleDoctorId){
+        if(!scheduleDoctorId.equals(doctorId)){
+            throw CommonException.type(ScheduleErrorCode.NOT_MATCH_DOCTOR_AND_SCHEDULE);
+        }
+    }
+
+    public void validateStartedScheduleStatus(EScheduleStatus status){
+        if(!status.equals(EScheduleStatus.STARTED)){
+            throw CommonException.type(ScheduleErrorCode.NOT_STARTED_SCHEDULE);
         }
     }
 }

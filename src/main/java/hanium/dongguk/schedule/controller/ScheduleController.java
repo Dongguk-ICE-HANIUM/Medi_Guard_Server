@@ -3,10 +3,8 @@ package hanium.dongguk.schedule.controller;
 import hanium.dongguk.global.annotation.UserId;
 import hanium.dongguk.global.dto.PageResponseDto;
 import hanium.dongguk.schedule.dto.request.SaveScheduleRequestDto;
-import hanium.dongguk.schedule.dto.response.GetScheduleDetailResponseDto;
-import hanium.dongguk.schedule.dto.response.GetTodayScheduleResponseDto;
-import hanium.dongguk.schedule.dto.response.ScheduleResponseDto;
-import hanium.dongguk.schedule.dto.response.StartScheduleResponseDto;
+import hanium.dongguk.schedule.dto.request.VerifyCodeRequestDto;
+import hanium.dongguk.schedule.dto.response.*;
 import hanium.dongguk.schedule.service.ScheduleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -57,4 +55,19 @@ public class ScheduleController implements ScheduleApiSwagger {
                                                                   @PathVariable UUID scheduleId) {
         return ResponseEntity.ok(scheduleService.startSchedule(userId, scheduleId));
     }
+
+    @Override
+    @PostMapping("/verify-doctor")
+    public ResponseEntity<VerifyCodeResponseDto> verifyCode(@UserId UUID userId,
+                                                            @RequestBody @Valid VerifyCodeRequestDto request) {
+        return ResponseEntity.ok(scheduleService.verifyCode(userId, request));
+    }
+
+    @Override
+    @GetMapping("/{scheduleId}/status")
+    public ResponseEntity<CheckProgressScheduleResponseDto> checkProgressSchedule(@UserId UUID userId,
+                                                                                  @PathVariable UUID scheduleId) {
+        return ResponseEntity.ok(scheduleService.checkProgressSchedule(userId, scheduleId));
+    }
+
 }
