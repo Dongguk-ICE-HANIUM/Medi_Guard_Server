@@ -72,7 +72,7 @@ public class ScheduleController implements ScheduleApiSwagger {
     }
 
     @Override
-    @PatchMapping("/{scheduleId}/record")
+    @PatchMapping("/{scheduleId}")
     public ResponseEntity<Void> updateSchedule(@UserId UUID userId,
                                                @PathVariable UUID scheduleId,
                                                @Valid @RequestBody UpdateScheduleRequestDto request
