@@ -18,7 +18,8 @@ public enum ScheduleErrorCode implements ErrorCode {
     FAILED_GENERATE_AUTH_CODE(HttpStatus.INTERNAL_SERVER_ERROR, "SCHEDULE_007", "인증코드 생성 실패"),
     INVALID_OR_EXPIRED_AUTH_CODE(HttpStatus.BAD_REQUEST, "SCHEDULE_008", "만료되거나 유효하지 않은 코드입니다."),
     NOT_MATCH_DOCTOR_AND_SCHEDULE(HttpStatus.BAD_REQUEST, "SCHEDULE_009", "해당하는 일자에 대한 의사가 일치하지 않습니다."),
-    NOT_STARTED_SCHEDULE(HttpStatus.BAD_REQUEST, "SCHEDULE_010", "시작되지 않은 스케줄입니다.")
+    NOT_STARTED_SCHEDULE(HttpStatus.BAD_REQUEST, "SCHEDULE_010", "시작되지 않은 스케줄입니다."),
+    NOT_IN_PROGRESS_SCHEDULE(HttpStatus.BAD_REQUEST, "SCHEDULE_011", "진행중이지 않은 진료는 수정할 수 없습니다." )
     ;
 
 

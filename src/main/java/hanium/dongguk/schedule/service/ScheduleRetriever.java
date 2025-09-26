@@ -44,4 +44,9 @@ public class ScheduleRetriever {
         return scheduleRepository.findByPatientIdAndId(patientId, scheduleId)
                 .orElseThrow(() -> CommonException.type(ScheduleErrorCode.NOT_FOUND_SCHEDULE));
     }
+
+    public Schedule getScheduleByDoctorId(UUID doctorId, UUID scheduleId){
+        return scheduleRepository.findByDoctorIdAndId(doctorId, scheduleId)
+                .orElseThrow(() -> CommonException.type(ScheduleErrorCode.NOT_FOUND_SCHEDULE));
+    }
 }

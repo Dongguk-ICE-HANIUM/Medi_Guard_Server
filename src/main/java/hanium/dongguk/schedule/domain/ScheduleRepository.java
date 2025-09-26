@@ -28,4 +28,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, UUID> {
                                                                    Pageable pageable);
 
     Optional<Schedule> findByPatientIdAndId(UUID patientId, UUID scheduleId);
+
+    Optional<Schedule> findByDoctorIdAndId(UUID doctorId, UUID scheduleId);
 }

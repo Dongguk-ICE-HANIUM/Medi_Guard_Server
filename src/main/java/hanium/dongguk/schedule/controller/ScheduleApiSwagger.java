@@ -5,6 +5,7 @@ import hanium.dongguk.global.dto.PageResponseDto;
 import hanium.dongguk.global.dto.ResponseDto;
 import hanium.dongguk.global.exception.CommonException;
 import hanium.dongguk.schedule.dto.request.SaveScheduleRequestDto;
+import hanium.dongguk.schedule.dto.request.UpdateScheduleRequestDto;
 import hanium.dongguk.schedule.dto.request.VerifyCodeRequestDto;
 import hanium.dongguk.schedule.dto.response.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,6 +18,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -579,4 +581,72 @@ public interface ScheduleApiSwagger {
     })
     ResponseEntity<CheckProgressScheduleResponseDto> checkProgressSchedule(@UserId UUID userId,
                                                                           @PathVariable UUID scheduleId);
+
+
+    @Operation(
+            summary = "진료 업데이트 -> 진료 완료",
+            description = """
+                    진료 완료 API
+                    """
+    )
+    @SecurityRequirement(name = "JWT")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "진료 완료",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ResponseDto.class),
+                            examples = @ExampleObject(
+                                    name = "상태 체크",
+                                    summary = "상태 체크",
+                                    value = """
+                                            {
+                                              "errorCode": null,
+                                              "message": "SUCCESS",
+                                              "result": null
+                                            }
+                                            """
+                            )
+
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "진료 상세 조회 실패",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = CommonException.class),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "등록된 스케줄을 찾을 수 없는 경우",
+                                            summary = "스케줄을 찾을 수 없는 경우",
+                                            value = """
+                                                    {
+                                                      "errorCode": "SCHEDULE_003",
+                                                      "message": "등록된 진료 예정일을 찾을 수 없습니다.",
+                                                      "result": null
+                                                    }
+                                                    """
+
+                                    ),
+                                    @ExampleObject(
+                                            name = "진행중 상태의 스케줄이 아닐 경우",
+                                            summary = "진행중 상태의 스케줄이 아닐경우",
+                                            value = """
+                                                    {
+                                                      "errorCode": "SCHEDULE_011",
+                                                      "message": "진행중이지 않은 진료는 수정할 수 없습니다.",
+                                                      "result": null
+                                                    }
+                                                    """
+                                    )
+                            }
+                    )
+            ),
+    })
+    public ResponseEntity<Void> updateSchedule(@UserId UUID userId,
+                                               @PathVariable UUID scheduleId,
+                                               @Valid @RequestBody UpdateScheduleRequestDto request
+    );
 }

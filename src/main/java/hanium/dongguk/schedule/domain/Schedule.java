@@ -85,4 +85,12 @@ public class Schedule {
     }
 
     public void progressSchedule() {this.status = EScheduleStatus.IN_PROGRESS; }
+
+    public void completeSchedule(String symptom, String diagnosis, String guidance, String warning) {
+        this.status = EScheduleStatus.COMPLETED;
+        this.symptom = symptom;
+        this.diagnosis = diagnosis;
+        this.guidance = guidance;
+        this.warning = warning;
+    }
 }

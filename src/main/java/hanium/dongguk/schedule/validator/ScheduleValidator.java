@@ -47,4 +47,10 @@ public class ScheduleValidator {
             throw CommonException.type(ScheduleErrorCode.NOT_STARTED_SCHEDULE);
         }
     }
+
+    public void validateInProgressScheduleStatus(EScheduleStatus status){
+        if(!status.equals(EScheduleStatus.IN_PROGRESS)){
+            throw CommonException.type(ScheduleErrorCode.NOT_IN_PROGRESS_SCHEDULE);
+        }
+    }
 }

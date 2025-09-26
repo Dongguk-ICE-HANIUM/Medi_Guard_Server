@@ -6,12 +6,14 @@ import hanium.dongguk.global.util.RedisUtil;
 import hanium.dongguk.schedule.domain.EScheduleStatus;
 import hanium.dongguk.schedule.domain.Schedule;
 import hanium.dongguk.schedule.dto.request.SaveScheduleRequestDto;
+import hanium.dongguk.schedule.dto.request.UpdateScheduleRequestDto;
 import hanium.dongguk.schedule.dto.request.VerifyCodeRequestDto;
 import hanium.dongguk.schedule.dto.response.*;
 import hanium.dongguk.schedule.exception.ScheduleErrorCode;
 import hanium.dongguk.schedule.validator.ScheduleValidator;
 import hanium.dongguk.user.doctor.domain.UserDoctor;
 import hanium.dongguk.user.doctor.service.UserDoctorRetriever;
+import hanium.dongguk.user.doctor.validator.UserDoctorValidator;
 import hanium.dongguk.user.patient.domain.UserPatient;
 import hanium.dongguk.user.patient.service.UserPatientRetriever;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +39,7 @@ public class ScheduleService {
     private final ScheduleRetriever scheduleRetriever;
     private final UserDoctorRetriever userDoctorRetriever;
     private final RedisUtil redisUtil;
+    private final UserDoctorValidator userDoctorValidator;
 
     @Transactional
     public void saveSchedule(SaveScheduleRequestDto request, UUID userId) {
@@ -116,6 +119,8 @@ public class ScheduleService {
     @Transactional
     public VerifyCodeResponseDto verifyCode(UUID userId, VerifyCodeRequestDto request) {
 
+        userDoctorValidator.validateDoctor(userId);
+
         ScheduleAuthDto scheduleAuthDto = redisUtil.getAndValidateCode(request.code(), ScheduleAuthDto.class);
 
         Schedule schedule = scheduleRetriever.getSchedule(scheduleAuthDto.patientId(), scheduleAuthDto.scheduleId());
@@ -141,6 +146,17 @@ public class ScheduleService {
             return CheckProgressScheduleResponseDto.started();
         }
         throw CommonException.type(ScheduleErrorCode.NOT_STARTED_SCHEDULE);
+    }
+
+    @Transactional
+    public void updateSchedule(UUID userId, UUID scheduleId, UpdateScheduleRequestDto request) {
+
+        Schedule schedule = scheduleRetriever.getScheduleByDoctorId(userId, scheduleId);
+
+        scheduleValidator.validateInProgressScheduleStatus(schedule.getStatus());
+
+        schedule.completeSchedule(request.symptom(), request.diagnosis(), request.guidance(), request.warning());
+
     }
 
     private record ScheduleAuthDto(
