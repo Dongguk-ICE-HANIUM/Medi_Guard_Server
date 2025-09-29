@@ -3,6 +3,7 @@ package hanium.dongguk.schedule.controller;
 import hanium.dongguk.global.annotation.UserId;
 import hanium.dongguk.global.dto.PageResponseDto;
 import hanium.dongguk.schedule.dto.request.SaveScheduleRequestDto;
+import hanium.dongguk.schedule.dto.request.UpdateScheduleRequestDto;
 import hanium.dongguk.schedule.dto.request.VerifyCodeRequestDto;
 import hanium.dongguk.schedule.dto.response.*;
 import hanium.dongguk.schedule.service.ScheduleService;
@@ -36,7 +37,7 @@ public class ScheduleController implements ScheduleApiSwagger {
     }
 
     @Override
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<PageResponseDto<ScheduleResponseDto>> getScheduleList(@UserId UUID userId,
                                                            @RequestParam(defaultValue = "0") Integer page) {
         return ResponseEntity.ok(scheduleService.getScheduleList(userId, page));
@@ -70,4 +71,13 @@ public class ScheduleController implements ScheduleApiSwagger {
         return ResponseEntity.ok(scheduleService.checkProgressSchedule(userId, scheduleId));
     }
 
+    @Override
+    @PatchMapping("/{scheduleId}")
+    public ResponseEntity<Void> updateSchedule(@UserId UUID userId,
+                                               @PathVariable UUID scheduleId,
+                                               @Valid @RequestBody UpdateScheduleRequestDto request
+                                               ){
+        scheduleService.updateSchedule(userId, scheduleId, request);
+        return ResponseEntity.ok().build();
+    }
 }

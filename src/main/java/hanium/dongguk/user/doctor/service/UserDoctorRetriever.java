@@ -25,4 +25,8 @@ public class UserDoctorRetriever {
     public List<UserDoctor> searchUserDoctorList(EDepartment department, String nameKeyWord){
         return userDoctorRepository.searchUserDoctorList(department, nameKeyWord);
     }
+
+    public boolean existsDoctor(UUID doctorId){
+        return userDoctorRepository.existsById(doctorId);
+    }
 }
