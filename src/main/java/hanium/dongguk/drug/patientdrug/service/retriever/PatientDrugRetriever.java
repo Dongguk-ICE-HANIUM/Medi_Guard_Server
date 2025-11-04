@@ -7,6 +7,7 @@ import hanium.dongguk.global.exception.CommonException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -30,5 +31,9 @@ public class PatientDrugRetriever {
 
     public Integer countByDrugGroupId(final UUID drugGroupId) {
         return patientDrugRepository.countByDrugGroupId(drugGroupId);
+    }
+
+    public List<PatientDrug> findAllByUserId(final UUID id) {
+        return patientDrugRepository.findByUserPatientId(id);
     }
 }

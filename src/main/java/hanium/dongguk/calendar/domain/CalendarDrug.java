@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -21,34 +22,31 @@ public class CalendarDrug extends BaseTimeEntity {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "calendar_id", nullable = false)
-    private Calendar calendar;  // 어떤 캘린더(날짜)에 속하는 기록인지
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_drug_id", nullable = false)
     private PatientDrug patientDrug; // 어떤 환자의 약물인지
 
     @Column(name = "time_slot", nullable = false)
     private Integer timeSlot;  // 예: 아침=1, 점심=2, 저녁=3 같은 slot 번호
 
-    //patient drug 연동 후 밑에 코드 사용 예정
+    @Column(name = "record_date", nullable = false)
+    private LocalDate recordDate;
+
     @Builder
-    private CalendarDrug(final Calendar calendar,
-                         final PatientDrug patientDrug,
-                         final Integer timeSlot) {
-        this.calendar = calendar;
+    private CalendarDrug(final PatientDrug patientDrug,
+                         final Integer timeSlot,
+                         final LocalDate recordDate) {
         this.patientDrug = patientDrug;
         this.timeSlot = timeSlot;
+        this.recordDate = recordDate;
     }
 
     // 정적 팩토리 메서드
-    public static CalendarDrug create(final Calendar calendar,
-                                      final PatientDrug patientDrug,
+    public static CalendarDrug create(final PatientDrug patientDrug,
                                       final Integer timeSlot) {
         return CalendarDrug.builder()
-                .calendar(calendar)
                 .patientDrug(patientDrug)
                 .timeSlot(timeSlot)
+                .recordDate(LocalDate.now())
                 .build();
     }
 }

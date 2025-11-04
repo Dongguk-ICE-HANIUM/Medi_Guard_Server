@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Component
@@ -23,5 +24,9 @@ public class SideEffectRetriever {
     public SideEffect findByIdAndPatientId(UUID sideEffectId, UUID patientId) {
         return sideEffectRepository.findByIdAndCalendarDrugCalendarUserPatientId(sideEffectId, patientId)
                 .orElseThrow(() -> CommonException.type(SideEffectErrorCode.SIDE_EFFECT_NOT_FOUND));
+    }
+
+    public List<UUID> findCalendarDrugIdsWithSideEffects(Set<UUID> calendarDrugIdSet) {
+        return sideEffectRepository.findCalendarDrugIdsWithSideEffects(calendarDrugIdSet);
     }
 }

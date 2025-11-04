@@ -1,4 +1,4 @@
-package hanium.dongguk.calendar.service;
+package hanium.dongguk.calendar.service.saver;
 
 import hanium.dongguk.calendar.domain.Calendar;
 import hanium.dongguk.calendar.domain.CalendarRepository;

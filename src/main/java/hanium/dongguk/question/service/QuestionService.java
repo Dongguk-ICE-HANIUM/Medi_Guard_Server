@@ -2,8 +2,8 @@ package hanium.dongguk.question.service;
 
 import hanium.dongguk.calendar.domain.Calendar;
 import hanium.dongguk.calendar.exception.CalendarErrorCode;
-import hanium.dongguk.calendar.service.CalendarRetriever;
-import hanium.dongguk.calendar.service.CalendarSaver;
+import hanium.dongguk.calendar.service.retriever.CalendarRetriever;
+import hanium.dongguk.calendar.service.saver.CalendarSaver;
 import hanium.dongguk.global.exception.CommonException;
 import hanium.dongguk.question.domain.Question;
 import hanium.dongguk.question.dto.request.SaveQuestionDto;

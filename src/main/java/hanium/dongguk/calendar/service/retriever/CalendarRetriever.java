@@ -1,8 +1,7 @@
-package hanium.dongguk.calendar.service;
+package hanium.dongguk.calendar.service.retriever;
 
 import hanium.dongguk.calendar.domain.Calendar;
 import hanium.dongguk.calendar.domain.CalendarRepository;
-import hanium.dongguk.user.patient.domain.UserPatient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
