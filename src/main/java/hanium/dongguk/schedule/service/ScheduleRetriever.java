@@ -6,19 +6,32 @@ import hanium.dongguk.schedule.domain.Schedule;
 import hanium.dongguk.schedule.domain.ScheduleRepository;
 import hanium.dongguk.schedule.exception.ScheduleErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class ScheduleRetriever {
 
     private final ScheduleRepository scheduleRepository;
+
+    public List<Schedule> findAllByUserIdAndScheduleTimeBetween(
+            final UUID userId,
+            final LocalDateTime startDateTime,
+            final LocalDateTime endDateTime
+    ) {
+        return scheduleRepository.findByPatientIdAndScheduleTimeBetween(
+                userId,
+                startDateTime,
+                endDateTime
+        );
+    }
 
     public boolean existsByScheduleTime(UUID userId, LocalDateTime scheduleTime) {
         LocalDateTime startTime = scheduleTime.minusHours(1);

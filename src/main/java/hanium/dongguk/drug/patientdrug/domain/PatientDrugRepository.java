@@ -2,6 +2,7 @@ package hanium.dongguk.drug.patientdrug.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -10,4 +11,5 @@ public interface PatientDrugRepository extends JpaRepository<PatientDrug, UUID> 
     void deleteByIdAndUserPatientId(UUID id, UUID userId);
     boolean existsByIdAndUserPatientId(UUID id, UUID userId);
     Integer countByDrugGroupId(UUID drugGroupId);
+    List<PatientDrug> findByUserPatientId(UUID patientId);
 }

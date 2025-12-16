@@ -6,8 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDate;
-
 @Schema(description = "캘린더 생성 요청 DTO")
 public record SaveCalendarRequestDto(
         @JsonProperty("description")

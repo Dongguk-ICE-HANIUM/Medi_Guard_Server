@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 public interface SideEffectRepository extends JpaRepository<SideEffect, UUID> {
@@ -17,4 +18,12 @@ public interface SideEffectRepository extends JpaRepository<SideEffect, UUID> {
            "JOIN FETCH cd.patientDrug pd " +
            "WHERE cd.calendar.userPatient.id = :patientId")
     List<SideEffect> findByPatientIdWithPatientDrug(@Param("patientId") UUID patientId);
+
+    @Query(value = """
+       SELECT s.calendar_Drug_id
+       FROM SideEffect s
+       WHERE s.calendar_Drug_id IN :calendarDrugIdSet
+    """,
+    nativeQuery = true)
+    List<UUID> findCalendarDrugIdsWithSideEffects(@Param("calendarDrugIdSet") Set<UUID> calendarDrugIdSet);
 }

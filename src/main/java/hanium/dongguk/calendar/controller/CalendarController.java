@@ -3,9 +3,8 @@ package hanium.dongguk.calendar.controller;
 import hanium.dongguk.calendar.dto.request.SaveCalendarRequestDto;
 import hanium.dongguk.calendar.dto.request.UpdateCalendarRequestDto;
 import hanium.dongguk.calendar.dto.response.CalendarResponseDto;
-import hanium.dongguk.calendar.service.CalendarService;
+import hanium.dongguk.calendar.service.service.CalendarService;
 import hanium.dongguk.global.annotation.UserId;
-import hanium.dongguk.global.dto.ResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -48,5 +46,14 @@ public class CalendarController implements CalendarApiSwagger {
 
         calendarService.updateCalendar(userId, requestDto);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/month")
+    public ResponseEntity<?> getMonthCalendar(
+            @UserId UUID userId,
+            @RequestParam LocalDate date) {
+        return ResponseEntity.ok(
+                calendarService.getMonthCalendar(userId, date)
+        );
     }
 }
