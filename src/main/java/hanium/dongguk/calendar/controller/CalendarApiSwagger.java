@@ -99,7 +99,6 @@ public interface CalendarApiSwagger {
                     - 중복 기록 방지 검증
                     
                     **검증 규칙:**
-                    - 날짜: 필수 입력값이며 ISO 날짜 형식(YYYY-MM-DD)
                     - 감정: HAPPY, SAD, ANGRY, ANXIOUS, NEUTRAL 중 하나
                     - 설명: 필수 입력값 (최대 1000자)
                     - 질문 유형: 유효한 질문 타입이어야 함
@@ -152,7 +151,6 @@ public interface CalendarApiSwagger {
                                     summary = "정상적인 기분 저장 요청",
                                     value = """
                                             {
-                                                "date": "2025-08-04",
                                                 "emotion": "NEUTRAL",
                                                 "description": "두통이 있고 어지럽다.",
                                                 "questionType": "PHYSICAL_SYMPTOMS"
@@ -219,30 +217,6 @@ public interface CalendarApiSwagger {
             )
     })
     ResponseEntity<Void> updateCalendar(
-            @Parameter(
-                    description = "수정할 기분 기록의 캘린더 ID",
-                    required = true,
-                    example = "f47ac10b-58cc-4372-a567-0e02b2c3d479"
-            )
-            UUID calendarId,
-            @Parameter(
-                    description = "기분 수정 요청 정보",
-                    required = true,
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = UpdateCalendarRequestDto.class),
-                            examples = @ExampleObject(
-                                    name = "기분 수정 요청 예시",
-                                    summary = "정상적인 기분 수정 요청",
-                                    value = """
-                                            {
-                                                "emotion": "HAPPY",
-                                                "description": "기분이 많이 좋아졌습니다."
-                                            }
-                                            """
-                            )
-                    )
-            )
             UpdateCalendarRequestDto requestDto,
             UUID userId
     );

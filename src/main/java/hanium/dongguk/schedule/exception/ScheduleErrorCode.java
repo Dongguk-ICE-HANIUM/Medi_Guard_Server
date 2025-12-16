@@ -1,0 +1,29 @@
+package hanium.dongguk.schedule.exception;
+
+import hanium.dongguk.global.exception.ErrorCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+
+@RequiredArgsConstructor
+@Getter
+public enum ScheduleErrorCode implements ErrorCode {
+
+    INVALID_SCHEDULE_TIME(HttpStatus.BAD_REQUEST, "SCHEDULE_001", "진료 예정일은 과거가 될 수 없습니다."),
+    DUPLICATE_SCHEDULE_TIME(HttpStatus.BAD_REQUEST, "SCHEDULE_002", "이전에 등록했던 진료일과 중복됩니다."),
+    NOT_FOUND_SCHEDULE(HttpStatus.NOT_FOUND, "SCHEDULE_003", "등록된 진료 예정일을 찾을 수 없습니다."),
+    NOT_WAITING_SCHEDULE(HttpStatus.BAD_REQUEST, "SCHEDULE_004", "대기중인 진료를 선택해야 합니다."),
+    NOT_COMPLETED_SCHEDULE(HttpStatus.BAD_REQUEST, "SCHEDULE_005", "완료된 진료를 선택해야 합니다."),
+    NOT_TODAY_SCHEDULE_TIME(HttpStatus.BAD_REQUEST, "SCHEDULE_006", "오늘의 일정의 진료만 시작가능합니다."),
+    FAILED_GENERATE_AUTH_CODE(HttpStatus.INTERNAL_SERVER_ERROR, "SCHEDULE_007", "인증코드 생성 실패"),
+    INVALID_OR_EXPIRED_AUTH_CODE(HttpStatus.BAD_REQUEST, "SCHEDULE_008", "만료되거나 유효하지 않은 코드입니다."),
+    NOT_MATCH_DOCTOR_AND_SCHEDULE(HttpStatus.BAD_REQUEST, "SCHEDULE_009", "해당하는 일자에 대한 의사가 일치하지 않습니다."),
+    NOT_STARTED_SCHEDULE(HttpStatus.BAD_REQUEST, "SCHEDULE_010", "시작되지 않은 스케줄입니다."),
+    NOT_IN_PROGRESS_SCHEDULE(HttpStatus.BAD_REQUEST, "SCHEDULE_011", "진행중이지 않은 진료는 수정할 수 없습니다." )
+    ;
+
+
+    private final HttpStatus status;
+    private final String errorCode;
+    private final String message;
+}

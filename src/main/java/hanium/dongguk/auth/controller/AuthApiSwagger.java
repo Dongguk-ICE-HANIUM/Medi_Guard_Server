@@ -1,6 +1,8 @@
 package hanium.dongguk.auth.controller;
 
+import hanium.dongguk.auth.dto.DoctorRegisterRequestDto;
 import hanium.dongguk.auth.provider.apple.dto.AppleLoginRequestDto;
+import hanium.dongguk.auth.provider.kakao.dto.KakaoLoginRequestDto;
 import hanium.dongguk.global.dto.JwtDto;
 import hanium.dongguk.auth.provider.google.dto.GoogleLoginRequestDto;
 import hanium.dongguk.auth.dto.SocialLoginSignupRequestDto;
@@ -73,7 +75,7 @@ public interface AuthApiSwagger {
                                             summary = "이미 가입된 이메일",
                                             value = """
                                                     {
-                                                       "errorCode": "USER_005",
+                                                       "errorCode": "AUTH_009",
                                                        "message": "이미 존재하는 이메일입니다.",
                                                        "result": null
                                                     }
@@ -95,7 +97,7 @@ public interface AuthApiSwagger {
                                             summary = "미래 날짜 생년월일",
                                             value = """
                                                     {
-                                                       "errorCode": "USER_004",
+                                                       "errorCode": "AUTH_008",
                                                        "message": "유효하지 않은 생년월일입니다.",
                                                        "result": null
                                                     }
@@ -106,7 +108,7 @@ public interface AuthApiSwagger {
                                             summary = "과거 날짜 출산예정일",
                                             value = """
                                                     {
-                                                      "errorCode": "USER_006",
+                                                      "errorCode": "AUTH_010",
                                                       "message": "출산 예정일은 과거가 될 수 없습니다.",
                                                       "result": null
                                                     }
@@ -226,7 +228,7 @@ public interface AuthApiSwagger {
                                             summary = "잘못된 액세스 토큰",
                                             value = """
                                                     {
-                                                       "errorCode": "USER_008",
+                                                       "errorCode": "AUTH_012",
                                                        "message": "구글 사용자 정보 조회 실패",
                                                        "result": null
                                                     }
@@ -245,7 +247,7 @@ public interface AuthApiSwagger {
                                     summary = "구글에서 사용자 정보를 찾을 수 없음",
                                     value = """
                                             {
-                                               "errorCode": "USER_007",
+                                               "errorCode": "AUTH_011",
                                                "message": "구글 사용자 정보를 찾을 수 없습니다.",
                                                "result": null
                                             }
@@ -326,7 +328,7 @@ public interface AuthApiSwagger {
                                             summary = "이미 회원가입이 완료된 사용자",
                                             value = """
                                                     {
-                                                       "errorCode": "USER_009",
+                                                       "errorCode": "AUTH_009",
                                                        "message": "이미 회원가입이 완료된 사용자입니다.",
                                                        "result": null
                                                     }
@@ -337,7 +339,7 @@ public interface AuthApiSwagger {
                                             summary = "유효하지 않은 생년월일",
                                             value = """
                                                     {
-                                                       "errorCode": "USER_004",
+                                                       "errorCode": "AUTH_008",
                                                        "message": "유효하지 않은 생년월일입니다.",
                                                        "result": null
                                                     }
@@ -348,7 +350,7 @@ public interface AuthApiSwagger {
                                             summary = "과거 날짜 출산예정일",
                                             value = """
                                                     {
-                                                      "errorCode": "USER_006",
+                                                      "errorCode": "AUTH_010",
                                                       "message": "출산 예정일은 과거가 될 수 없습니다.",
                                                       "result": null
                                                     }
@@ -396,6 +398,99 @@ public interface AuthApiSwagger {
     ResponseEntity<JwtDto> socialLoginSignup(
             @Valid @RequestBody SocialLoginSignupRequestDto request
     );
+
+    @Operation(
+            summary = "카카오 소셜 로그인",
+            description = """
+                    구글 OAuth를 통한 소셜 로그인을 처리합니다.
+                    
+                    **주요 기능:**
+                    - 카카오 액세스 토큰으로 사용자 정보 조회
+                    - 신규 사용자인 경우 PENDING 상태로 임시 계정 생성
+                    - 기존 사용자인 경우 JWT 토큰 발급
+                    - 비활성화된 계정 자동 복구
+                    
+                    **응답 분기:**
+                    - 신규 사용자: `isSignUpNeeded=true`, `jwtDto=null`
+                    - 기존 사용자: `isSignUpNeeded=false`, JWT 토큰 발급
+                    - 비활성화된 기존 사용자: 계정 활성화 후 JWT 토큰 발급
+                    """
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "로그인 처리 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = {
+                                    @ExampleObject(
+                                            name = "신규 사용자 (회원가입 필요)",
+                                            summary = "첫 로그인으로 회원가입이 필요한 경우",
+                                            value = """
+                                                    {
+                                                        "jwtDto": null,
+                                                        "isSignUpNeeded": true,
+                                                        "userId": "123e4567-e89b-12d3-a456-426614174000"
+                                                    }
+                                                    """
+                                    ),
+                                    @ExampleObject(
+                                            name = "기존 사용자 (로그인 완료)",
+                                            summary = "이미 가입된 사용자의 로그인 완료",
+                                            value = """
+                                                    {
+                                                        "jwtDto": {
+                                                            "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                                                            "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                                                        },
+                                                        "isSignUpNeeded": false,
+                                                        "userId": "123e4567-e89b-12d3-a456-426614174000"
+                                                    }
+                                                    """
+                                    )
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "카카오 OAuth 실패",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = {
+                                    @ExampleObject(
+                                            name = "카카오 OAuth 실패",
+                                            summary = "잘못된 액세스 토큰",
+                                            value = """
+                                                    {
+                                                       "errorCode": "AUTH_015",
+                                                       "message": "카카오 사용자 정보 조회 실패",
+                                                       "result": null
+                                                    }
+                                                    """
+                                    )
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "카카오 사용자 정보 없음",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "사용자 정보 없음",
+                                    summary = "카카오에서 사용자 정보를 찾을 수 없음",
+                                    value = """
+                                            {
+                                               "errorCode": "AUTH_014",
+                                               "message": "카카오 사용자 정보를 찾을 수 없습니다.",
+                                               "result": null
+                                            }
+                                            """
+                            )
+                    )
+            )
+    })
+    ResponseEntity<SocialLoginResponseDto> kakaoLogin(@RequestBody KakaoLoginRequestDto request);
 
     @Operation(
             summary = "애플 소셜 로그인",
@@ -559,4 +654,111 @@ public interface AuthApiSwagger {
     ResponseEntity<SocialLoginResponseDto> appleLogin(
             @Valid @RequestBody AppleLoginRequestDto request
     );
+
+    @Operation(
+            summary = "의사 회원가입",
+            description = """
+                    의료진 사용자의 회원가입을 처리합니다.
+                    
+                    **주요 기능:**
+                    - 이메일 중복 검증
+                    - 비밀번호 암호화 저장
+                    - 의료진 정보 등록 (병원명, 진료과)
+                    - 의사 권한으로 계정 생성
+                    
+                    **검증 규칙:**
+                    - 이메일: 올바른 이메일 형식이어야 합니다
+                    - 비밀번호: 필수 입력값입니다
+                    - 이름: 필수 입력값입니다
+                    - 병원명: 필수 입력값입니다
+                    - 진료과: 유효한 진료과 코드여야 합니다
+                    
+                    **진료과 코드:**
+                    - 내과계: INTERNAL_MEDICINE, CARDIOLOGY, GASTROENTEROLOGY, ENDOCRINOLOGY, NEPHROLOGY, HEMATOLOGY, ONCOLOGY, RHEUMATOLOGY, NEUROLOGY, PULMONOLOGY
+                    - 외과계: GENERAL_SURGERY, ORTHOPEDIC_SURGERY, NEUROSURGERY, PLASTIC_SURGERY, THORACIC_SURGERY, UROLOGY
+                    - 전문과: PEDIATRICS, OBSTETRICS_GYNECOLOGY, OPHTHALMOLOGY, OTOLARYNGOLOGY, DERMATOLOGY, PSYCHIATRY, ANESTHESIOLOGY, RADIOLOGY, PATHOLOGY, FAMILY_MEDICINE, EMERGENCY_MEDICINE, REHABILITATION, DENTISTRY
+                    - 기타: OTHER_DEPARTMENT
+                    """
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "의사 회원가입 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "성공 응답",
+                                    summary = "의사 회원가입 완료",
+                                    value = """
+                                            {
+                                                "errorCode": null,
+                                                "message": "SUCCESS",
+                                                "result": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "잘못된 요청 - 입력값 검증 실패",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = {
+                                    @ExampleObject(
+                                            name = "이메일 중복",
+                                            summary = "이미 가입된 이메일",
+                                            value = """
+                                                    {
+                                                       "errorCode": "AUTH_009",
+                                                       "message": "이미 존재하는 이메일입니다.",
+                                                       "result": null
+                                                    }
+                                                    """
+                                    ),
+                                    @ExampleObject(
+                                            name = "이메일 형식 오류",
+                                            summary = "잘못된 이메일 형식",
+                                            value = """
+                                                    {
+                                                       "result": null,
+                                                       "errorCode": "REQUEST_001",
+                                                       "message": "잘못된 요청입니다."
+                                                    }
+                                                    """
+                                    ),
+                                    @ExampleObject(
+                                            name = "필수 필드 누락",
+                                            summary = "필수 필드가 누락된 경우",
+                                            value = """
+                                                    {
+                                                        "success": false,
+                                                        "message": "입력값이 올바르지 않습니다",
+                                                        "errors": {
+                                                            "password": "비밀번호는 필수 입력값입니다",
+                                                            "name": "이름은 필수 입력값입니다",
+                                                            "hospitalName": "병원명은 필수 입력값입니다",
+                                                            "department": "진료과는 필수 입력값입니다"
+                                                        }
+                                                    }
+                                                    """
+                                    ),
+                                    @ExampleObject(
+                                            name = "잘못된 진료과 코드",
+                                            summary = "유효하지 않은 진료과 코드",
+                                            value = """
+                                                    {
+                                                        "success": false,
+                                                        "message": "입력값이 올바르지 않습니다",
+                                                        "errors": {
+                                                            "department": "유효하지 않은 진료과 코드입니다"
+                                                        }
+                                                    }
+                                                    """
+                                    )
+                            }
+                    )
+            )
+    })
+    ResponseEntity<Void> doctorRegister(@Valid @RequestBody DoctorRegisterRequestDto request);
 }

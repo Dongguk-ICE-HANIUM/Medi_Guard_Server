@@ -19,7 +19,7 @@ public class CalendarRetriever {
         return calendarRepository.findByDateAndUserPatientId(date, userPatientId);
     }
 
-    public Optional<Calendar> findByIdAndUserPatient(UUID calendarId, UUID userPatientId) {
-        return calendarRepository.findByIdAndUserPatientId(calendarId, userPatientId);
+    public Optional<Calendar> getTodayCalendar(UUID userPatientId) {
+        return calendarRepository.findByDateAndUserPatientId(LocalDate.now(), userPatientId);
     }
 }

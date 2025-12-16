@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum EScheduleStatus {
     WAITING("진료예정"),
+    STARTED("진료시작"),
     IN_PROGRESS("진료중"),
     COMPLETED("진료완료")
     ;

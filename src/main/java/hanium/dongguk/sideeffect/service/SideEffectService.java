@@ -1,7 +1,7 @@
 package hanium.dongguk.sideeffect.service;
 
 import hanium.dongguk.calendar.domain.CalendarDrug;
-import hanium.dongguk.calendar.service.CalendarDrugRetriever;
+import hanium.dongguk.calendar.service.retriever.CalendarDrugRetriever;
 import hanium.dongguk.sideeffect.domain.SideEffect;
 import hanium.dongguk.sideeffect.dto.request.SaveSideEffectRequestDto;
 import hanium.dongguk.sideeffect.dto.request.UpdateSideEffectRequestDto;

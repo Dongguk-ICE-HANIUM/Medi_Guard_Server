@@ -22,6 +22,10 @@ public class CalendarDrug extends BaseTimeEntity {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "calendar_id", nullable = false)
+    private Calendar calendar;  // 어떤 캘린더(날짜)에 속하는 기록인지
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_drug_id", nullable = false)
     private PatientDrug patientDrug; // 어떤 환자의 약물인지
 

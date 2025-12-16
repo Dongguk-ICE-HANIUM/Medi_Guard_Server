@@ -16,6 +16,7 @@ import java.util.UUID;
 public class DrugGroupController implements DrugGroupApiSwagger {
     private final DrugGroupService drugGroupService;
 
+    @Override
     @PostMapping
     public ResponseEntity<?> createDrugGroup(
             @UserId UUID userId,
@@ -25,8 +26,9 @@ public class DrugGroupController implements DrugGroupApiSwagger {
         ).build();
     }
 
+    @Override
     @GetMapping
-    public ResponseEntity<?> getListDrugDroup(@UserId UUID userId) {
+    public ResponseEntity<?> getListDrugGroup(@UserId UUID userId) {
         return ResponseEntity.ok(
                 drugGroupService.getListDrugGroup(userId)
         );

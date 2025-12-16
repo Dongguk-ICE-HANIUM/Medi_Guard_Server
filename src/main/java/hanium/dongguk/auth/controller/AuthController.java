@@ -1,5 +1,6 @@
 package hanium.dongguk.auth.controller;
 
+import hanium.dongguk.auth.dto.DoctorRegisterRequestDto;
 import hanium.dongguk.auth.provider.kakao.dto.KakaoLoginRequestDto;
 import hanium.dongguk.auth.service.AuthService;
 import hanium.dongguk.global.dto.JwtDto;
@@ -51,5 +52,12 @@ public class AuthController implements AuthApiSwagger {
     @PostMapping("/apple/login")
     public ResponseEntity<SocialLoginResponseDto> appleLogin (@RequestBody @Valid AppleLoginRequestDto request){
         return ResponseEntity.ok(authService.appleLogin(request));
+    }
+
+    @Override
+    @PostMapping("/register/doctors")
+    public ResponseEntity<Void> doctorRegister(@RequestBody @Valid DoctorRegisterRequestDto request) {
+        authService.doctorRegister(request);
+        return ResponseEntity.ok().build();
     }
 }

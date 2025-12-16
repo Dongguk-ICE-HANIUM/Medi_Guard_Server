@@ -1,5 +1,6 @@
 package hanium.dongguk.auth.service;
 
+import hanium.dongguk.auth.dto.DoctorRegisterRequestDto;
 import hanium.dongguk.auth.exception.AuthErrorCode;
 import hanium.dongguk.auth.provider.apple.AppleJwtTokenValidator;
 import hanium.dongguk.auth.provider.google.GoogleApiService;
@@ -19,6 +20,7 @@ import hanium.dongguk.user.core.service.UserRetriever;
 import hanium.dongguk.user.core.service.UserSaver;
 import hanium.dongguk.auth.validator.AuthValidator;
 import hanium.dongguk.auth.provider.apple.dto.AppleLoginRequestDto;
+import hanium.dongguk.user.doctor.domain.UserDoctor;
 import hanium.dongguk.user.patient.domain.UserPatient;
 import hanium.dongguk.auth.provider.google.dto.GoogleLoginRequestDto;
 import hanium.dongguk.auth.dto.SocialLoginSignupRequestDto;
@@ -143,6 +145,7 @@ public class AuthService {
         return createLoginResponse(user);
     }
 
+    @Transactional
     public SocialLoginResponseDto kakaoLogin(KakaoLoginRequestDto request){
         KakaoUserInfo userInfo = kakaoApiService.getUserInfo(request.accessToken());
 
@@ -160,6 +163,20 @@ public class AuthService {
         }
 
         return createLoginResponse(user);
+    }
+
+    @Transactional
+    public void doctorRegister(DoctorRegisterRequestDto request) {
+        validateEmailNotExist(request.email());
+
+        UserDoctor userDoctor = UserDoctor.create(
+                request.email(),
+                encodePassword(request.password()),
+                request.name(),
+                request.hospitalName(),
+                request.department());
+
+        userSaver.save(userDoctor);
     }
 
     private SocialLoginResponseDto createLoginResponse(User user){

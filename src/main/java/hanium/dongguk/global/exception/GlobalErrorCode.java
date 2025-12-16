@@ -51,7 +51,15 @@ public enum GlobalErrorCode implements ErrorCode {
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "RESPONSE_001", "서버와의 연결에 실패했습니다."),
     BAD_GATEWAY(HttpStatus.BAD_GATEWAY, "RESPONSE_002", "다른 서버로부터 잘못된 응답이 수신되었습니다."),
     INSUFFICIENT_STORAGE(HttpStatus.INSUFFICIENT_STORAGE, "RESPONSE_003", "서버의 용량이 부족해 요청에 실패했습니다."),
-    UNSUPPORTED_ENCODING(HttpStatus.INTERNAL_SERVER_ERROR, "RESPONSE_004", "지원하지 않는 인코딩입니다.")
+    UNSUPPORTED_ENCODING(HttpStatus.INTERNAL_SERVER_ERROR, "RESPONSE_004", "지원하지 않는 인코딩입니다."),
+
+
+    /*
+    * Redis 오류
+    */
+    FAILED_CODE_SERIALIZATION(HttpStatus.INTERNAL_SERVER_ERROR, "REDIS_001", "데이터 직렬화에 실패했습니다."),
+    FAILED_CODE_DESERIALIZATION(HttpStatus.INTERNAL_SERVER_ERROR, "REDIS_002", "데이터 역직렬화에 실패했습니다."),
+    INVALID_OR_EXPIRED_CODE(HttpStatus.BAD_REQUEST, "REDIS_003", "유효하지않거나 만료된 코드입니다.")
     ;
 
     private final HttpStatus status;

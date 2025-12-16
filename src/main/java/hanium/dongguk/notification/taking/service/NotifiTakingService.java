@@ -94,6 +94,9 @@ public class NotifiTakingService {
 
         List<NotifiTakingDto> notifiTakingDtoList = requestDto.notifiTakingDtoList();
 
+        if (notifiTakingDtoList.stream().anyMatch(dto -> dto.id() == null)){
+            throw CommonException.type(NotifiTakingErrorCode.MISSING_ID_FOR_UPDATE);
+        }
         // Request 중복 time 값 처리
         Map<LocalTime, NotifiTakingDto> uniqueTimeMap
                 = notifiTakingDtoList.stream()
